@@ -1,0 +1,60 @@
+.f24-input-checkbox-container {
+  display: flex;
+  align-items: center;
+  padding: calc(var(--margin-global, 20px) / 4);
+  gap: calc(var(--margin-global, 20px) / 2);
+}
+
+.f24-input-checkbox-filter {
+  display: flex;
+  align-items: center;
+}
+
+.f24-input-checkbox {
+  width: 100%;
+  display: flex;
+  gap: calc(var(--margin-global, 20px) / 2);
+  flex-direction: column;
+}
+
+.f24-input-checkbox-items {
+  overflow: hidden;
+  gap: calc(var(--margin-global, 20px) / 2);
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.f24-input-checkbox-button {
+  flex: 1;
+  padding: calc(var(--margin-global, 20px) / 2);
+  border-radius: var(--mat-sys-corner-extra-small, 8px);;
+  border: 1px solid var(--border-primary);
+}
+
+.f24-input-checkbox-button-content {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: calc(var(--margin-global, 20px) / 2);
+  align-items: center;
+  width: 100%;
+}
+
+.f24-input-checkbox-icon {
+  font-size: 40px !important;
+  height: 40px !important;
+  width: 40px !important;
+}
+
+::ng-deep .mat-mdc-checkbox-checked {
+  border: 1px solid var(--mat-checkbox-checked-ripple-color, var(--mat-sys-primary)) !important;
+  //padding: calc(var(--margin-global, 20px) / 2 - 2px) !important;
+}
+
+::ng-deep .mat-internal-form-field>label {
+  width: 100%;
+}
+
+::ng-deep .mat-mdc-checkbox .mat-internal-form-field {
+  width: 100%;
+}

@@ -1,0 +1,11 @@
+.f24-form-checkbox-container {
+  display: flex;
+  align-items: center;
+  padding: calc(var(--margin-global, 20px) / 4);
+  gap: calc(var(--margin-global, 20px) / 2);
+  margin-bottom: 10px;
+
+  .f24-form-checkbox {
+    width: 100%;
+  }
+}

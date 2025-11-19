@@ -1,0 +1,42 @@
+<div
+  #container
+  [class]="class('container')"
+  [attr.aria-labelledby]="formField?.getLabelId()"
+  (focusin)="onFocusIn()"
+  (focusout)="onFocusOut($event)"
+>
+  <div [class]="class()">
+    @if (itemsMaps().length > limit) {
+      <div [class]="class('filter')">
+        <mat-icon [class]="class('icon-search')">search</mat-icon>
+        <input matInput type="text" (input)="onFilter($event)">
+      </div>
+    }
+    @if (itemsFiltered().length > 0) {
+      <div [class]="class('items')">
+        @for (item of itemsFiltered(); track $index) {
+          <mat-checkbox 
+            [value]="item.value || 0"
+            [class]="class('button')"
+            [labelPosition]="'before'"
+            [checked]="control.value === item.value"
+            (change)="onChange($event)"
+          >
+            <div [class]="class('button-content')">
+              @if (item.title) {
+                {{ item.title }}
+              }
+              @if (item.icon) {
+                @if (item.isMaterialIcon()) {
+                  <mat-icon [class]="class('icon')">{{ item.icon }}</mat-icon>
+                } @else if (item.isSVGIcon()) {
+                  <mat-icon [class]="class('icon')" [svgIcon]="item.icon"></mat-icon>
+                }
+              }
+            </div>
+          </mat-checkbox>
+        }
+      </div>
+    }
+  </div>
+</div>

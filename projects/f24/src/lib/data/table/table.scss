@@ -1,0 +1,72 @@
+.f24-table-progress-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3px;
+}
+
+.f24-table-input-filter {
+    max-width: 50%;
+    min-width: 40%;
+    font-size: 14px;
+    padding: calc(var(--margin-global) / 4);
+}
+
+.f24-table-header-content {
+    padding: calc(var(--margin-global) / 4);
+}
+
+.f24-table-content {
+  position: relative;
+  flex: 1;
+  overflow: auto;
+}
+
+.f24-table-x2 {
+    --mat-table-header-container-height: 30px;
+}
+
+.f24-cell-no-result{
+    text-align: center;
+    padding: 20px;
+}
+
+:host ::ng-deep table {
+  width: 100%;
+
+  th {
+    padding: 0 10px 0 10px;
+    height: 10px;
+  }
+  td {
+    padding: 0 5px 0 5px;
+    height: 20px;
+  }
+}
+
+
+.mat-mdc-row:hover {
+    background-color: #8484842f;
+}
+
+:host ::ng-deep .f24-table-pagination-all .mat-mdc-select-value-text:before {
+    content: 'Todos' !important;
+    position: relative !important;
+}
+
+:host ::ng-deep .f24-table-pagination-all .mat-mdc-select-value-text .mat-mdc-select-min-line{
+    display: none;
+}
+
+:host ::ng-deep mat-option:last-child:before{
+    content: 'Todos' !important;
+    position: relative !important;
+}
+
+:host ::ng-deep mat-option:last-child span{
+    display: none !important;
+}
+
+:host ::ng-deep .mat-mdc-header-cell{
+    text-transform: uppercase;
+}

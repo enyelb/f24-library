@@ -1,0 +1,5 @@
+@if (errors() && show()) {
+  @for (error of errors() | keyvalue; track $index) {
+    {{ message(error.key, error.value) }}
+  }
+}

@@ -1,0 +1,111 @@
+import { format as dateFormat, endOfMonth, startOfMonth, differenceInDays, differenceInMonths, addDays, isValid } from "date-fns";
+import { es } from 'date-fns/locale';
+
+/**
+ * Options
+ */
+interface Options {
+  locale?: any
+  weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6
+  firstWeekContainsDate?: 1 | 4
+  useAdditionalWeekYearTokens?: boolean
+  useAdditionalDayOfYearTokens?: boolean
+}
+
+/**
+ * date
+ * @param value 
+ * @param format 
+ * @param options 
+ * @returns 
+ */
+export function date(value: string | Date, format: string = 'yyyy-MM', options?: Options) : string {
+  if (!value || value == '') {
+    return value
+  }
+  options = options ? options : {};
+  options.locale = options.locale ? options.locale: es;
+  return dateFormat(new Date(value), format, options);
+}
+
+/**
+ * month
+ * @param value 
+ * @param format 
+ * @param type 
+ * @param options 
+ * @returns 
+ */
+function month(value: string, format: string = 'yyyy-MM', type: 'end' | 'start', options?: Options) : string {
+  if (!value || value == '') {
+    return value
+  }
+  options = options ? options : {};
+  options.locale = options.locale ? options.locale: es;
+  if (type === 'end') {
+    return dateFormat(endOfMonth(new Date(value)), format, options);
+  } else {
+    return dateFormat(startOfMonth(new Date(value)), format, options);
+  }
+}
+
+/**
+ * monthStart
+ * @param value 
+ * @param format 
+ * @param options 
+ * @returns 
+ */
+export function monthStart(value: string, format: string = 'yyyy-MM', options?: Options) : string {
+  return month(value, format, 'start', options)
+}
+
+/**
+ * monthEnd
+ * @param value 
+ * @param format 
+ * @param options 
+ * @returns 
+ */
+export function monthEnd(value: string, format: string = 'yyyy-MM', options?: Options) : string {
+  return month(value, format, 'end', options)
+}
+
+/**
+ * diffDays
+ * @param value1 
+ * @param value2 
+ * @returns 
+ */
+export function diffDays(value1: string | Date, value2: string | Date) : number {
+  return differenceInDays(new Date(value1), new Date(value2))
+}
+
+/**
+ * diffMonths
+ * @param value1 
+ * @param value2 
+ * @returns 
+ */
+export function diffMonths(value1: string | Date, value2: string | Date) : number {
+  return differenceInMonths(new Date(value1), new Date(value2))
+}
+
+/**
+ * addDay
+ * @param value 
+ * @param amount 
+ * @returns 
+ */
+export function addDay(value: string | Date, amount: number) : Date {
+  return addDays(new Date(value), amount)
+}
+
+/**
+ * dateIsValid
+ * @param value1 
+ * @returns 
+ */
+export function dateIsValid(value1: string | Date) : boolean {
+  return isValid(new Date(value1))
+}

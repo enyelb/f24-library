@@ -1,0 +1,69 @@
+.f24-note-container {
+  padding: calc(var(--margin-global, 20px) / 4);
+}
+
+.f24-note-icon {
+  font-size: 35px !important;
+  height: 35px !important;
+  width: 50px !important;
+}
+
+.f24-note {
+  background: var(--mat-sys-note-container, light-dark(#ebeff4, #232630));
+  padding: calc(var(--margin-global, 20px));
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.f24-note-success {
+  border-left: solid 3px #10b981; /* Verde esmeralda */
+
+  .f24-note-icon {
+    color: #10b981;
+  }
+}
+
+/* Warning - Ámbar suave */
+.f24-note-warning {
+  border-left: solid 3px #f59e0b; /* Ámbar */
+
+  .f24-note-icon {
+    color: #f59e0b;
+  }
+}
+
+/* Error - Rojo profesional */
+.f24-note-error {
+  border-left: solid 3px #ef4444; /* Rojo coral */
+
+  .f24-note-icon {
+    color: #ef4444;
+  }
+}
+
+/* Info - Azul confiable */
+.f24-note-info {
+  border-left: solid 3px #3b82f6; /* Azul eléctrico */
+
+  .f24-note-icon {
+    color: #3b82f6;
+  }
+}
+
+/* Neutral - Gris neutro */
+.f24-note-none {
+  border-left: solid 3px #6b7280; /* Gris medio */
+
+  .f24-note-icon {
+    color: #6b7280;
+  }
+}
+
+.f24-note-title {
+  font-size: 1.5rem;
+  margin: 0px;
+  padding-bottom: 0.9rem;
+}

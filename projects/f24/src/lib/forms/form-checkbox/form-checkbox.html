@@ -1,0 +1,16 @@
+<div [class]="'f24-form-checkbox-container'">
+  <mat-form-field appearance="outline" class="f24-form-checkbox">
+    <mat-label>{{ label() }}</mat-label>
+    <f24-input-checkbox
+      matInput
+      [items]="items()"
+      [bindValue]="bindValue()"
+      [bindTitle]="bindTitle()"
+      [bindIcon]="bindIcon()"
+      [formControl]="control()"
+    />
+    <mat-error>
+      <f24-form-errors [errors]="control().errors"/>
+    </mat-error>
+  </mat-form-field>
+</div>

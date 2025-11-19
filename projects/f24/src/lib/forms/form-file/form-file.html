@@ -1,0 +1,63 @@
+<div class="f24-form-file-container">
+  <mat-form-field appearance="outline" class="f24-form-file">
+    <mat-label>{{ label() }}</mat-label>
+
+    <!-- Input visual que muestra el nombre del archivo -->
+    <input
+      matInput readonly
+      [placeholder]="placeholder()"
+      [value]="selectedFileName"
+      (click)="openFileSelector()"
+    >
+
+    <!-- Botones de acción -->
+    <div matSuffix class="file-actions">
+      <button
+        mat-icon-button
+        type="button"
+        (click)="openFileSelector()"
+        title="Seleccionar archivo"
+      >
+        <mat-icon>attach_file</mat-icon>
+      </button>
+
+      @if (selectedFileName) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="clearFile()"
+          title="Limpiar archivo"
+        >
+          <mat-icon>clear</mat-icon>
+        </button>
+      }
+    </div>
+
+    <!-- Input file real (oculto) -->
+    <input
+      #fileInput
+      type="file"
+      [accept]="accept()"
+      [multiple]="multiple()"
+      (change)="onFileSelected($event)"
+      style="display: none"
+    >
+
+    <!-- Área de drag and drop -->
+    <div
+      class="drop-zone"
+      [class.drag-over]="isDragOver"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    >
+      <mat-icon>cloud_upload</mat-icon>
+      <span>Arrastra y suelta archivos aquí</span>
+    </div>
+
+    <!-- Mostrar errores -->
+    <mat-error>
+      <f24-form-errors [errors]="control().errors"/>
+    </mat-error>
+  </mat-form-field>
+</div>

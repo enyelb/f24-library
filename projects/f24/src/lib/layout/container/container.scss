@@ -1,0 +1,11 @@
+.container {
+  border-radius: 8px;
+  border: 1px solid var(--border-primary);
+  overflow: hidden;
+  background-color: var(--mat-sys-surface);
+
+  .container {
+    border-radius: 0px;
+    border: none;
+  }
+}

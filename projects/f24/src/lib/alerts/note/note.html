@@ -1,0 +1,15 @@
+<div class="f24-note-container">
+  <div [class]="'f24-note f24-note-' + type()">
+    @if (defaultIcon()) {
+      @if (isMaterialIcon()) {
+        <mat-icon [class]="'f24-note-icon'">{{ defaultIcon() }}</mat-icon>
+      } @else if (isSVGIcon()) {
+        <mat-icon [class]="'f24-note-icon'" [svgIcon]="defaultIcon()"></mat-icon>
+      }
+    }
+    <div class="f24-note-content">
+      <p class="f24-note-title">{{ title() }}</p>
+      <span class="f24-note-description"> {{  description() }}</span>
+    </div>
+  </div>
+</div>

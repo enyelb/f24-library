@@ -1,0 +1,17 @@
+<div [class]="'f24-form-radio-container'">
+  <mat-form-field appearance="outline" class="f24-form-radio">
+    <mat-label>{{ label() }}</mat-label>
+    <f24-input-radio
+      matInput
+      [items]="items()"
+      [bindValue]="bindValue()"
+      [bindTitle]="bindTitle()"
+      [bindIcon]="bindIcon()"
+      [formControl]="control()"
+      [limit]="limit()"
+    />
+    <mat-error>
+      <f24-form-errors [errors]="control().errors"/>
+    </mat-error>
+  </mat-form-field>
+</div>
