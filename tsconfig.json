@@ -5,8 +5,26 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
+      "alerts": [
+        "./dist/alerts"
+      ],
+      "api": [
+        "./dist/api"
+      ],
+      "data": [
+        "./dist/data"
+      ],
       "f24": [
         "./dist/f24"
+      ],
+      "forms": [
+        "./dist/forms"
+      ],
+      "functions": [
+        "./dist/functions"
+      ],
+      "layout": [
+        "./dist/layout"
       ]
     },
     "noImplicitOverride": true,
@@ -30,10 +48,40 @@
   "files": [],
   "references": [
     {
-      "path": "./projects/f24/tsconfig.lib.json"
+      "path": "./projects/alerts/tsconfig.lib.json"
     },
     {
-      "path": "./projects/f24/tsconfig.spec.json"
+      "path": "./projects/alerts/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/forms/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/forms/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/functions/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/functions/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/layout/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/layout/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/api/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/api/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/data/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/data/tsconfig.spec.json"
     }
   ]
 }

@@ -8,20 +8,20 @@
     }
   },
   "projects": {
-    "f24": {
+    "alerts": {
       "projectType": "library",
-      "root": "projects/f24",
-      "sourceRoot": "projects/f24/src",
-      "prefix": "f24",
+      "root": "projects/alerts",
+      "sourceRoot": "projects/alerts/src",
+      "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
-              "tsConfig": "projects/f24/tsconfig.lib.prod.json"
+              "tsConfig": "projects/alerts/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/f24/tsconfig.lib.json"
+              "tsConfig": "projects/alerts/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -29,7 +29,137 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "tsConfig": "projects/f24/tsconfig.spec.json"
+            "tsConfig": "projects/alerts/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "forms": {
+      "projectType": "library",
+      "root": "projects/forms",
+      "sourceRoot": "projects/forms/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/forms/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/forms/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/forms/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "functions": {
+      "projectType": "library",
+      "root": "projects/functions",
+      "sourceRoot": "projects/functions/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/functions/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/functions/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/functions/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "layout": {
+      "projectType": "library",
+      "root": "projects/layout",
+      "sourceRoot": "projects/layout/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/layout/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/layout/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/layout/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "api": {
+      "projectType": "library",
+      "root": "projects/api",
+      "sourceRoot": "projects/api/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/api/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/api/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/api/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "data": {
+      "projectType": "library",
+      "root": "projects/data",
+      "sourceRoot": "projects/data/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/data/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/data/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/data/tsconfig.spec.json"
           }
         }
       }

@@ -1,10 +1,11 @@
 {
   "name": "@f24",
-  "version": "0.0.0",
+  "version": "20.3.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:all": "ng build alerts && ng build api && ng build data && ng build forms && ng build functions && ng build layout",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
