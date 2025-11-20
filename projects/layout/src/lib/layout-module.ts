@@ -6,6 +6,8 @@ import { F24ResponsiveView } from './components/responsive-view/responsive-view'
 import { F24Container } from './components/container/container';
 import { F24Currency } from './components/currency/currency';
 import { F24Description } from './components/description/description';
+import { F24Image } from './components/image/image';
+import { F24Status } from './components/status/status';
 
 import { F24ColDirective } from './directives/col-directive';
 import { F24RowDirective } from './directives/row-directive';
@@ -22,6 +24,8 @@ import { F24RowDirective } from './directives/row-directive';
     F24Container,
     F24Currency,
     F24Description,
+    F24Image,
+    F24Status,
     F24ColDirective,
     F24RowDirective
   ],
@@ -32,6 +36,8 @@ import { F24RowDirective } from './directives/row-directive';
     F24Container,
     F24Currency,
     F24Description,
+    F24Image,
+    F24Status,
     F24ColDirective,
     F24RowDirective
   ]

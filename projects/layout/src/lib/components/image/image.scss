@@ -1,0 +1,30 @@
+img {
+    height: 45px;
+    border-radius: 10px;
+}
+
+img[mtxPhotoviewer] {
+    cursor: zoom-in;
+}
+
+::ng-deep .photoviewer-footer {
+    display: none;
+}
+
+::ng-deep .photoviewer-stage {
+    bottom: 0px;
+}
+
+::ng-deep .photoviewer-modal {
+    border: none;
+}
+
+::ng-deep .photoviewer-stage {
+    border-top: none;
+    border-bottom: none;
+    border-radius: 0 0 5px 5px;
+}
+
+::ng-deep .photoviewer-modal:focus-visible {
+    outline: none;
+}

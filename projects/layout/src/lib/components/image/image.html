@@ -1,0 +1,22 @@
+@if (!notfound) {
+  <img mtxPhotoviewer class="f24-image"
+    [mtxPhotoviewerOptions]="{
+      draggable:false,
+      resizable:false,
+      headerToolbar: ['close'],
+      footerToolbar: [],
+      multiInstances: false,
+      title: false
+    }"
+    [srcset]="src"
+    [src]="src"
+    [alt]="alt"
+    (error)="error($event)">
+}
+
+@if (notfound && !notfoundDefault) {
+  <img class="f24-image"
+    [srcset]="default"
+    [alt]="alt"
+    (error)="errorDefault($event)">
+}
