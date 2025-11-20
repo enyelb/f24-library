@@ -62,12 +62,12 @@ export class F24ColDirective {
    * @param
    */
   sizes(): Required<F24ColDirectiveModel> {
-    const xxl = this.col.xxl !== undefined ? this.col.xxl : 20;
-    const xl = this.col.xl !== undefined ? this.col.xl : (xxl || 20);
-    const l = this.col.l !== undefined ? this.col.l : (xl || 20);
-    const m = this.col.m !== undefined ? this.col.m : (l || 20);
-    const s = this.col.s !== undefined ? this.col.s : (m || 20);
-    const xs = this.col.xs !== undefined ? this.col.xs : (s || 20);
+    const xxl = this.col?.xxl || 20;
+    const xl = this.col?.xl || xxl;
+    const l = this.col?.l || xl;
+    const m = this.col?.m || l;
+    const s = this.col?.s || m;
+    const xs = this.col?.xs || s;
     return { xxl, xl, l, m, s, xs };
   }
 

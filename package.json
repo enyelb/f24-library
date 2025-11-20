@@ -1,11 +1,11 @@
 {
   "name": "@f24",
-  "version": "20.3.0",
+  "version": "20.3.13",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:all": "ng build alerts && ng build api && ng build data && ng build forms && ng build functions && ng build layout",
+    "build:all": "ng build alerts && ng build api && ng build data && ng build forms && ng build functions && ng build layout && ng build notification",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -23,22 +23,24 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/compiler": "^20.3.0",
-    "@angular/core": "^20.3.0",
-    "@angular/forms": "^20.3.0",
-    "@angular/material": "^20.2.11",
-    "@angular/material-date-fns-adapter": "^20.2.11",
-    "@angular/platform-browser": "^20.3.0",
-    "@angular/router": "^20.3.0",
+    "@angular/common": "^20.3.13",
+    "@angular/compiler": "^20.3.13",
+    "@angular/core": "^20.3.13",
+    "@angular/forms": "^20.3.13",
+    "@angular/material": "^20.2.14",
+    "@angular/material-date-fns-adapter": "^20.2.14",
+    "@angular/platform-browser": "^20.3.13",
+    "@angular/router": "^20.3.13",
+    "ngx-toastr": "^19.1.0",
+    "sweetalert2": "^11.26.3",
     "date-fns": "^4.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@angular/build": "^20.3.8",
-    "@angular/cli": "^20.3.8",
-    "@angular/compiler-cli": "^20.3.0",
+    "@angular/build": "^20.3.11",
+    "@angular/cli": "^20.3.11",
+    "@angular/compiler-cli": "^20.3.11",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
@@ -46,7 +48,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "ng-packagr": "^20.3.0",
+    "ng-packagr": "^20.3.2",
     "typescript": "~5.9.2"
   }
 }

@@ -1,9 +1,12 @@
 {
-  "name": "functions",
+  "name": "notification",
   "version": "20.3.13",
   "peerDependencies": {
     "@angular/common": "^20.3.13",
-    "@angular/core": "^20.3.13"
+    "@angular/core": "^20.3.13",
+    "@angular/material": "^20.3.13",
+    "ngx-toastr": "^19.1.0",
+    "sweetalert2": "^11.26.3"
   },
   "dependencies": {
     "tslib": "^2.3.0"

@@ -5,26 +5,26 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "alerts": [
+      "@f24/alerts": [
         "./dist/alerts"
       ],
-      "api": [
+      "@f24/api": [
         "./dist/api"
       ],
-      "data": [
+      "@f24/data": [
         "./dist/data"
       ],
-      "f24": [
-        "./dist/f24"
-      ],
-      "forms": [
+      "@f24/forms": [
         "./dist/forms"
       ],
-      "functions": [
+      "@f24/functions": [
         "./dist/functions"
       ],
-      "layout": [
+      "@f24/layout": [
         "./dist/layout"
+      ],
+      "@f24/notification": [
+        "./dist/notification"
       ]
     },
     "noImplicitOverride": true,
@@ -82,6 +82,12 @@
     },
     {
       "path": "./projects/data/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/notification/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/notification/tsconfig.spec.json"
     }
   ]
 }

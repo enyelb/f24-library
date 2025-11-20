@@ -10,7 +10,7 @@
     "types": [],
     "paths": {
       "@f24/api": [
-        "./../../dist/api"
+        "../../dist/api"
       ],
     }
   },

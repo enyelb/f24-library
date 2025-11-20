@@ -1,6 +1,6 @@
-import { AfterContentInit, ContentChildren, Directive, ElementRef, OnDestroy, OnInit, QueryList } from '@angular/core';
+import { contentChildren, Directive, effect, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { F24ColDirective } from './col-directive';
-import { Subscription } from 'rxjs';
+
 /**
  * F24RowDirective
  */
@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
   standalone: true,
   selector: '[row]'
 })
-export class F24RowDirective implements OnDestroy, OnInit, AfterContentInit {
+export class F24RowDirective implements OnDestroy, OnInit {
 
   /**
    * currentSize
@@ -35,15 +35,10 @@ export class F24RowDirective implements OnDestroy, OnInit, AfterContentInit {
   private resizeObserver: ResizeObserver;
 
   /**
-   * columnsSubscription
-   */
-  private columnsSubscription!: Subscription;
-
-  /**
    * columns
    * Content children of type F24ColDirective
    */
-  @ContentChildren(F24ColDirective, { descendants: true }) columns!: QueryList<F24ColDirective>;
+  private columns = contentChildren(F24ColDirective, { descendants: true });
 
   /**
    * constructor
@@ -54,19 +49,13 @@ export class F24RowDirective implements OnDestroy, OnInit, AfterContentInit {
     this.resizeObserver = new ResizeObserver(entries => {
       this.checkSize(entries[0].contentRect.width);
     });
-  }
 
-  ngAfterContentInit() {
-    // Suscribirse a los cambios
-    this.columnsSubscription = this.columns.changes.subscribe({
-      next: () => {
-        console.log(this.columns.length)
+    effect(() => {
+      const columns = this.columns();
+      if (columns.length > 0) {
         this.checkColumnsNotSize(this.el.nativeElement.clientWidth);
-      },
-      error: (error) => {
-        console.error('Error en columns changes:', error);
       }
-    });
+    })
   }
 
   /**
@@ -87,9 +76,6 @@ export class F24RowDirective implements OnDestroy, OnInit, AfterContentInit {
   ngOnDestroy(): void {
     this.resizeObserver.unobserve(this.el.nativeElement);
     this.resizeObserver.disconnect();
-    if (this.columnsSubscription) {
-      this.columnsSubscription.unsubscribe();
-    }
   }
 
 
@@ -109,7 +95,7 @@ export class F24RowDirective implements OnDestroy, OnInit, AfterContentInit {
 
     if (newSize !== this.currentSize && this.columns.length > 0) {
       this.currentSize = newSize;
-      this.columns.forEach(col => {
+      this.columns().forEach(col => {
         col.change(newSize);
       });
     }
@@ -128,7 +114,7 @@ export class F24RowDirective implements OnDestroy, OnInit, AfterContentInit {
     else if (width >= this.breakpoints.md) newSize = 'M';
     else if (width >= this.breakpoints.sm) newSize = 'S';
 
-    this.columns.forEach(col => {
+    this.columns().forEach(col => {
       if (!col.isInizialized()) {
         col.change(newSize);
       }

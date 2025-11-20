@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ContentChildren, effect, EventEmitter, inject, Input, OnDestroy, OnInit, Output, QueryList, signal, ViewChild, computed } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ContentChildren, EventEmitter, inject, Input, OnDestroy, OnInit, Output, QueryList, signal, ViewChild, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl } from '@angular/forms';
 
