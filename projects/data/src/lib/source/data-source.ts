@@ -1,13 +1,42 @@
 import { computed, effect, signal } from "@angular/core";
-import { DataSource as CDKDataSource } from '@angular/cdk/collections';
+import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, debounceTime, Observable, of, Subject, switchMap, takeUntil } from "rxjs";
 
-import { FnRequestAll, FnRequestArray, FnRequestServerSide, FnRequestServerSidePage } from "./model";
+import { F24Page } from "@f24/api";
+
+/**
+ * FnRequestAll
+ */
+export interface FnRequestAll<DataSource> {
+  (page: Number, size: Number, filters: {}, sorts: {}): Observable<DataSource[] | F24Page<DataSource>> | DataSource[]
+}
+
+/**
+ * FnRequestServerSide
+ */
+export interface FnRequestServerSide<DataSource> {
+  (filters: {}, sorts: {}): Observable<DataSource[]>
+}
+
+
+/**
+ * FnRequestServerSidePage
+ */
+export interface FnRequestServerSidePage<DataSource> {
+  (page: Number, size: Number, filters: {}, sorts: {}): Observable<F24Page<DataSource>>
+}
+
+/**
+ * FnRequestArray
+ */
+export interface FnRequestArray<DataSource> {
+  (filters: {}, sorts: {}): DataSource[]
+}
 
 /**
  * DataSource
  */
-export class DataSource<T> extends CDKDataSource<T> {
+export class F24DataSource<T> extends DataSource<T> {
 
   /**
    * stream
@@ -190,19 +219,19 @@ export class DataSource<T> extends CDKDataSource<T> {
  * createDataSourceServerSide
  */
 export const createDataSourceServerSide = <T>(fn: FnRequestServerSide<T>) => {
-  return new DataSource<T>((page, size, filters, sorts) => fn(filters, sorts))
+  return new F24DataSource<T>((page, size, filters, sorts) => fn(filters, sorts))
 }
 
 /**
  * createDataSourceServerSidePage
  */
 export const createDataSourceServerSidePage = <T>(fn: FnRequestServerSidePage<T>) => {
-  return new DataSource<T>((page, size, filters, sorts) => fn(page, size,filters, sorts))
+  return new F24DataSource<T>((page, size, filters, sorts) => fn(page, size,filters, sorts))
 }
 
 /**
  * createDataSource
  */
 export const createDataSource = <T>(fn: FnRequestArray<T>) => {
-  return new DataSource<T>((page, size, filters, sorts) => fn(filters, sorts))
+  return new F24DataSource<T>((page, size, filters, sorts) => fn(filters, sorts))
 }

@@ -6,14 +6,54 @@ import { map, Observable } from 'rxjs';
 
 import { format, isDate } from "date-fns";
 
-import {
-  Page,
-  PageRequestData,
-  RequestData,
-  RequestOptions,
-} from '../models'
+import { F24APICache } from './api-cache';
 
-import { APICache } from './api-cache';
+/**
+ * Page
+ */
+export interface F24Page<Data> {
+  current_page: number
+  data: Data[]
+  last_page: number
+  per_page: number
+  total: number
+}
+
+/**
+ * PageRequestData
+ */
+export interface F24PageRequestData<Model> {
+  (pageNumber: Number, pageSize: Number, filters?: {}, sorts?: {}) : Observable<F24Page<Model>>
+};
+
+/**
+ * RequestData
+ */
+export interface F24RequestData<Model> {
+  (filters?: {}, sorts?: {}) : Observable<Model[]>,
+};
+
+/**
+ * RequestOptions
+ */
+export interface F24RequestMessage<Generic> {
+  status: number,
+  message: string,
+  data: Generic
+};
+
+/**
+ * RequestOptions
+ */
+export interface F24RequestOptions {
+  params?: {}
+  filters?: {}
+  sorts?: {}
+  options?: {}
+  url?: boolean
+  cache?: string
+  index?: boolean
+};
 
 /**
  * APIService
@@ -21,7 +61,7 @@ import { APICache } from './api-cache';
 @Injectable({
   providedIn: 'root'
 })
-export abstract class APIService {
+export abstract class F24APIService {
 
   /**
    * _cache
@@ -41,8 +81,8 @@ export abstract class APIService {
   /**
    * get
    */
-  public get<Generic>(url: string, options: RequestOptions = {}) : Observable<Generic> {
-    return APICache.api(this._cache, options.cache, () => {
+  public get<Generic>(url: string, options: F24RequestOptions = {}) : Observable<Generic> {
+    return F24APICache.api(this._cache, options.cache, () => {
       return this.index(
         this._http.get<Generic>(this.url(url, options.params, options.filters, options.sorts), options.options), options
       );
@@ -52,8 +92,8 @@ export abstract class APIService {
   /**
    * post
    */
-  public post<Generic>(url: string, body = {}, options: RequestOptions = {}) : Observable<Generic> {
-    return APICache.api(this._cache, options.cache, () => {
+  public post<Generic>(url: string, body = {}, options: F24RequestOptions = {}) : Observable<Generic> {
+    return F24APICache.api(this._cache, options.cache, () => {
       return this.index(
         this._http.post<Generic>(this.url(url, options.params, options.filters, options.sorts), body, options.options), options
       );
@@ -63,8 +103,8 @@ export abstract class APIService {
   /**
    * put
    */
-  public put<Generic>(url: string, body = {}, options: RequestOptions = {}) : Observable<Generic> {
-    return APICache.api(this._cache, options.cache, () => {
+  public put<Generic>(url: string, body = {}, options: F24RequestOptions = {}) : Observable<Generic> {
+    return F24APICache.api(this._cache, options.cache, () => {
       return this.index(
         this._http.put<Generic>(this.url(url, options.params, options.filters, options.sorts), body, options.options), options
       );
@@ -74,8 +114,8 @@ export abstract class APIService {
   /**
    * delete
    */
-  public delete<Generic>(url: string, options: RequestOptions = {}) : Observable<Generic> {
-    return APICache.api(this._cache, options.cache, () => {
+  public delete<Generic>(url: string, options: F24RequestOptions = {}) : Observable<Generic> {
+    return F24APICache.api(this._cache, options.cache, () => {
       return this.index(
         this._http.delete<Generic>(this.url(url, options.params, options.filters, options.sorts), options.options), options
       );
@@ -106,7 +146,7 @@ export abstract class APIService {
   /**
    * index
    */
-  private index<Generic>(request: Observable<Generic>, options: RequestOptions) : Observable<Generic> {
+  private index<Generic>(request: Observable<Generic>, options: F24RequestOptions) : Observable<Generic> {
     if (options.index) {
       return request.pipe(map(data => {
         if (this.isPage(data)) {
@@ -123,7 +163,7 @@ export abstract class APIService {
    * @param request
    * @returns
    */
-  private isPage<Data>(request: Page<Data> | any): request is Page<Data> {
+  private isPage<Data>(request: F24Page<Data> | any): request is F24Page<Data> {
     return 'data' in request;
   }
 
@@ -182,7 +222,4 @@ export abstract class APIService {
     }
     return sorts;
   }
-
 }
-
-export type { PageRequestData, RequestData, Page };

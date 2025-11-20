@@ -1,0 +1,19 @@
+import { Component, input } from '@angular/core';
+
+/**
+ * Loader
+ */
+@Component({
+  selector: 'f24-loader',
+  styleUrls: ['loader.scss'],
+  templateUrl: 'loader.html',
+  standalone: true,
+  imports: [],
+})
+export class F24Loader {
+
+  /**
+   * isLoading
+   */
+  readonly isLoading = input(true);
+}

@@ -1,0 +1,26 @@
+<div class="f24-filter-select-container">
+  <!-- FILTER -->
+  <mat-form-field class="f24-filter-select" [appearance]="appearance">
+
+    <!-- label -->
+    <mat-label>{{label}}</mat-label>
+
+    <!-- select -->
+    <mtx-select
+      [items]="items"
+      [bindLabel]="bindLabel"
+      [bindValue]="bindValue"
+      [formControl]="form"
+      [multiple]="multiple"
+    >
+        <ng-template ng-label-tmp let-item="item" let-clear="clear" class="m2">
+          {{formatterLabel(item)}}
+          <span class="ng-value-icon right" (click)="clear(item)">×</span>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+          {{formatterOption(item)}}
+        </ng-template>
+    </mtx-select>
+  </mat-form-field>
+  <ng-content></ng-content>
+</div>

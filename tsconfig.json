@@ -25,6 +25,9 @@
       ],
       "@f24/notification": [
         "./dist/notification"
+      ],
+      "filters": [
+        "./dist/filters"
       ]
     },
     "noImplicitOverride": true,
@@ -88,6 +91,12 @@
     },
     {
       "path": "./projects/notification/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/filters/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/filters/tsconfig.spec.json"
     }
   ]
 }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { Note } from './note';
+import { F24Note } from './components/note/note';
 
 /**
  * FormModule
@@ -8,10 +8,10 @@ import { Note } from './note';
 @NgModule({
   declarations: [],
   imports: [
-    Note,
+    F24Note,
   ],
   exports: [
-    Note,
+    F24Note,
   ]
 })
-export class AlertsModule { }
+export class F24AlertsModule { }

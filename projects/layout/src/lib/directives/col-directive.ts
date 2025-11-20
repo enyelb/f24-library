@@ -1,6 +1,6 @@
 import { Directive, ElementRef, inject, Input } from '@angular/core';
 
-import { F24LayoutService } from '../services';
+import { F24LayoutService } from '../services/layout-service';
 
 /**
  * F24ColDirectiveModel

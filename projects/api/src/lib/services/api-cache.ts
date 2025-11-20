@@ -1,9 +1,9 @@
 import { Observable, of } from "rxjs";
 
 /**
- * APICache
+ * F24APICache
  */
-export class APICache {
+export class F24APICache {
 
   /**
    * set
@@ -34,7 +34,7 @@ export class APICache {
    */
   public static api<Generic>(cache: { [key:string] : any }, key: string | undefined, api: (() => Observable<Generic>)) : Observable<Generic> {
     if (key) {
-      const chace = APICache.get(cache, key);
+      const chace = F24APICache.get(cache, key);
       if (chace) {
         return of(chace);
       }
@@ -43,7 +43,7 @@ export class APICache {
     if (key) {
       observable.subscribe(data => {
         if (key) {
-          APICache.set(cache, key, data);
+          F24APICache.set(cache, key, data);
         }
         return data;
       });

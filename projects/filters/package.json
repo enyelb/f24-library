@@ -1,0 +1,14 @@
+{
+  "name": "filters",
+  "version": "20.3.0",
+  "peerDependencies": {
+    "@angular/common": "^20.3.0",
+    "@angular/core": "^20.3.0",
+    "@ng-matero/extensions": "^20.3.1",
+    "rxjs": "~7.8.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

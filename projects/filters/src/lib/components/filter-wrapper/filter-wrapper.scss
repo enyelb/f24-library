@@ -1,0 +1,34 @@
+:host ::ng-deep .f24-filter-wrapper-container {
+  display: flex; align-items: center;
+  padding: calc(var(--margin-global) / 4);
+
+  gap: calc(var(--margin-global) / 2);
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+:host ::ng-deep .f24-filter-wrapper-container > :first-child {
+  width: 100%;
+}
+
+:host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  min-height: 35px;
+}
+
+
+:host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-flex .mat-mdc-floating-label {
+  top: 18px;
+}
+
+:host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+    --mat-mdc-form-field-label-transform: translateY(-24.75px) scale(var(--mat-mdc-form-field-floating-label-scale, 0.75));
+    transform: var(--mat-mdc-form-field-label-transform);
+}
+
+:host ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}

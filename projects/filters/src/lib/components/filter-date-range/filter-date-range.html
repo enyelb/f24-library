@@ -1,0 +1,20 @@
+
+
+<div class="f24-filter-date-range-container">
+  <!-- DATE RANGE -->
+  <mat-form-field class="f24-filter-date-range" [appearance]="appearance">
+    <mat-label>{{label}}</mat-label>
+    <mat-date-range-input [rangePicker]="picker">
+      <input matStartDate [formControl]="formStart" [placeholder]="placeholderStart">
+      <input matEndDate [formControl]="formEnd" [placeholder]="placeholderEnd">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker disabled="false" [touchUi]="layout.isMobile()">
+      <mat-date-range-picker-actions>
+        <button mat-button matDateRangePickerCancel>{{labelCancel}}</button>
+        <button mat-raised-button color="primary" matDateRangePickerApply>{{labelApply}}</button>
+      </mat-date-range-picker-actions>
+    </mat-date-range-picker>
+  </mat-form-field>
+  <ng-content></ng-content>
+</div>

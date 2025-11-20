@@ -1,0 +1,16 @@
+<div class="f24-filter-input-container">
+  <!-- FILTER -->
+  <mat-form-field class="f24-filter-input" [appearance]="appearance">
+    <mat-label>{{label}}</mat-label>
+    <input matInput placeholder="{{placeholder}}" #input [formControl]="form" >
+
+    @if (form.value) {
+      <button matSuffix mat-icon-button aria-label="Clear" (click)="form.setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+
+  </mat-form-field>
+
+  <ng-content></ng-content>
+</div>

@@ -4,12 +4,14 @@
 
 export * from './lib/layout-module';
 
-export * from './lib/lazy';
-export * from './lib/loader';
-export * from './lib/responsive-view';
-export * from './lib/container';
-export * from './lib/currency';
-export * from './lib/description';
+export * from './lib/components/lazy/lazy';
+export * from './lib/components/loader/loader';
+export * from './lib/components/responsive-view/responsive-view';
+export * from './lib/components/container/container';
+export * from './lib/components/currency/currency';
+export * from './lib/components/description/description';
 
-export * from './lib/directives';
-export * from './lib/services';
+export * from './lib/directives/col-directive';
+export * from './lib/directives/row-directive';
+
+export * from './lib/services/layout-service';

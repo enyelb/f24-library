@@ -3,6 +3,6 @@
  */
 export * from './lib/alerts-module';
 
-export * from './lib/note';
+export * from './lib/components/note/note';
 
 
