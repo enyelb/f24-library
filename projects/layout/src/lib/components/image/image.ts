@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { MtxPhotoviewerModule } from '@ng-matero/extensions/photoviewer';
 
@@ -15,19 +15,11 @@ import { MtxPhotoviewerModule } from '@ng-matero/extensions/photoviewer';
 export class F24Image {
 
   /**
-   * src
+   * inputs
    */
-  @Input() src!: string;
-
-  /**
-   * alt
-   */
-  @Input() alt!: string;
-
-  /**
-   * default
-   */
-  @Input() default!: string;
+  readonly src = input('');
+  readonly alt = input('');
+  readonly default = input('');
 
   /**
    * notfound

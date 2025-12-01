@@ -1,6 +1,6 @@
 <!-- PROGRESS BAR -->
 <div class="f24-table-progress-bar">
-  @if (dataSource.options.loading()) {
+  @if (dataSource().options.loading()) {
     <mat-progress-bar color="primary" mode="indeterminate"/>
   }
 </div>
@@ -12,42 +12,37 @@
 </div>
 
 <!-- TABLE CONTENT -->
-<div [ngClass]="headerDisabled ? 'f24-table-content' : 'f24-table-content f24-table-content-top'">
+<div class="f24-table-content">
   <!-- TABLE -->
   <table mat-table
-    [dataSource]="dataSource"
-    [ngClass]="{'f24-table-x2': displayedTitlesColumns && displayedTitlesColumns.length > 0, 'f24-table': true}">
+    [dataSource]="dataSource()"
+    class="f24-table">
 
     <!-- CUSTOM COLUMNS -->
     <ng-content/>
 
     <!-- HEADER ROW TITLE -->
-    @if (displayedTitlesColumns && displayedTitlesColumns.length > 0) {
-      <tr mat-header-row *matHeaderRowDef="displayedTitlesColumns; sticky: isSticky" class="f24-header-row-x2"></tr>
+    @if (displayed().header.length > 0) {
+      <tr mat-header-row *matHeaderRowDef="displayed().header; sticky: isSticky()" class="f24-header-row"></tr>
     }
 
     <!-- HEADER ROW -->
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: isSticky" class="f24-header-row"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayed().columns; sticky: isSticky()" class="f24-header-row"></tr>
 
     <!-- COLUMNS DISPLAYED-->
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-    <!-- FOOTER ROW -->
-    @if (showFooterColumns) {
-      <tr mat-footer-row *matFooterRowDef="displayedColumns" class="f24-header-row"></tr>
-    }
+    <tr mat-row *matRowDef="let row; columns: displayed().columns;"></tr>
 
     <!-- FOOTER ROW TITLE -->
-    @if (displayedFooterTitlesColumns && displayedFooterTitlesColumns.length > 0) {
-      <tr mat-footer-row *matFooterRowDef="displayedFooterTitlesColumns; sticky: isSticky" class="f24-header-row-x2"></tr>
+    @if (displayed().footer.length > 0) {
+      <tr mat-footer-row *matFooterRowDef="displayed().footer; sticky: isSticky()" class="f24-header-row"></tr>
     }
     <!-- COLUMNS NO RESULT -->
-    @if (!dataSource.options.loading() && dataSource.options.total() === 0) {
+    @if (!dataSource().options.loading() && dataSource().options.total() === 0) {
       <tr *matNoDataRow>
-        <td class="f24-cell f24-cell-no-result" [attr.colspan]="displayedColumns.length">
+        <td class="f24-cell f24-cell-no-result" [attr.colspan]="displayed().columns.length">
           <div class="no-data">
             <mat-icon>inbox</mat-icon>
-            <p>{{ noResultLabel }}</p>
+            <p>{{ noResultLabel() }}</p>
           </div>
         </td>
       </tr>
@@ -55,11 +50,11 @@
   </table>
 </div>
 <!-- PAGINATION -->
-@if (isPagination) {
+@if (isPagination()) {
   <mat-paginator  #paginator showFirstLastButtons class="f24-teble-pagination"
     [ngClass]="paginator.pageSize === pageSizeMaxLength ? 'f24-table-pagination-all': ''"
-    [length]="dataSource.options.total()"
-    [pageSize]="dataSource.options.size()"
-    [pageSizeOptions]="pageSizeOptions">
+    [length]="dataSource().options.total()"
+    [pageSize]="dataSource().options.size()"
+    [pageSizeOptions]="pageSizeOptions()">
   </mat-paginator>
 }

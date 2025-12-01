@@ -1,8 +1,26 @@
-import { NgClass } from '@angular/common';
-import { Component, Input } from '@angular/core';
+
+import { Component, input } from '@angular/core';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+
+/**
+ * F24IconOpts
+ */
+export interface F24IconOpts {
+  name: string;
+  color?: string;
+  tooltip?: string;
+  hide?: boolean;
+}
+
+/**
+ * F24ItemsOpts
+ */
+export interface F24ItemsOpts {
+  icon: string,
+  text: string
+}
 
 /**
  * F24Description
@@ -12,28 +30,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   templateUrl: './description.html',
   styleUrl: './description.scss',
   standalone: true,
-  imports: [NgClass, MatIconModule, MatTooltipModule],
+  imports: [MatIconModule, MatTooltipModule],
 })
 export class F24Description {
 
   /**
-   * description
+   * inputs
    */
-  @Input() description!: string;
-
-  /**
-   * icon
-   */
-  @Input() icon?: {
-    name: string;
-    color?: string;
-    tooltip?: string;
-    hide?: boolean;
-  };
-
-
-  @Input() items: {
-    icon: string,
-    text: string
-  }[] = [];
+  readonly description = input.required<string>();
+  readonly icon = input<F24IconOpts>();
+  readonly items = input<F24ItemsOpts[]>([]);
 }

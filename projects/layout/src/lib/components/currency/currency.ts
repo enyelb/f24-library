@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { F24FunctionsModule  } from '@f24/functions';
 
@@ -15,12 +15,8 @@ import { F24FunctionsModule  } from '@f24/functions';
 export class F24Currency {
 
   /**
-   * bs
+   * inputs
    */
-  @Input() bs!: number;
-
-  /**
-   * usd
-   */
-  @Input() usd!: number;
+  readonly bs = input.required<number>();
+  readonly usd = input.required<number>();
 }

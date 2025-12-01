@@ -235,3 +235,7 @@ export const createDataSourceServerSidePage = <T>(fn: FnRequestServerSidePage<T>
 export const createDataSource = <T>(fn: FnRequestArray<T>) => {
   return new F24DataSource<T>((page, size, filters, sorts) => fn(filters, sorts))
 }
+
+export const createDataSourceEmpty = <T>() => {
+  return new F24DataSource<T>((page, size, filters, sorts) => [])
+}

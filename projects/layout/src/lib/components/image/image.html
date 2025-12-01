@@ -8,15 +8,15 @@
       multiInstances: false,
       title: false
     }"
-    [srcset]="src"
-    [src]="src"
-    [alt]="alt"
-    (error)="error($event)">
+    [srcset]="src()"
+    [src]="src()"
+    [alt]="alt()"
+    (error)="error($event)" loading="lazy">
 }
 
 @if (notfound && !notfoundDefault) {
   <img class="f24-image"
-    [srcset]="default"
-    [alt]="alt"
-    (error)="errorDefault($event)">
+    [srcset]="default()"
+    [alt]="alt()"
+    (error)="errorDefault($event)" loading="lazy">
 }

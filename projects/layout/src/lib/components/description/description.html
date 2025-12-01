@@ -1,19 +1,19 @@
 <div class="descripcion-container">
   <div class="descripcion">
     <p class="title">
-      {{ description }}
-      @if (icon && !icon.hide) {
+      {{ description() }}
+      @if (icon() && !icon()?.hide) {
         <mat-icon
-          [matTooltip]="icon.tooltip ?? ''"
-          [ngClass]="icon.color ?? ''"
+          [matTooltip]="icon()?.tooltip ?? ''"
+          [class]="icon()?.color ?? ''"
         >
-          {{icon.name}}
+          {{icon()?.name}}
         </mat-icon>
       }
     </p>
 
     <div class="list">
-      @for (item of items; track $index) {
+      @for (item of items(); track $index) {
         <mat-icon>{{item.icon}}</mat-icon> <p>{{ item.text }}</p>
       }
     </div>

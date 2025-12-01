@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:all": "ng build alerts && ng build api && ng build data && ng build forms && ng build functions && ng build layout && ng build notification",
+    "build:all": "ng build alerts && ng build api && ng build data  && ng build filters && ng build forms && ng build functions && ng build layout && ng build notification",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

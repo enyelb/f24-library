@@ -1,4 +1,5 @@
-import { Directive, ElementRef, inject, Input } from '@angular/core';
+import { signal } from '@angular/core';
+import { Directive, ElementRef, inject, input, Input } from '@angular/core';
 
 import { F24LayoutService } from '../services/layout-service';
 
@@ -26,7 +27,7 @@ export type F24ColDirectiveSize = 'small' | 'medium' | 'large' | 'width';
  */
 @Directive({
   standalone: true,
-  selector: '[col-xs], [col-s], [col-m], [col-l], [col-xl], [col-xxl], [col], [col-base]',
+  selector: '[col], [base]',
 })
 export class F24ColDirective {
 
@@ -36,19 +37,16 @@ export class F24ColDirective {
   protected readonly layout = inject(F24LayoutService);
 
   /**
-   * inizialized
+   * inputs
    */
-  inizialized: boolean = false;
+  readonly base = input(20);
+  readonly col = input<F24ColDirectiveModel>();
 
   /**
-   * col-base
+   * signals
    */
-  @Input('col-base') colBase: number = 20;
+  readonly inizialized = signal(false);
 
-  /**
-   * col
-   */
-  @Input('col') col!: F24ColDirectiveModel;
   /**
    * constructor
    * @param el
@@ -62,12 +60,12 @@ export class F24ColDirective {
    * @param
    */
   sizes(): Required<F24ColDirectiveModel> {
-    const xxl = this.col?.xxl || 20;
-    const xl = this.col?.xl || xxl;
-    const l = this.col?.l || xl;
-    const m = this.col?.m || l;
-    const s = this.col?.s || m;
-    const xs = this.col?.xs || s;
+    const xxl = this.col()?.xxl || 20;
+    const xl = this.col()?.xl || xxl;
+    const l = this.col()?.l || xl;
+    const m = this.col()?.m || l;
+    const s = this.col()?.s || m;
+    const xs = this.col()?.xs || s;
     return { xxl, xl, l, m, s, xs };
   }
 
@@ -77,14 +75,14 @@ export class F24ColDirective {
   change(SIZE: string): void {
     const sises = this.sizes();
 
-    const width = ((this.layout.values(sises, SIZE) / this.colBase) * 100);
+    const width = ((this.layout.values(sises, SIZE) / this.base()) * 100);
     if (width == 0) {
       this.el.nativeElement.style.display = 'none';
     } else {
       this.el.nativeElement.style.display = 'block';
     }
     this.el.nativeElement.style.width = `${width}%`//`calc(${width}% - (var(--margin-global) / 2))`;
-    this.inizialized = true;
+    this.inizialized.set(true);
   }
 
   /**
@@ -92,7 +90,7 @@ export class F24ColDirective {
    * @returns boolean
    */
   isInizialized(): boolean {
-    return this.inizialized;
+    return this.inizialized();
   }
 
 }

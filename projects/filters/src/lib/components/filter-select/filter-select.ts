@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, OnDestroy, OnInit, output, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
@@ -17,57 +17,57 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MtxSelectModule],
 })
-export class F24FilterSelect<Data, Type> implements OnInit, OnDestroy {
+export class F24FilterSelect<Data> implements OnInit, OnDestroy {
 
   /**
    * id
    */
-  @Input() id : string = '';
+  readonly id = input('');
 
   /**
    * label
    */
-  @Input() label: string = 'Filter';
+  readonly label = input('Filter');
 
   /**
    * multiple
    */
-  @Input() multiple: boolean = false;
+  readonly multiple = input(false);
 
   /**
    * dafault
    */
-  @Input() default: Type | null = null;
-
-  /**
-   * appearance
-   */
-  @Input() appearance: 'fill' | 'outline' = 'outline';
+  readonly default = input<any>(null);
 
   /**
    * bindLabel
    */
-  @Input() bindLabel!: string;
+  readonly bindLabel = input<string>();
 
   /**
    * bindValue
    */
-  @Input() bindValue!: string;
+  readonly bindValue = input<string>();
 
   /**
    * form
    */
-  @Input() form: FormControl<Type | null> = new FormControl(this.default);
+  readonly form = input(new FormControl(this.default()));
 
   /**
    * items
    */
-  @Input() items: Data[] = [];
+  readonly items = input<Data[]>([]);
+
+   /**
+   * appearance
+   */
+  readonly appearance = input<'fill' | 'outline'>('outline');
 
   /**
    * change
    */
-  @Output() change = new EventEmitter<Type | null>();
+  readonly change = output<any>();
 
   /**
    * subscription
@@ -77,53 +77,49 @@ export class F24FilterSelect<Data, Type> implements OnInit, OnDestroy {
   /**
    * formatterLabel
    */
-  @Input() formatterLabel: (data: Data) => any = (data: Data) => {
-    if (this.bindLabel && data != null && (data instanceof Object)) {
+  readonly formatterLabel = input((data: Data) => {
+    if (this.bindLabel() && data != null && (data instanceof Object)) {
       for(const [key, value] of Object.entries(data)) {
-        if (key === this.bindLabel) {
+        if (key === this.bindLabel()) {
           return value;
         }
       }
     }
     return data;
-  };
+  });
 
   /**
    * formatterOption
    */
-  @Input() formatterOption: (data: Data) => any = (data: Data) => {
-    if (this.bindLabel && data != null && (data instanceof Object)) {
+  readonly formatterOption = input((data: Data) => {
+    if (this.bindLabel() && data != null && (data instanceof Object)) {
       for(const [key, value] of Object.entries(data)) {
-        if (key === this.bindLabel) {
+        if (key === this.bindLabel()) {
           return value;
         }
       }
     }
     return data;
-  };
+  });
 
   /**
    * ngOnInit
    */
   ngOnInit() {
-    if (!this.form) {
-      this.form = new FormControl(this.default);
-    }
-
-    if (this.id) {
+    if (this.id()) {
       const filters = JSON.parse(localStorage.getItem("filters") ?? '{}');
 
-      if (filters[this.id]) {
-        this.form.setValue(filters[this.id]);
+      if (filters[this.id()]) {
+        this.form().setValue(filters[this.id()]);
       }
     }
 
-    this.subscription = this.form.valueChanges.subscribe(value => {
+    this.subscription = this.form().valueChanges.subscribe(value => {
       this.change.emit(value);
 
-      if (this.id) {
+      if (this.id()) {
         const filters = JSON.parse(localStorage.getItem("filters") ?? '{}');
-        filters[this.id] = value;
+        filters[this.id()] = value;
         localStorage.setItem("filters", JSON.stringify(filters));
       }
     });

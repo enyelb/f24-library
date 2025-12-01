@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
@@ -66,62 +66,62 @@ export class F24FilterDateRange implements OnInit, OnDestroy {
   /**
    * services
    */
-  layout = inject(F24LayoutService);
+  readonly layout = inject(F24LayoutService);
 
   /**
-   * id
+   * inputs
    */
-  @Input() id : string = '';
+  readonly id = input('');
 
   /**
    * label
    */
-  @Input() label: string = 'Enter a date range';
+  readonly label = input('Enter a date range');
 
-   /**
+  /**
    * labelCancel
    */
-   @Input() labelCancel: string = 'Cancel';
+  readonly labelCancel = input('Cancel');
 
   /**
    * labelApply
    */
-  @Input() labelApply: string = 'Apply';
+  readonly labelApply = input('Apply');
 
   /**
    * placeholderStart
    */
-  @Input() placeholderStart: string = 'Start date';
+  readonly placeholderStart = input('Start date');
 
   /**
    * defaultStart
    */
-  @Input() defaultStart: any = format(new Date(), "yyyy") + '-01-01';
+  readonly defaultStart = input(format(new Date(), "yyyy") + '-01-01');
 
   /**
    * formStart
    */
-  @Input() formStart!: FormControl;
+  readonly formStart = input(new FormControl(this.defaultStart()));
 
   /**
    * placeholderEnd
    */
-  @Input() placeholderEnd: string = 'End date';
+  readonly placeholderEnd = input('End date');
 
   /**
    * defaultEnd
    */
-  @Input() defaultEnd: any = format(new Date(), "yyyy") + '-12-31';
-
-  /**
-   * appearance
-   */
-  @Input() appearance: 'fill' | 'outline' = 'outline';
+  readonly defaultEnd = input(format(new Date(), "yyyy") + '-12-31');
 
   /**
    * formEnd
    */
-  @Input() formEnd!: FormControl;
+  readonly formEnd = input(new FormControl(this.defaultEnd()));
+
+  /**
+   * appearance
+   */
+  readonly appearance = input<'fill' | 'outline'>('outline');
 
   /**
    * subscriptionStart
@@ -139,39 +139,31 @@ export class F24FilterDateRange implements OnInit, OnDestroy {
    */
   ngOnInit() {
 
-    if (!this.formStart) {
-      this.formStart = new FormControl(this.defaultStart);
-    }
-
-    if (!this.formEnd) {
-      this.formEnd = new FormControl(this.defaultEnd);
-    }
-
     const filters = JSON.parse(localStorage.getItem("filters") ?? '{}');
 
     if (this.id) {
-      if (filters[this.id]) {
-        if (filters[this.id].start) {
-          this.formStart.setValue(filters[this.id].start);
+      if (filters[this.id()]) {
+        if (filters[this.id()].start) {
+          this.formStart().setValue(filters[this.id()].start);
         }
-        if (filters[this.id].end) {
-          this.formEnd.setValue(filters[this.id].end);
+        if (filters[this.id()].end) {
+          this.formEnd().setValue(filters[this.id()].end);
         }
       }
 
-      this.subscriptionStart = this.formStart.valueChanges.subscribe(value => {
+      this.subscriptionStart = this.formStart().valueChanges.subscribe(value => {
         const filters = JSON.parse(localStorage.getItem("filters") ?? '{}');
-        filters[this.id] = {
+        filters[this.id()] = {
           start: value,
-          end: this.formEnd.value ?? ''
+          end: this.formEnd().value ?? ''
         }
         localStorage.setItem("filters", JSON.stringify(filters));
       });
 
-      this.subscriptionEnd = this.formEnd.valueChanges.subscribe(value => {
+      this.subscriptionEnd = this.formEnd().valueChanges.subscribe(value => {
         const filters = JSON.parse(localStorage.getItem("filters") ?? '{}');
-        filters[this.id] = {
-          start: this.formStart.value ?? '',
+        filters[this.id()] = {
+          start: this.formStart().value ?? '',
           end: value
         }
         localStorage.setItem("filters", JSON.stringify(filters));

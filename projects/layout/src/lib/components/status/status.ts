@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 /**
  * F24Status
@@ -13,18 +13,10 @@ import { Component, Input } from '@angular/core';
 export class F24Status {
 
   /**
-   * status
+   * inputs
    */
-  @Input() status!: string;
-
-  /**
-   * color
-   */
-  @Input() color: string = 'black';
-
-  /**
-   * background
-   */
-  @Input() background: string = 'white';
+  readonly status = input.required<string>();
+  readonly color = input('black');
+  readonly background = input('white');
 
 }

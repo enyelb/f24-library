@@ -50,15 +50,7 @@ export interface F24LazyComponent<C> {
 export class F24Lazy<C> implements OnDestroy {
 
   /**
-   * inputs
-   */
-  readonly inputId = input('component', { alias: 'id' });
-  readonly inputModule = input<F24LazyModule<C>>(undefined, { alias: 'module' });
-  readonly inputPost = input<F24LazyPost<C>>(undefined, { alias: 'post' });
-  readonly inputInputs = input<F24LazyInputs>(undefined, { alias: 'inputs' });
-
-  /**
-   * viewChilds
+   * componentViewContainerRef
    */
   readonly componentViewContainerRef = viewChild.required('componentViewContainerRef', { 
     read: ViewContainerRef 
@@ -67,7 +59,7 @@ export class F24Lazy<C> implements OnDestroy {
   /**
    * loading
    */
-  protected loading = signal(true);
+  protected readonly loading = signal(true);
 
   /**
    * catalogoRef
@@ -75,23 +67,36 @@ export class F24Lazy<C> implements OnDestroy {
   private componentRef?: ComponentRef<C>;
 
   /**
-   * signals
+   * id es para identificar al componente que se esta cargando o que etsa cargado
    */
-  private id = signal('component');
-  private module = signal<F24LazyModule<C> | undefined>(undefined);
-  private post = signal<F24LazyPost<C> | undefined>(undefined);
-  private inputs = signal<F24LazyInputs | undefined>(undefined);
-
+  private readonly id = signal('component');
   /**
-   * constructor
+   * module es el componente que cargara de manera lazy 
    */
-  constructor() {
-    effect(() => this.id.set(this.inputId()));
-    effect(() => this.module.set(this.inputModule()));
-    effect(() => this.post.set(this.inputPost()));
-    effect(() => this.inputs.set(this.inputInputs()));
-  }
-   
+  private readonly module = signal<F24LazyModule<C> | undefined>(undefined);
+  /**
+   * post es un funcion que se ejecuta despues de cargar el component
+   * Nota: si el componente ya esta cargado y se llama a la funcion load nuevamente tambien se ejecutara
+   */
+  private readonly post = signal<F24LazyPost<C> | undefined>(undefined);
+  /**
+   * inputs son la lista de inputs que se le pasaran por directiva al componente
+   */
+  private readonly inputs = signal<F24LazyInputs | undefined>(undefined);
+  /**
+   * isLoadingMoudle es para saber cuando un module se esta cargando para en caso de llamar a la funcion
+   * load esperar que termine la llamada anterior
+   */
+  private readonly isLoadingMoudle = signal(false);
+  /**
+   * loadingModuleAttempts espara saber cuantos intentos de espera llava el cargar el modulo
+   */
+  private readonly loadingModuleAttempts = signal(0);
+  /**
+   * loadingModuleAttemptsMax maximo intentos de espera que tendra el cargar modulo
+   */
+  private readonly loadingModuleAttemptsMax = signal(5);
+  
   /**
    * ngOnDestroy
    */
@@ -121,6 +126,9 @@ export class F24Lazy<C> implements OnDestroy {
    */
   public loadId(id: F24LazyId<C>): F24Lazy<C> {
     const newId = typeof id === 'string' ? id : id.name;
+    /**
+     * si el id del componente cambia destruir el componente actual para que se carge otro de manera perezosa
+     */
     if (this.id() !== newId) {
       this.destroyComponent();
       this.id.set(newId);
@@ -161,11 +169,40 @@ export class F24Lazy<C> implements OnDestroy {
   /**
    * safeLoadModule
    */
-  private safeLoadModule(module?: F24LazyModule<C>) {
+  private async safeLoadModule(module?: F24LazyModule<C>) {
     if (!module) {
       return;
     }
 
+    /**
+     * validar si ya hay un modulo cargando
+     * validar si el modulo es dintino de null porque hay casos donde el module se manda a cargar pero no termina de cargar y queda en null
+     */
+    while(this.isLoadingMoudle() && this.module() != null){
+      /**
+       * esperar 2 segundos
+       */
+      console.log(`loading module (${this.loadingModuleAttempts() + 1}) ...`)
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      /**
+       * incrementar los intentos
+       */
+      this.loadingModuleAttempts.set(this.loadingModuleAttempts() + 1)
+      /**
+       * validar si el numero de intentos llego al maximo
+       */
+      if (this.loadingModuleAttempts() == this.loadingModuleAttemptsMax()) {
+        this.loadingModuleAttempts.set(0);
+        return;
+      }
+    }
+    /**
+     * reiniciar el numero de intentos
+     */
+    this.loadingModuleAttempts.set(0);
+    /**
+     * si el componente ya existe, solo se ejecuta la funcion post y sale
+     */
     if (this.componentRef) {
       const fnPost = this.post();
       if (fnPost) {
@@ -173,7 +210,13 @@ export class F24Lazy<C> implements OnDestroy {
       }
       return;
     }
-
+    /**
+     * asignar el modulo actual
+     */
+    this.module.set(module);
+    /**
+     * crear y cargar el componente
+     */
     module().then(module => this.createComponent(module));
   }
 
@@ -181,6 +224,8 @@ export class F24Lazy<C> implements OnDestroy {
    * create component
    */
   private createComponent(module: Type<C>) {
+    this.isLoadingMoudle.set(true);
+
     this.componentRef = this.componentViewContainerRef().createComponent(module);
     if (this.componentRef) {
       const fnInputs = this.inputs();
@@ -197,6 +242,7 @@ export class F24Lazy<C> implements OnDestroy {
       }
     }
     this.loading.set(false);
+    this.isLoadingMoudle.set(false);
   }
 
   /**

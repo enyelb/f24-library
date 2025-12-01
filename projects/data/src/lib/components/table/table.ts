@@ -1,8 +1,9 @@
-import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ContentChildren, EventEmitter, inject, Input, OnDestroy, OnInit, Output, QueryList, signal, ViewChild, computed } from '@angular/core';
+import { computed, output, viewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, input, effect, untracked, contentChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl } from '@angular/forms';
 
-import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { MatSortHeader } from '@angular/material/sort';
 import { MatColumnDef, MatFooterRowDef, MatHeaderRowDef, MatTable, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -12,7 +13,7 @@ import { merge, Subscription } from 'rxjs';
 
 import { F24APIService } from '@f24/api';
 
-import { F24DataSource } from '../../source/data-source';
+import { createDataSourceEmpty, F24DataSource } from '../../source/data-source';
 
 /**
  * Table
@@ -27,105 +28,32 @@ import { F24DataSource } from '../../source/data-source';
     MatIconModule, MatTableModule, MatProgressBarModule, MatPaginatorModule
   ],
 })
-export class F24Table<T> implements AfterContentInit, AfterViewInit, OnInit, OnDestroy {
-
-  /**
-   * change
-   */
-  readonly change = inject(ChangeDetectorRef);
+export class F24Table<T> implements AfterViewInit, OnDestroy {
 
   //CONFIG
   /**
-   * sticky
+   * inputs
    */
-  @Input() isSticky: boolean = true;
-
-  /**
-   * headerDisabled
-   */
-  @Input() headerDisabled: boolean = false;
-
-  /**
-   * displayedTitlesColumns
-   */
-  @Input() displayedTitlesColumns: string[] = [];
-
-  /**
-   * displayedFooterTitlesColumns
-   */
-  @Input() displayedFooterTitlesColumns: string[] = [];
-
-  /**
-   * dataSource
-   */
-  @Input() dataSource!: F24DataSource<T>;
+  readonly isSticky = input(true);
+  readonly dataSource = input<F24DataSource<T>>(createDataSourceEmpty());
+  readonly pageSize = input(10);
+  readonly pageSizes = input([5, 10, 25, 100]);
+  readonly isPageSizeMaxLength = input(true);
+  readonly isPagination = input(true);
+  readonly filters = input<{[key: string]: FormControl}>({});
+  readonly sorts = input<{[key: string]: FormControl}>({});
+  readonly noResultLabel = input('No data matching the filter');
+  readonly sortFn = input<(name: string, direction: string, data: T[]) => T[]>();
+  readonly changeData = output<T[]>();
 
   //PAGINATION
-  /**
-   * pageSizes
-   */
-  @Input() pageSizes: number[] = [5, 10, 25, 100];
-
-  /**
-   * pageSizes
-   */
-  @Input() isPageSizeMaxLength: boolean = true;
-
-  /**
-   * pageSizes
-   */
-  @Input() pageSize: number = 10;
-
-  /**
-   * isPagination
-   */
-  @Input() isPagination: boolean = true;
 
   //FILTER INPUT
-  /**
-   * noResultLabel
-   */
-  @Input() noResultLabel: string = "No data matching the filter";
-
-  /**
-   * filters
-   */
-  @Input() filters: {[key: string]: FormControl} = {};
-
-  /**
-   * forms
-   */
-  @Input() sorts: {[key: string]: FormControl} = {};
-
-  /**
-   * changeData
-   */
-  @Output() changeData = new EventEmitter<T[]>();
-
-  /**
-   * sortFn
-   */
-  @Input() sortFn?: (name: string, direction: string, data: T[]) => T[];
 
   /**
    * pageSizeMaxLength
    */
   protected pageSizeMaxLength: number = 100000;
-
-  /**
-   * pageSizeOptions
-   */
-  protected pageSizeOptions: number[] = [];
-
-  /**
-   * displayedColumns
-   */
-  protected displayedColumns: string[] = [];
-
-  /**
-   * showFooterColumns
-   */
-  protected showFooterColumns: boolean = false;
 
   /**
    * subscriptionHeaderSort
@@ -153,80 +81,79 @@ export class F24Table<T> implements AfterContentInit, AfterViewInit, OnInit, OnD
   protected subscriptionSortChange!: Subscription;
 
   /**
-   * sort
+   * view childs
    */
-  protected sort!: MatSort;
+  protected readonly table = viewChild.required(MatTable);
+  protected readonly paginator = viewChild(MatPaginator);
 
   /**
-   * table
+   * content childrens
    */
-  @ViewChild(MatTable, {static: true}) table!: MatTable<T>;
+  protected readonly sortHeaders = contentChildren(MatSortHeader);
+  protected readonly headerRowDefs = contentChildren(MatHeaderRowDef);
+  protected readonly footerRowDefs = contentChildren(MatFooterRowDef);
+  protected readonly columnDefs = contentChildren(MatColumnDef);
 
   /**
-   * paginator
+   * displayed
    */
-  @ViewChild(MatPaginator) protected paginator!: MatPaginator;
-
-  /**
-   * sortHeaderDefs
-   */
-  @ContentChildren(MatSortHeader) sortHeaders!: QueryList<MatSortHeader>;
-
-  /**
-   * headerRowDefs
-   */
-  @ContentChildren(MatHeaderRowDef) headerRowDefs!: QueryList<MatHeaderRowDef>;
-
-  /**
-   * footerRowDefs
-   */
-  @ContentChildren(MatFooterRowDef) footerRowDefs!: QueryList<MatFooterRowDef>;
-
-  /**
-   * columnDefs
-   */
-  @ContentChildren(MatColumnDef) columnDefs!: QueryList<MatColumnDef>;
-
-  /**
-   * ngOnInit
-   */
-  ngOnInit(): void {
-    this.pageSizeOptions = this.isPageSizeMaxLength ? [... this.pageSizes, this.pageSizeMaxLength] : this.pageSizes;
-
-    //this.table.dataSource = this.dataSource;
-  }
-
-  /**
-   * ngAfterContentInit
-   */
-  ngAfterContentInit() {
-    this.columnDefs.forEach(columnDef => {
-      this.table.addColumnDef(columnDef);
-      if (columnDef.headerCell && !columnDef.cell) {
-        if(!this.displayedTitlesColumns.includes(columnDef.name)) {
-          this.displayedTitlesColumns.push(columnDef.name)
+  protected readonly displayed = computed(() => {
+    const defs = this.columnDefs();
+    const columns: string[] = [], header: string[] = [], footer: string[] = [];
+    untracked(() => {
+      defs.forEach(columnDef => {
+        this.table().addColumnDef(columnDef);
+        if (columnDef.headerCell && !columnDef.cell) {
+          header.push(columnDef.name);
+        } else if (columnDef.footerCell) {
+          footer.push(columnDef.name);
+        } else {
+          columns.push(columnDef.name);
         }
-      } else if (columnDef.footerCell) {
-        if(!this.displayedFooterTitlesColumns.includes(columnDef.name)) {
-          this.displayedFooterTitlesColumns.push(columnDef.name)
-        }
-      } else {
-        if(!this.displayedColumns.includes(columnDef.name)) {
-          this.displayedColumns.push(columnDef.name);
-        }
-      }
+      });
+    })
+    
+    return { columns, header, footer}
+  });
+
+  /**
+   * pageSizeOptions
+   */
+  protected readonly pageSizeOptions = computed(() => {
+    if (this.isPageSizeMaxLength()) {
+      return [...this.pageSizes(), this.pageSizeMaxLength];
+    }
+    return this.pageSizes();
+  })
+
+  /**
+   * constructor
+   */
+  constructor() {
+
+    /**
+     *  
+     */
+    effect(() => {
+      const defs = this.headerRowDefs();
+      untracked(() => defs.forEach(headerRowDef => this.table().addHeaderRowDef(headerRowDef)));
     });
 
-
-    this.headerRowDefs.forEach(headerRowDef => this.table.addHeaderRowDef(headerRowDef));
-    this.footerRowDefs.forEach(footerRowDef => this.table.addFooterRowDef(footerRowDef));
-
-    this.subscriptionHeaderSort = this.sortHeaders.changes.subscribe((sortHeaders: QueryList<MatSortHeader>) => {
-      if (sortHeaders.first) {
-        this.sort = sortHeaders.first._sort;
-        //this.subscriptionSortChange = this.sort.sortChange.subscribe(e => this.sortChange(e));
-      }
+    /**
+     * 
+     */
+    effect(() => {
+      const defs = this.footerRowDefs();
+      untracked(() => defs.forEach(footerRowDef => this.table().addFooterRowDef(footerRowDef)));
     });
+
+    /**
+     * sort header
+     */
+    effect(() => {
+      const sorts = this.sortHeaders();
+    })
+
   }
 
   /**
@@ -234,21 +161,22 @@ export class F24Table<T> implements AfterContentInit, AfterViewInit, OnInit, OnD
    */
   ngAfterViewInit(): void {
 
-    const filters = Object.values(this.filters).map(filter => filter.valueChanges);
-    const sorts = Object.values(this.sorts).map(sort => sort.valueChanges);
+    const filters = Object.values(this.filters()).map(filter => filter.valueChanges);
+    const sorts = Object.values(this.sorts()).map(sort => sort.valueChanges);
 
     this.subscriptionFilters = merge(... filters).subscribe(() => {
-      this.dataSource.filter(F24APIService.filters(this.filters));
+      this.dataSource().filter(F24APIService.filters(this.filters()));
     });
     this.subscriptionSorts = merge(... sorts).subscribe(() => {
-      this.dataSource.sort(F24APIService.sorts(this.sorts));
+      this.dataSource().sort(F24APIService.sorts(this.sorts()));
     });
-    if (this.paginator) {
-      this.dataSource.page(1, this.pageSize);
-      this.subscriptionPage = this.paginator.page.subscribe( () => {
-        this.dataSource.page(
-          this.paginator.pageIndex + 1,
-          this.paginator.pageSize
+    const paginator = this.paginator();
+    if (paginator) {
+      this.dataSource().page(1, this.pageSize());
+      this.subscriptionPage = paginator.page.subscribe( () => {
+        this.dataSource().page(
+          paginator.pageIndex + 1,
+          paginator.pageSize
         );
       });
     }
@@ -284,10 +212,13 @@ export class F24Table<T> implements AfterContentInit, AfterViewInit, OnInit, OnD
    * paginatorPageSize
    */
   protected paginatorPageSize(): number {
-    if(this.paginator) {
-      return this.paginator.pageSize;
-    } else if (this.pageSizes) {
-      return this.pageSizes[0];
+    const paginator = this.paginator();
+    if(paginator) {
+      return paginator.pageSize;
+    } 
+    
+    if (this.pageSizes) {
+      return this.pageSizes()[0];
     }
 
     return 25;
@@ -297,8 +228,10 @@ export class F24Table<T> implements AfterContentInit, AfterViewInit, OnInit, OnD
    * paginatorPageIndex
    */
   protected paginatorPageIndex(): number {
-    if(this.paginator) {
-      return this.paginator.pageIndex + 1;
+
+    const paginator = this.paginator();
+    if(paginator) {
+      return paginator.pageIndex + 1;
     }
 
     return 1;
@@ -330,7 +263,7 @@ export class F24Table<T> implements AfterContentInit, AfterViewInit, OnInit, OnD
    */
   refresh(data?: T[]): void {
     if (data) {
-      this.dataSource.data(data)
+      this.dataSource().data(data)
     }
   }
 
@@ -338,9 +271,13 @@ export class F24Table<T> implements AfterContentInit, AfterViewInit, OnInit, OnD
    * updatePageSize
    */
   updatePageSize(size: number): void {
-    if (this.isPagination && this.pageSizes.includes(size)) {
-      this.paginator.pageSize = size;
-      this.paginator.page.emit();
+    const paginator = this.paginator();
+    if (!paginator) {
+      return;
+    }
+    if (this.isPagination() && this.pageSizes().includes(size)) {
+      paginator.pageSize = size;
+      paginator.page.emit();
     }
   }
 }

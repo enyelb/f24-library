@@ -58,7 +58,7 @@
     display: none;
 }
 
-:host ::ng-deep mat-option:last-child:before{
+:host ::ng-deep mat-option:last-child:before {
     content: 'Todos' !important;
     position: relative !important;
 }

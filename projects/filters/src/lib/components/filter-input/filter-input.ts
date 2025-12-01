@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, input, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
@@ -24,32 +24,32 @@ export class F24FilterInput implements OnInit, OnDestroy {
   /**
    * id
    */
-  @Input() id : string = '';
+  readonly id = input('');
 
   /**
    * label
    */
-  @Input() label: string = 'Filter';
+  readonly label = input('Filter');
 
   /**
    * placeholder
    */
-  @Input() placeholder!: string;
+  readonly placeholder = input('') ;
 
   /**
    * dafault
    */
-  @Input() default: any = null;
-
-  /**
-   * appearance
-   */
-  @Input() appearance: 'fill' | 'outline' = 'outline';
+  readonly default = input<any>(null);
 
   /**
    * form
    */
-  @Input() form!: FormControl;
+  readonly form = input(new FormControl(this.default()));
+
+  /**
+   * appearance
+   */
+  readonly appearance = input<'fill' | 'outline'>('outline');
 
   /**
    * subscription
@@ -60,20 +60,16 @@ export class F24FilterInput implements OnInit, OnDestroy {
    * ngOnInit
    */
   ngOnInit() {
-    if (!this.form) {
-      this.form = new FormControl(this.default);
-    }
-
     const filters = JSON.parse(localStorage.getItem("filters") ?? '{}');
 
-    if (this.id) {
-      if (filters[this.id]) {
-        this.form.setValue(filters[this.id]);
+    if (this.id()) {
+      if (filters[this.id()]) {
+        this.form().setValue(filters[this.id()]);
       }
 
-      this.subscription = this.form.valueChanges.subscribe(value => {
+      this.subscription = this.form().valueChanges.subscribe(value => {
         const filters = JSON.parse(localStorage.getItem("filters") ?? '{}');
-        filters[this.id] = value;
+        filters[this.id()] = value;
         localStorage.setItem("filters", JSON.stringify(filters));
       });
     }
