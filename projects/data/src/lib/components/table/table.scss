@@ -70,3 +70,7 @@
 :host ::ng-deep .mat-mdc-header-cell{
     text-transform: uppercase;
 }
+
+:host .mat-mdc-header-row {
+    height: var(--mat-table-header-container-height, 40px)
+};

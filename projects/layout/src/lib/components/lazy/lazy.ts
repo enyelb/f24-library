@@ -89,10 +89,6 @@ export class F24Lazy<C> implements OnDestroy {
    */
   private readonly isLoadingMoudle = signal(false);
   /**
-   * loadingModuleAttempts espara saber cuantos intentos de espera llava el cargar el modulo
-   */
-  private readonly loadingModuleAttempts = signal(0);
-  /**
    * loadingModuleAttemptsMax maximo intentos de espera que tendra el cargar modulo
    */
   private readonly loadingModuleAttemptsMax = signal(5);
@@ -175,6 +171,11 @@ export class F24Lazy<C> implements OnDestroy {
     }
 
     /**
+     * intentos de cargar el modulo
+     */
+    let loadingModuleAttempts = 0;
+
+    /**
      * validar si ya hay un modulo cargando
      * validar si el modulo es dintino de null porque hay casos donde el module se manda a cargar pero no termina de cargar y queda en null
      */
@@ -182,24 +183,19 @@ export class F24Lazy<C> implements OnDestroy {
       /**
        * esperar 2 segundos
        */
-      console.log(`loading module (${this.loadingModuleAttempts() + 1}) ...`)
+      console.log(`loading module... (Attempt: ${loadingModuleAttempts + 1})`)
       await new Promise(resolve => setTimeout(resolve, 2000));
       /**
        * incrementar los intentos
        */
-      this.loadingModuleAttempts.set(this.loadingModuleAttempts() + 1)
+      loadingModuleAttempts++;
       /**
        * validar si el numero de intentos llego al maximo
        */
-      if (this.loadingModuleAttempts() == this.loadingModuleAttemptsMax()) {
-        this.loadingModuleAttempts.set(0);
+      if (loadingModuleAttempts == this.loadingModuleAttemptsMax()) {
         return;
       }
     }
-    /**
-     * reiniciar el numero de intentos
-     */
-    this.loadingModuleAttempts.set(0);
     /**
      * si el componente ya existe, solo se ejecuta la funcion post y sale
      */
@@ -211,9 +207,10 @@ export class F24Lazy<C> implements OnDestroy {
       return;
     }
     /**
-     * asignar el modulo actual
+     * asignar el modulo actual y marcar el modulo como cargando
      */
     this.module.set(module);
+    this.isLoadingMoudle.set(true);
     /**
      * crear y cargar el componente
      */
@@ -224,8 +221,6 @@ export class F24Lazy<C> implements OnDestroy {
    * create component
    */
   private createComponent(module: Type<C>) {
-    this.isLoadingMoudle.set(true);
-
     this.componentRef = this.componentViewContainerRef().createComponent(module);
     if (this.componentRef) {
       const fnInputs = this.inputs();
