@@ -9,7 +9,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
  */
 export interface F24IconOpts {
   name: string;
-  color?: string;
   tooltip?: string;
   hide?: boolean;
 }

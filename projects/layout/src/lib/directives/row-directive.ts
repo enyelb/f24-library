@@ -1,5 +1,6 @@
 import { contentChildren, Directive, effect, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { F24ColDirective } from './col-directive';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
 
 /**
  * F24RowDirective
@@ -33,6 +34,8 @@ export class F24RowDirective implements OnDestroy, OnInit {
    * resizeObserver
    */
   private resizeObserver: ResizeObserver;
+  private destroy$ = new Subject<void>();
+  private resizeSubject = new Subject<number>();
 
   /**
    * columns
@@ -46,8 +49,23 @@ export class F24RowDirective implements OnDestroy, OnInit {
    * @param renderer Renderer2
    */
   constructor(protected el: ElementRef) {
+    let rafId = 0;
     this.resizeObserver = new ResizeObserver(entries => {
-      this.checkSize(entries[0].contentRect.width);
+      // Cancelar frame anterior
+      if (rafId) cancelAnimationFrame(rafId);
+      
+      // Procesar en nuevo frame
+      rafId = requestAnimationFrame(() => {
+        this.resizeSubject.next(entries[0].contentRect.width);
+      });
+      
+    });
+
+    this.resizeSubject.pipe(
+      debounceTime(100), // Espera 100ms después del último cambio
+      takeUntil(this.destroy$)
+    ).subscribe(width => {
+      this.checkSize(width);
     });
 
     effect(() => {
@@ -93,7 +111,7 @@ export class F24RowDirective implements OnDestroy, OnInit {
     else if (width >= this.breakpoints.sm) newSize = 'S';
     else newSize = 'XS';
 
-    if (newSize !== this.currentSize && this.columns.length > 0) {
+    if (newSize !== this.currentSize && this.columns().length > 0) {
       this.currentSize = newSize;
       this.columns().forEach(col => {
         col.change(newSize);

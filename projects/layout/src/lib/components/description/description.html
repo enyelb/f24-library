@@ -1,11 +1,11 @@
-<div class="descripcion-container">
-  <div class="descripcion">
+<div class="description-container">
+  <div class="description">
     <p class="title">
       {{ description() }}
       @if (icon() && !icon()?.hide) {
         <mat-icon
           [matTooltip]="icon()?.tooltip ?? ''"
-          [class]="icon()?.color ?? ''"
+          class="icon"
         >
           {{icon()?.name}}
         </mat-icon>

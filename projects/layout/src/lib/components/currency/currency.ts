@@ -13,10 +13,16 @@ import { F24FunctionsModule  } from '@f24/functions';
   imports: [F24FunctionsModule],
 })
 export class F24Currency {
-
   /**
-   * inputs
+   * label
    */
-  readonly bs = input.required<number>();
-  readonly usd = input.required<number>();
+  readonly label = input<string>();
+  /**
+   * ves
+   */
+  readonly ves = input.required<number | undefined>();
+  /**
+   * usd
+   */
+  readonly usd = input.required<number | undefined>();
 }

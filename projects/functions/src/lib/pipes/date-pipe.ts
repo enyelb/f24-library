@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { differenceInDays, format as dateFormat } from "date-fns";
+import { differenceInDays, format as dateFormat, parseISO } from "date-fns";
 import { es } from 'date-fns/locale'
 
 
@@ -22,7 +22,7 @@ export class F24DatePipe implements PipeTransform {
   transform(value: string | undefined, format: string = 'dd/MM/yyyy'): string {
     if (value) {
       if (!['N/A', '0', 0, null, 'null'].includes(value)) {
-        return dateFormat(new Date(value),format, { locale: es });
+        return dateFormat(parseISO(value.replaceAll('/', '-')), format, { locale: es });
       } else {
         return 'N/A';
       }

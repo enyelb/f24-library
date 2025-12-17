@@ -1,7 +1,7 @@
 .currency {
-  .bs {
+  .ves {
     font-weight: 500;
-    color: var(--primary-color);
+    color: var(--primary-color, var(--seped-main-color, green));
     margin: 0 !important;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -9,7 +9,7 @@
   }
   .usd {
     font-weight: 500;
-    color: #ff0f27;
+    color: var(--red-color, var(--seped-red-color, #ff0f27));;
     margin: 0 !important;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -18,5 +18,9 @@
     span {
       font-weight: 700;
     }
+  }
+  .label {
+    font-weight: 900;
+    margin: 0px;
   }
 }

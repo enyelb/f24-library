@@ -1,4 +1,4 @@
-import { format as dateFormat, endOfMonth, startOfMonth, differenceInDays, differenceInMonths, addDays, isValid } from "date-fns";
+import { format as dateFormat, endOfMonth, startOfMonth, differenceInDays, differenceInMonths, addDays, isValid, parseISO } from "date-fns";
 import { es } from 'date-fns/locale';
 
 /**
@@ -43,9 +43,9 @@ function month(value: string, format: string = 'yyyy-MM', type: 'end' | 'start',
   options = options ? options : {};
   options.locale = options.locale ? options.locale: es;
   if (type === 'end') {
-    return dateFormat(endOfMonth(new Date(value)), format, options);
+    return dateFormat(endOfMonth(parseISO(value)), format, options);
   } else {
-    return dateFormat(startOfMonth(new Date(value)), format, options);
+    return dateFormat(startOfMonth(parseISO(value)), format, options);
   }
 }
 

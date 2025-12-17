@@ -1,18 +1,21 @@
 
 
-.descripcion-container {
+.description-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  .descripcion {
+  .description {
     .title {
       display: flex;
       align-items: center;
       gap: 10px;
       margin: 0;
       font-weight: 700;
-      color: var(--primary-color);
+      color: var(--primary-color, var(--seped-main-color, blue));
+      .icon {
+        color: var(--success, var(--seped-green-color, green));
+      }
     }
     .list {
       display: flex;
