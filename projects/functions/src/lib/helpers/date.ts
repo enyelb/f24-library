@@ -1,4 +1,4 @@
-import { format as dateFormat, endOfMonth, startOfMonth, differenceInDays, differenceInMonths, addDays, isValid, parseISO } from "date-fns";
+import { format as dateFormat, endOfMonth, startOfMonth, differenceInDays, differenceInMonths, addDays, isValid, parseISO, formatDistanceToNow } from "date-fns";
 import { es } from 'date-fns/locale';
 
 /**
@@ -108,4 +108,26 @@ export function addDay(value: string | Date, amount: number) : Date {
  */
 export function dateIsValid(value1: string | Date) : boolean {
   return isValid(new Date(value1))
+}
+
+/**
+ * timeAgo
+ * @param value
+ */
+export function timeAgo(value: string | Date | undefined): string {
+  if (value) {
+      return formatDistanceToNow(new Date(value), {
+        addSuffix: false,
+        locale: es
+      })
+      .replaceAll("menos de un ", "")
+      .replaceAll("alrededor de ", "")
+      .replaceAll("minutos", "mins")
+      .replaceAll("minuto", "min")
+      //.replaceAll("horas", "hrs")
+      //.replaceAll("hora", "hr")
+      .replaceAll("segundos", "segs")
+      .replaceAll("segundo", "seg");
+    }
+    return '';
 }
