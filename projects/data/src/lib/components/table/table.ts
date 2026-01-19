@@ -35,7 +35,7 @@ export class F24Table<T> implements AfterViewInit, OnDestroy {
    * inputs
    */
   readonly isSticky = input(true);
-  readonly dataSource = input<F24DataSource<T>>(createDataSourceEmpty());
+  readonly dataSource = input.required<F24DataSource<T>>();
   readonly pageSize = input(10);
   readonly pageSizes = input([5, 10, 25, 100]);
   readonly isPageSizeMaxLength = input(true);
@@ -113,7 +113,7 @@ export class F24Table<T> implements AfterViewInit, OnDestroy {
       });
     })
     
-    return { columns, header, footer}
+    return { columns, header, footer }
   });
 
   /**
@@ -130,7 +130,6 @@ export class F24Table<T> implements AfterViewInit, OnDestroy {
    * constructor
    */
   constructor() {
-
     /**
      *  
      */
@@ -152,6 +151,14 @@ export class F24Table<T> implements AfterViewInit, OnDestroy {
      */
     effect(() => {
       const sorts = this.sortHeaders();
+    });
+
+    /**
+     * dataSource
+     */
+    effect(() => {
+      this.dataSource().filter(F24APIService.filters(this.filters()));
+      this.dataSource().sort(F24APIService.sorts(this.sorts()));
     })
 
   }

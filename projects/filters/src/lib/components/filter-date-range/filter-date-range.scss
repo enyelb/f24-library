@@ -1,8 +1,8 @@
 .f24-filter-date-range-container {
   display: flex; align-items: center;
-  padding: calc(var(--margin-global) / 4);
+  padding: calc(var(--margin-global, 20px) / 4);
 
-  gap: calc(var(--margin-global) / 2);
+  gap: calc(var(--margin-global, 20px) / 2);
 
   .f24-filter-date-range {
     width: 100%;

@@ -1,14 +1,6 @@
 import { toNumber } from "./number";
 
 /**
- * usd
- */
-const USD = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
-
-/**
  * ves
  */
 const VES = new Intl.NumberFormat('en-ES', {
@@ -23,16 +15,10 @@ const VES = new Intl.NumberFormat('en-ES', {
  * @returns 
  */
 export function currency(
-  value: number | string | undefined, 
-  format: "USD" | "VES" = "USD"
+  value: number | string | undefined,
 ) : string {
   let valueNumber: number = toNumber(value)
-
-  if (format === 'VES') {
-    return VES.format(valueNumber).replace("VES", "");
-  } else {
-    return USD.format(valueNumber);
-  } 
+  return VES.format(valueNumber).replace("VES", ""); 
 }
 
 /**

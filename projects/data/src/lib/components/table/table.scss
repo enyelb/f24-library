@@ -71,6 +71,10 @@
     text-transform: uppercase;
 }
 
-:host .mat-mdc-header-row {
+:host .mat-mdc-header-row:first-child {
+    height: var(--mat-table-header-container-height, 40px);
+}
+
+:host .mat-mdc-header-row:not(:first-child) {
     height: var(--mat-table-header-container-height, 20px)
 };

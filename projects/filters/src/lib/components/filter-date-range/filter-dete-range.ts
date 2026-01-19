@@ -49,11 +49,11 @@ class CustomMomentDateAdapter extends DateFnsAdapter {
         provide: MAT_DATE_FORMATS,
         useValue: {
           parse: {
-            dateInput: [format]
+             dateInput: 'MM/dd/yyyy',
           },
           display: {
-            dateInput: format,
-            monthYearLabel: 'MMM yyyy',
+            dateInput: 'MM/dd/yyyy',  // String format
+            monthYearLabel: 'MMM yyyy',  // String format
             dateA11yLabel: 'LL',
             monthYearA11yLabel: 'MMMM yyyy',
           }

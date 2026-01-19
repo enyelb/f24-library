@@ -16,7 +16,7 @@ export class F24CurrencyPipe implements PipeTransform {
    * @param format 
    * @returns 
    */
-  transform(value: number | string | undefined, format: "USD" | "VES" = "USD"): string {
-    return currency(value, format);
+  transform(value: number | string | undefined): string {
+    return currency(value);
   }
 }

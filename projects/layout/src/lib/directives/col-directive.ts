@@ -1,4 +1,4 @@
-import { signal } from '@angular/core';
+import { effect, signal, untracked } from '@angular/core';
 import { Directive, ElementRef, inject, input, Input } from '@angular/core';
 
 import { F24LayoutService } from '../services/layout-service';
@@ -45,7 +45,8 @@ export class F24ColDirective {
   /**
    * signals
    */
-  readonly inizialized = signal(false);
+  protected readonly inizialized = signal(false);
+  protected readonly size = signal('XXL');
 
   /**
    * constructor
@@ -53,6 +54,19 @@ export class F24ColDirective {
    * @param _latoutServices
    */
   constructor(protected el: ElementRef) {
+
+    /**
+     * validar si el col cambia para actualizar el tamanio
+     */
+    effect(() => {
+      const col = this.col();
+      if (col) {
+        untracked(() => {
+          this.change(this.size());
+        })
+        
+      }
+    })
   }
 
   /**
@@ -83,6 +97,7 @@ export class F24ColDirective {
     }
     this.el.nativeElement.style.width = `${width}%`//`calc(${width}% - (var(--margin-global) / 2))`;
     this.inizialized.set(true);
+    this.size.set(SIZE);
   }
 
   /**
