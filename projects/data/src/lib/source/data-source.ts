@@ -8,7 +8,7 @@ import { F24Page } from "@f24/api";
  * FnRequestAll
  */
 export interface FnRequestAll<DataSource> {
-  (page: Number, size: Number, filters: {}, sorts: {}): Observable<DataSource[] | F24Page<DataSource>> | DataSource[]
+  (page: Number, size: Number, filters: {}, sorts: {}, previus: DataSource[]): Observable<DataSource[] | F24Page<DataSource>> | DataSource[]
 }
 
 /**
@@ -85,8 +85,9 @@ export class F24DataSource<T> extends DataSource<T> {
         const filters = this.signals.filters();
         const sorts = this.signals.sorts();
         const page = this.signals.page();
+        const previus = this.signals.data();
 
-        const request = this.request(page.index, page.size, filters, sorts);
+        const request = this.request(page.index, page.size, filters, sorts, previus);
 
         if (request instanceof Observable) {
           return request;
@@ -189,9 +190,10 @@ export class F24DataSource<T> extends DataSource<T> {
    * @param size
    * @param filters
    * @param sorts
+   * @param previus
    */
-  public request(page: number, size: number, filters: {}, sorts: {}) {
-    return this.fnRequest(page, size, filters, sorts);
+  public request(page: number, size: number, filters: {}, sorts: {}, previus: T[] = []) {
+    return this.fnRequest(page, size, filters, sorts, previus);
   }
 
   /**
@@ -237,5 +239,5 @@ export const createDataSource = <T>(fn: FnRequestArray<T>) => {
 }
 
 export const createDataSourceEmpty = <T>() => {
-  return new F24DataSource<T>((page, size, filters, sorts) => [])
+  return new F24DataSource<T>((page, size, filters, sorts, previus) => previus)
 }

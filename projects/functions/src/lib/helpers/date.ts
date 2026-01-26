@@ -12,6 +12,21 @@ interface Options {
   useAdditionalDayOfYearTokens?: boolean
 }
 
+function transform(
+  value: string | Date | undefined, 
+  options: Options | undefined, 
+  fn: (value: string | Date, options: Options) => string
+): string {
+  options = options ? options : {};
+  options.locale = options.locale ? options.locale: es;
+  if (value instanceof Date) {
+    return fn(value, options);
+  }
+  if (value && !['N/A', '0', 0, 'null'].includes(value)) {
+    return fn(parseISO(value.replaceAll('/', '-')), options);
+  }
+  return 'N/A';
+}
 /**
  * date
  * @param value 
@@ -19,13 +34,10 @@ interface Options {
  * @param options 
  * @returns 
  */
-export function date(value: string | Date, format: string = 'yyyy-MM', options?: Options) : string {
-  if (!value || value == '') {
-    return value
-  }
-  options = options ? options : {};
-  options.locale = options.locale ? options.locale: es;
-  return dateFormat(new Date(value), format, options);
+export function date(value: string | Date | undefined, format: string = 'dd/MM/yyyy', options?: Options) : string {
+  return transform(value, options, (value, options) => {
+    return dateFormat(value, format, options);
+  });
 }
 
 /**

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'f24-container',
@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './container.html',
   styleUrl: './container.scss',
+  encapsulation: ViewEncapsulation.None
 })
 export class F24Container {
 

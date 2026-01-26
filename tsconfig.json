@@ -28,6 +28,12 @@
       ],
       "filters": [
         "./dist/filters"
+      ],
+      "preview": [
+        "./dist/preview"
+      ],
+      "previews": [
+        "./dist/previews"
       ]
     },
     "noImplicitOverride": true,
@@ -97,6 +103,18 @@
     },
     {
       "path": "./projects/filters/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/previews/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/previews/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/preview/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/preview/tsconfig.spec.json"
     }
   ]
 }

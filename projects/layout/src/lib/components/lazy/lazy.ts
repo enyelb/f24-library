@@ -1,4 +1,4 @@
-import { Component, ComponentRef, Type, ViewContainerRef, signal, input, viewChild, OnDestroy, effect } from '@angular/core';
+import { Component, ComponentRef, Type, ViewContainerRef, signal, input, viewChild, OnDestroy, effect, ViewEncapsulation } from '@angular/core';
 
 import { F24Loader } from '../loader/loader';
 
@@ -46,6 +46,7 @@ export interface F24LazyComponent<C> {
   templateUrl: './lazy.html',
   styleUrl: './lazy.scss',
   standalone: true,
+  encapsulation: ViewEncapsulation.None
 })
 export class F24Lazy<C> implements OnDestroy {
 

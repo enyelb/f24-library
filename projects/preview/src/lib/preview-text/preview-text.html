@@ -1,0 +1,10 @@
+<div [class]="['f24-preview-container', orientation()]">
+  @if (label(); as label) {
+    <p class="f24-preview-label">
+      {{ label }}
+    </p>
+  }
+  <p class="f24-preview-text">
+    {{ value() }}
+  </p>
+</div>

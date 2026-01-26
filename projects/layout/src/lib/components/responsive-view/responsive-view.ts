@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ElementRef, input, viewChild, effect } from '@angular/core';
+import { Component, OnDestroy, ElementRef, input, viewChild, effect, ViewEncapsulation } from '@angular/core';
 
 import { F24Lazy, F24LazyId, F24LazyInputs, F24LazyModule, F24LazyPost } from "../lazy/lazy";
 
@@ -28,6 +28,7 @@ export interface F24ResponsiveViewComponent<C> {
   templateUrl: './responsive-view.html',
   styleUrl: './responsive-view.scss',
   standalone: true,
+  encapsulation: ViewEncapsulation.None
 })
 export class F24ResponsiveView implements OnDestroy {
 

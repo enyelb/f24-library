@@ -1,10 +1,10 @@
-import { computed, output, viewChild } from '@angular/core';
+import { computed, OnInit, output, viewChild, ViewEncapsulation } from '@angular/core';
 import { AfterViewInit, Component, OnDestroy, input, effect, untracked, contentChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl } from '@angular/forms';
 
 import { MatSortHeader } from '@angular/material/sort';
-import { MatColumnDef, MatFooterRowDef, MatHeaderRowDef, MatTable, MatTableModule } from '@angular/material/table';
+import { MatTable, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +13,9 @@ import { merge, Subscription } from 'rxjs';
 
 import { F24APIService } from '@f24/api';
 
-import { createDataSourceEmpty, F24DataSource } from '../../source/data-source';
+import { F24DataSource } from '../../source/data-source';
+import { F24Column } from '../column/column';
+import { F24_COLUMN_DEF_TOKEN, F24_FOOTER_ROW_DEF_TOKEN, F24_HEADER_ROW_DEF_TOKEN } from '../../column-token';
 
 /**
  * Table
@@ -27,8 +29,9 @@ import { createDataSourceEmpty, F24DataSource } from '../../source/data-source';
     CommonModule,
     MatIconModule, MatTableModule, MatProgressBarModule, MatPaginatorModule
   ],
+  encapsulation: ViewEncapsulation.None
 })
-export class F24Table<T> implements AfterViewInit, OnDestroy {
+export class F24Table<T> implements OnInit, AfterViewInit, OnDestroy {
 
   //CONFIG
   /**
@@ -90,28 +93,30 @@ export class F24Table<T> implements AfterViewInit, OnDestroy {
    * content childrens
    */
   protected readonly sortHeaders = contentChildren(MatSortHeader);
-  protected readonly headerRowDefs = contentChildren(MatHeaderRowDef);
-  protected readonly footerRowDefs = contentChildren(MatFooterRowDef);
-  protected readonly columnDefs = contentChildren(MatColumnDef);
+  protected readonly headerRowDefs = contentChildren(F24_HEADER_ROW_DEF_TOKEN);
+  protected readonly footerRowDefs = contentChildren(F24_FOOTER_ROW_DEF_TOKEN);
+  protected readonly columnDefs = contentChildren(F24_COLUMN_DEF_TOKEN);
 
   /**
    * displayed
    */
   protected readonly displayed = computed(() => {
-    const defs = this.columnDefs();
+    const defs = this.columnDefs()
+      .map(column => column instanceof F24Column ? column.matColumnDef() : column)
+      .filter(column => !!column);
+
     const columns: string[] = [], header: string[] = [], footer: string[] = [];
-    untracked(() => {
-      defs.forEach(columnDef => {
-        this.table().addColumnDef(columnDef);
-        if (columnDef.headerCell && !columnDef.cell) {
-          header.push(columnDef.name);
-        } else if (columnDef.footerCell) {
-          footer.push(columnDef.name);
-        } else {
-          columns.push(columnDef.name);
-        }
-      });
-    })
+    
+    untracked(() => defs.forEach(columnDef => {
+      this.table().addColumnDef(columnDef);
+      if (columnDef.headerCell && !columnDef.cell) {
+        header.push(columnDef.name);
+      } else if (columnDef.footerCell) {
+        footer.push(columnDef.name);
+      } else {
+        columns.push(columnDef.name);
+      }
+    }));
     
     return { columns, header, footer }
   });
@@ -131,43 +136,49 @@ export class F24Table<T> implements AfterViewInit, OnDestroy {
    */
   constructor() {
     /**
-     *  
+     *  Headers
      */
     effect(() => {
-      const defs = this.headerRowDefs();
-      untracked(() => defs.forEach(headerRowDef => this.table().addHeaderRowDef(headerRowDef)));
+      const defs = this.headerRowDefs()
+        .map(column => column instanceof F24Column ? column.matHeaderRowDef() : column)
+        .filter(column => !!column);
+      untracked(() => {
+        defs.forEach(headerRowDef => this.table().addHeaderRowDef(headerRowDef))
+      });
     });
-
     /**
-     * 
+     * Footers
      */
     effect(() => {
-      const defs = this.footerRowDefs();
-      untracked(() => defs.forEach(footerRowDef => this.table().addFooterRowDef(footerRowDef)));
-    });
+      const defs = this.footerRowDefs()
+        .map(column => column instanceof F24Column ? column.matFooterRowDef() : column)
+        .filter(column => !!column);
 
+      untracked(() => {
+        console.log(defs);
+        defs.forEach(footerRowDef => this.table().addFooterRowDef(footerRowDef));
+      });
+    });
     /**
-     * sort header
+     * Sorts
      */
     effect(() => {
       const sorts = this.sortHeaders();
     });
-
     /**
      * dataSource
      */
     effect(() => {
       this.dataSource().filter(F24APIService.filters(this.filters()));
       this.dataSource().sort(F24APIService.sorts(this.sorts()));
-    })
+    });
 
   }
 
   /**
    * ngAfterViewInit
    */
-  ngAfterViewInit(): void {
-
+  ngOnInit(): void {
     const filters = Object.values(this.filters()).map(filter => filter.valueChanges);
     const sorts = Object.values(this.sorts()).map(sort => sort.valueChanges);
 
@@ -177,6 +188,12 @@ export class F24Table<T> implements AfterViewInit, OnDestroy {
     this.subscriptionSorts = merge(... sorts).subscribe(() => {
       this.dataSource().sort(F24APIService.sorts(this.sorts()));
     });
+  }
+
+  /**
+   * ngAfterViewInit
+   */
+  ngAfterViewInit(): void {
     const paginator = this.paginator();
     if (paginator) {
       this.dataSource().page(1, this.pageSize());

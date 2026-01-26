@@ -1,0 +1,45 @@
+.f24-preview-container {
+  padding: calc(var(--margin-global, 20px) / 4);
+  
+  .f24-preview-label{
+    margin: 0px;
+    border: 1px solid var(--border-primary);
+    padding: 1px 10px;
+    width: fit-content;
+    background: var(--bg-primary);
+    
+  }
+
+  .f24-preview-text {
+    border: 1px solid var(--border-primary);
+    padding: 5px;
+    margin: 0px;
+    background: var(--input-bg);
+    font-weight: 500;
+  }
+}
+
+.f24-preview-container.vertical {
+  .f24-preview-label {
+    border-radius: 10px 10px 0px 0px;
+    border-bottom: 0px;
+  }
+
+  .f24-preview-text {
+    border-radius: 0px 10px 10px 10px;
+  }
+}
+
+.f24-preview-container.horizontal {
+  display: flex;
+  .f24-preview-label {
+    border-radius: 10px 0px 0px 10px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .f24-preview-text {
+    border-radius: 0px 10px 10px 0px;
+    width: 100%;
+  }
+}

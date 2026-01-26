@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 
-import { Component, OnInit, inject, OnDestroy, input, output } from '@angular/core';
+import { Component, OnInit, inject, OnDestroy, input, output, effect } from '@angular/core';
 import { NgControl, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,15 +25,17 @@ export class FormInput extends ControlValueAccessor implements OnInit, OnDestroy
   /**
    * inputs
    */
-  public label = input<string>('');
-  public placeholder = input<string>('');
-  public type = input<string>('text');
-  public formControl = input<AbstractControl | null>(null);
+  readonly label = input<string>('');
+  readonly placeholder = input<string>('');
+  readonly type = input<string>('text');
+  readonly disabled = input<boolean>(false);
+  readonly value = input();
+  readonly formControl = input<AbstractControl | null>(null);
 
   /**
    * outputs
    */
-  public changes = output<any>()
+  readonly changes = output<any>()
 
   /**
    * injects
@@ -49,6 +51,13 @@ export class FormInput extends ControlValueAccessor implements OnInit, OnDestroy
    */
   constructor() {
     super();
+
+    effect(() => {
+      const value = this.value();
+      if (value) {
+        this.control().setValue(value);
+      }
+    });
 
     // Configurar el value accessor
     if (this.ngControl) {

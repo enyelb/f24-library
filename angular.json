@@ -12,7 +12,7 @@
       "projectType": "library",
       "root": "projects/alerts",
       "sourceRoot": "projects/alerts/src",
-      "prefix": "lib",
+      "prefix": "f24",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
@@ -38,7 +38,7 @@
       "projectType": "library",
       "root": "projects/forms",
       "sourceRoot": "projects/forms/src",
-      "prefix": "lib",
+      "prefix": "f24",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
@@ -64,7 +64,7 @@
       "projectType": "library",
       "root": "projects/functions",
       "sourceRoot": "projects/functions/src",
-      "prefix": "lib",
+      "prefix": "f24",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
@@ -90,7 +90,7 @@
       "projectType": "library",
       "root": "projects/layout",
       "sourceRoot": "projects/layout/src",
-      "prefix": "lib",
+      "prefix": "f24",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
@@ -116,7 +116,7 @@
       "projectType": "library",
       "root": "projects/api",
       "sourceRoot": "projects/api/src",
-      "prefix": "lib",
+      "prefix": "f24",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
@@ -142,7 +142,7 @@
       "projectType": "library",
       "root": "projects/data",
       "sourceRoot": "projects/data/src",
-      "prefix": "lib",
+      "prefix": "f24",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
@@ -168,7 +168,7 @@
       "projectType": "library",
       "root": "projects/notification",
       "sourceRoot": "projects/notification/src",
-      "prefix": "lib",
+      "prefix": "f24",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
@@ -194,7 +194,7 @@
       "projectType": "library",
       "root": "projects/filters",
       "sourceRoot": "projects/filters/src",
-      "prefix": "lib",
+      "prefix": "f24",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
@@ -212,6 +212,32 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/filters/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "preview": {
+      "projectType": "library",
+      "root": "projects/preview",
+      "sourceRoot": "projects/preview/src",
+      "prefix": "f24",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/preview/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/preview/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/preview/tsconfig.spec.json"
           }
         }
       }
