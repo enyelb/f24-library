@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { MtxPhotoviewerModule } from '@ng-matero/extensions/photoviewer';
 
@@ -11,6 +11,7 @@ import { MtxPhotoviewerModule } from '@ng-matero/extensions/photoviewer';
   imports: [MtxPhotoviewerModule],
   templateUrl: './image.html',
   styleUrls: ['./image.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class F24Image {
 

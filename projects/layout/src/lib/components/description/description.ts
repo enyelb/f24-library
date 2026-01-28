@@ -1,5 +1,5 @@
 
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -30,6 +30,7 @@ export interface F24ItemsOpts {
   styleUrl: './description.scss',
   standalone: true,
   imports: [MatIconModule, MatTooltipModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class F24Description {
 

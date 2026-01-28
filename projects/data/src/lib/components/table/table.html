@@ -14,9 +14,11 @@
 <!-- TABLE CONTENT -->
 <div class="f24-table-content">
   <!-- TABLE -->
-  <table mat-table
-    [dataSource]="dataSource()"
-    class="f24-table">
+  <table mat-table [class]="{
+      'f24-table': true,
+      'f24-table-no-result': dataSource().options.total() === 0,
+    }"
+    [dataSource]="dataSource()">
 
     <!-- CUSTOM COLUMNS -->
     <ng-content/>
@@ -30,29 +32,36 @@
     <tr mat-header-row *matHeaderRowDef="displayed().columns; sticky: isSticky()" class="f24-header-row"></tr>
 
     <!-- COLUMNS DISPLAYED-->
-    <tr mat-row *matRowDef="let row; columns: displayed().columns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayed().columns;" class="f24-row"></tr>
 
     <!-- FOOTER ROW TITLE -->
     @if (displayed().footer.length > 0) {
-      <tr mat-footer-row *matFooterRowDef="displayed().footer; sticky: isSticky()" class="f24-header-row"></tr>
+      <tr mat-footer-row *matFooterRowDef="displayed().footer; sticky: isSticky()" class="f24-footer-row"></tr>
     }
     <!-- COLUMNS NO RESULT -->
-    @if (!dataSource().options.loading() && dataSource().options.total() === 0) {
-      <tr *matNoDataRow>
-        <td class="f24-cell f24-cell-no-result" [attr.colspan]="displayed().columns.length">
-          <div class="no-data">
-            <mat-icon>inbox</mat-icon>
-            <p>{{ noResultLabel() }}</p>
+    
+    <tr *matNoDataRow class="f24-row-no-result">
+      <td class="f24-cell-no-result" [attr.colspan]="displayed().columns.length">
+        @if (dataSource().options.total() === 0) {  
+          <div class="f24-item-no-result">
+            @if (dataSource().options.loading()) {
+              <mat-spinner></mat-spinner>
+            } @else {
+              <mat-icon>inbox</mat-icon>
+              <p>{{ noResultLabel() }} </p>
+            }
           </div>
-        </td>
-      </tr>
-    }
+        }
+      </td>
+    </tr>
   </table>
 </div>
 <!-- PAGINATION -->
 @if (isPagination()) {
   <mat-paginator  #paginator showFirstLastButtons class="f24-teble-pagination"
-    [ngClass]="paginator.pageSize === pageSizeMaxLength ? 'f24-table-pagination-all': ''"
+    [class]="{
+      'f24-table-pagination-all': paginator.pageSize === pageSizeMaxLength
+    }"
     [length]="dataSource().options.total()"
     [pageSize]="dataSource().options.size()"
     [pageSizeOptions]="pageSizeOptions()">

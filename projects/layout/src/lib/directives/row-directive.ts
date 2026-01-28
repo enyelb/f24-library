@@ -80,12 +80,18 @@ export class F24RowDirective implements OnDestroy, OnInit {
    * ngOnInit
    */
   ngOnInit(): void {
-    this.el.nativeElement.style.display = 'flex';
-    this.el.nativeElement.style.flexWrap = 'wrap';
-    this.el.nativeElement.style.alignItems = 'stretch';
-    this.el.nativeElement.style.padding = 'calc(var(--margin-global, 20px) / 2)';
-   // this.el.nativeElement.style.width = 'calc(100% - (var(--margin-global, 20px) / 2))';
-    this.resizeObserver.observe(this.el.nativeElement);
+    const element = this.el.nativeElement;
+    
+    requestAnimationFrame(() => {
+      element.style.cssText = `
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        padding: calc(var(--margin-global, 20px) / 2);
+      `;
+    });
+    
+    this.resizeObserver.observe(element);
   }
 
   /**

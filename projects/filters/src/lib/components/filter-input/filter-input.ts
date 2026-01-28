@@ -1,13 +1,13 @@
-import { Component, input, Input, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+
+import { ChangeDetectionStrategy, Component, effect, input, OnDestroy, OnInit, untracked } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { Subscription } from 'rxjs';
+import { createFilterSourceInput, F24FilterSourceInputParams } from './../../source/input-source';
 
 /**
  * F24FilterInputComponent
@@ -17,67 +17,51 @@ import { Subscription } from 'rxjs';
   styleUrls: ['filter-input.scss'],
   templateUrl: 'filter-input.html',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule],
+  imports: [
+    ReactiveFormsModule, 
+    MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class F24FilterInput implements OnInit, OnDestroy {
-
+export class F24FilterInput<T = string | number> implements OnInit, OnDestroy {
   /**
-   * id
+   * params
    */
-  readonly id = input('');
-
+  readonly params = input<F24FilterSourceInputParams<T>>();
   /**
-   * label
+   * source 
    */
-  readonly label = input('Filter');
-
+  readonly source = input(createFilterSourceInput(this.params()));
   /**
-   * placeholder
+   * constructor
    */
-  readonly placeholder = input('') ;
-
-  /**
-   * dafault
-   */
-  readonly default = input<any>(null);
-
-  /**
-   * form
-   */
-  readonly form = input(new FormControl(this.default()));
-
-  /**
-   * appearance
-   */
-  readonly appearance = input<'fill' | 'outline'>('outline');
-
-  /**
-   * subscription
-   */
-  private subscription? : Subscription;
-
+  constructor() {
+    /**
+     * efecto para asignar los parametros al source
+     */
+    effect(() => {
+      /**
+       * validar si los parametros existen
+       */
+      const params = this.params();
+      if (!params) {
+        return;
+      }
+      untracked(() => {
+        this.source().update(params)
+      });
+    });
+  }
   /**
    * ngOnInit
    */
   ngOnInit() {
-    const filters = JSON.parse(localStorage.getItem("filters") ?? '{}');
-
-    if (this.id()) {
-      if (filters[this.id()]) {
-        this.form().setValue(filters[this.id()]);
-      }
-
-      this.subscription = this.form().valueChanges.subscribe(value => {
-        const filters = JSON.parse(localStorage.getItem("filters") ?? '{}');
-        filters[this.id()] = value;
-        localStorage.setItem("filters", JSON.stringify(filters));
-      });
-    }
+    this.source().init();
   }
-
+  /**
+   * ngOnDestroy
+   */
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.source().destroy();
   }
 }

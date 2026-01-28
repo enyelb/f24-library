@@ -85,9 +85,7 @@ export class FormInput extends ControlValueAccessor implements OnInit, OnDestroy
    * @returns
    */
   protected changeEmit() {
-    setTimeout(() => {
-      this.changes.emit(this.control().value);
-    }, 0)
+    this.changes.emit(this.control().value);
   }
 
 }

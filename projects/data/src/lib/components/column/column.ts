@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, computed, contentChild, effect, input, TemplateRef, viewChild } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChild, effect, input, viewChild } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
 import { MatSortHeader, MatSortModule } from '@angular/material/sort';
@@ -38,7 +38,8 @@ import { F24HeaderDirective } from '../../directives/header';
       useFactory: (component: F24Column) => component,
       deps: [F24Column]
     }
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class F24Column {
   /**

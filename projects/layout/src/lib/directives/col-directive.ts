@@ -87,17 +87,34 @@ export class F24ColDirective {
    * change
    */
   change(SIZE: string): void {
-    const sises = this.sizes();
-
-    const width = ((this.layout.values(sises, SIZE) / this.base()) * 100);
-    if (width == 0) {
-      this.el.nativeElement.style.display = 'none';
-    } else {
-      this.el.nativeElement.style.display = 'block';
+    if (SIZE === this.size() && this.inizialized()) {
+      return;
     }
-    this.el.nativeElement.style.width = `${width}%`//`calc(${width}% - (var(--margin-global) / 2))`;
-    this.inizialized.set(true);
-    this.size.set(SIZE);
+    
+    const sises = this.sizes();
+    const width = ((this.layout.values(sises, SIZE) / this.base()) * 100);
+    
+    //AGREGAR: Usar classList en lugar de style directo
+    const element = this.el.nativeElement;
+    
+    //PREPARAR: Primero calcular todo
+    const shouldHide = width === 0;
+    const newWidth = `${width}%`;
+    
+    //APLICAR: Todo en un batch
+    requestAnimationFrame(() => {
+      // Solo modificar si realmente cambió
+      if (shouldHide !== (element.style.display === 'none')) {
+        element.style.display = shouldHide ? 'none' : 'block';
+      }
+      
+      if (element.style.width !== newWidth) {
+        element.style.width = newWidth;
+      }
+      
+      this.inizialized.set(true);
+      this.size.set(SIZE);
+    });
   }
 
   /**

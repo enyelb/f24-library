@@ -1,11 +1,10 @@
-import { Component, EventEmitter, input, Input, OnDestroy, OnInit, output, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, effect, input, OnDestroy, OnInit, untracked } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MtxSelectModule } from '@ng-matero/extensions/select';
 
-import { Subscription } from 'rxjs';
+import { createFilterSourceSelect, F24FilterSourceSelectParams, F24FilterSourceSelectType } from '../../source/select-source';
 
 /**
  * F24FilterSelectComponent
@@ -15,119 +14,51 @@ import { Subscription } from 'rxjs';
   styleUrls: ['filter-select.scss'],
   templateUrl: 'filter-select.html',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MtxSelectModule],
+  imports: [
+    ReactiveFormsModule, 
+    MatFormFieldModule, MtxSelectModule
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class F24FilterSelect<Data> implements OnInit, OnDestroy {
-
+export class F24FilterSelect<D, T = F24FilterSourceSelectType> implements OnInit, OnDestroy {
   /**
-   * id
+   * params
    */
-  readonly id = input('');
-
+  readonly params = input<F24FilterSourceSelectParams<D,T>>();
   /**
-   * label
+   * source 
    */
-  readonly label = input('Filter');
-
+  readonly source = input(createFilterSourceSelect(this.params()));
   /**
-   * multiple
+   * constructor
    */
-  readonly multiple = input(false);
-
-  /**
-   * dafault
-   */
-  readonly default = input<any>(null);
-
-  /**
-   * bindLabel
-   */
-  readonly bindLabel = input<string>();
-
-  /**
-   * bindValue
-   */
-  readonly bindValue = input<string>();
-
-  /**
-   * form
-   */
-  readonly form = input(new FormControl(this.default()));
-
-  /**
-   * items
-   */
-  readonly items = input<Data[]>([]);
-
-   /**
-   * appearance
-   */
-  readonly appearance = input<'fill' | 'outline'>('outline');
-
-  /**
-   * change
-   */
-  readonly change = output<any>();
-
-  /**
-   * subscription
-   */
-  private subscription? : Subscription;
-
-  /**
-   * formatterLabel
-   */
-  readonly formatterLabel = input((data: Data) => {
-    if (this.bindLabel() && data != null && (data instanceof Object)) {
-      for(const [key, value] of Object.entries(data)) {
-        if (key === this.bindLabel()) {
-          return value;
-        }
+  constructor() {
+    /**
+     * efecto para asignar los parametros al source
+     */
+    effect(() => {
+      /**
+       * validar si los parametros existen
+       */
+      const params = this.params();
+      if (!params) {
+        return;
       }
-    }
-    return data;
-  });
-
-  /**
-   * formatterOption
-   */
-  readonly formatterOption = input((data: Data) => {
-    if (this.bindLabel() && data != null && (data instanceof Object)) {
-      for(const [key, value] of Object.entries(data)) {
-        if (key === this.bindLabel()) {
-          return value;
-        }
-      }
-    }
-    return data;
-  });
-
+      untracked(() => {
+        this.source().update(params)
+      });
+    });
+  }
   /**
    * ngOnInit
    */
   ngOnInit() {
-    if (this.id()) {
-      const filters = JSON.parse(localStorage.getItem("filters") ?? '{}');
-
-      if (filters[this.id()]) {
-        this.form().setValue(filters[this.id()]);
-      }
-    }
-
-    this.subscription = this.form().valueChanges.subscribe(value => {
-      this.change.emit(value);
-
-      if (this.id()) {
-        const filters = JSON.parse(localStorage.getItem("filters") ?? '{}');
-        filters[this.id()] = value;
-        localStorage.setItem("filters", JSON.stringify(filters));
-      }
-    });
+    this.source().init();
   }
-
+  /**
+   * ngOnDestroy
+   */
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.source().destroy();
   }
 }

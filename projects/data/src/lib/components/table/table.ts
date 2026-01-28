@@ -1,17 +1,15 @@
-import { computed, OnInit, output, viewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, computed, OnInit, output, viewChild, ViewEncapsulation } from '@angular/core';
 import { AfterViewInit, Component, OnDestroy, input, effect, untracked, contentChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl } from '@angular/forms';
 
 import { MatSortHeader } from '@angular/material/sort';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 
-import { merge, Subscription } from 'rxjs';
-
-import { F24APIService } from '@f24/api';
+import { Subscription } from 'rxjs';
 
 import { F24DataSource } from '../../source/data-source';
 import { F24Column } from '../column/column';
@@ -26,10 +24,10 @@ import { F24_COLUMN_DEF_TOKEN, F24_FOOTER_ROW_DEF_TOKEN, F24_HEADER_ROW_DEF_TOKE
   templateUrl: 'table.html',
   standalone: true,
   imports: [
-    CommonModule,
-    MatIconModule, MatTableModule, MatProgressBarModule, MatPaginatorModule
+    MatIconModule, MatTableModule, MatProgressBarModule, MatPaginatorModule, MatProgressSpinnerModule
   ],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class F24Table<T> implements OnInit, AfterViewInit, OnDestroy {
 
@@ -43,8 +41,6 @@ export class F24Table<T> implements OnInit, AfterViewInit, OnDestroy {
   readonly pageSizes = input([5, 10, 25, 100]);
   readonly isPageSizeMaxLength = input(true);
   readonly isPagination = input(true);
-  readonly filters = input<{[key: string]: FormControl}>({});
-  readonly sorts = input<{[key: string]: FormControl}>({});
   readonly noResultLabel = input('No data matching the filter');
   readonly sortFn = input<(name: string, direction: string, data: T[]) => T[]>();
   readonly changeData = output<T[]>();
@@ -67,16 +63,6 @@ export class F24Table<T> implements OnInit, AfterViewInit, OnDestroy {
    * subscriptionPage
    */
   protected subscriptionPage!: Subscription;
-
-  /**
-   * subscriptionFilters
-   */
-  protected subscriptionFilters!: Subscription;
-
-  /**
-   * subscriptionSorts
-   */
-  protected subscriptionSorts!: Subscription;
 
   /**
    * subscriptionSortChange
@@ -143,6 +129,7 @@ export class F24Table<T> implements OnInit, AfterViewInit, OnDestroy {
         .map(column => column instanceof F24Column ? column.matHeaderRowDef() : column)
         .filter(column => !!column);
       untracked(() => {
+        console.log(defs);
         defs.forEach(headerRowDef => this.table().addHeaderRowDef(headerRowDef))
       });
     });
@@ -163,31 +150,17 @@ export class F24Table<T> implements OnInit, AfterViewInit, OnDestroy {
      * Sorts
      */
     effect(() => {
-      const sorts = this.sortHeaders();
+      const defs = this.sortHeaders();
+      untracked(() => {
+        console.log(defs);
+      });
     });
-    /**
-     * dataSource
-     */
-    effect(() => {
-      this.dataSource().filter(F24APIService.filters(this.filters()));
-      this.dataSource().sort(F24APIService.sorts(this.sorts()));
-    });
-
   }
 
   /**
    * ngAfterViewInit
    */
   ngOnInit(): void {
-    const filters = Object.values(this.filters()).map(filter => filter.valueChanges);
-    const sorts = Object.values(this.sorts()).map(sort => sort.valueChanges);
-
-    this.subscriptionFilters = merge(... filters).subscribe(() => {
-      this.dataSource().filter(F24APIService.filters(this.filters()));
-    });
-    this.subscriptionSorts = merge(... sorts).subscribe(() => {
-      this.dataSource().sort(F24APIService.sorts(this.sorts()));
-    });
   }
 
   /**
@@ -210,14 +183,6 @@ export class F24Table<T> implements OnInit, AfterViewInit, OnDestroy {
    * ngOnDestroy
    */
   ngOnDestroy(): void {
-    if(this.subscriptionFilters) {
-      this.subscriptionFilters.unsubscribe();
-    }
-
-    if(this.subscriptionSorts) {
-      this.subscriptionSorts.unsubscribe();
-    }
-
     if(this.subscriptionHeaderSort) {
       this.subscriptionHeaderSort.unsubscribe();
     }

@@ -5,3 +5,17 @@ f24-lazy {
   flex-direction: column;
   flex: 1;
 }
+
+f24-lazy {
+  animation: fadeInLazy 0.8s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInLazy {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

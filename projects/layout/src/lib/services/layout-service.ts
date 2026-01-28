@@ -141,11 +141,4 @@ export class F24LayoutService {
   is(values: string[]): boolean {
     return values.map(v => v.toUpperCase()).includes(this.SIZE());
   }
-
-  /**
-   * destroy - Método mantenido por compatibilidad (ya no es necesario con Signals)
-   */
-  destroy(): void {
-    // No es necesario con Signals, pero se mantiene por compatibilidad
-  }
 }

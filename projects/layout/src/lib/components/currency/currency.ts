@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { F24FunctionsModule  } from '@f24/functions';
 
@@ -11,6 +11,7 @@ import { F24FunctionsModule  } from '@f24/functions';
   styleUrl: './currency.scss',
   standalone: true,
   imports: [F24FunctionsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class F24Currency {
   /**

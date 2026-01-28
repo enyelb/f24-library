@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 /**
  * Loader
@@ -9,6 +9,7 @@ import { Component, input } from '@angular/core';
   templateUrl: 'loader.html',
   standalone: true,
   imports: [],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class F24Loader {
 

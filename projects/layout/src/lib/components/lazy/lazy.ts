@@ -1,4 +1,4 @@
-import { Component, ComponentRef, Type, ViewContainerRef, signal, input, viewChild, OnDestroy, effect, ViewEncapsulation } from '@angular/core';
+import { Component, ComponentRef, Type, ViewContainerRef, signal, input, viewChild, OnDestroy, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 import { F24Loader } from '../loader/loader';
 
@@ -46,17 +46,21 @@ export interface F24LazyComponent<C> {
   templateUrl: './lazy.html',
   styleUrl: './lazy.scss',
   standalone: true,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class F24Lazy<C> implements OnDestroy {
 
+  /**
+   * disableLoading
+   */
+  readonly disableLoading = input(false);
   /**
    * componentViewContainerRef
    */
   readonly componentViewContainerRef = viewChild.required('componentViewContainerRef', { 
     read: ViewContainerRef 
   })
-
   /**
    * loading
    */
@@ -164,6 +168,23 @@ export class F24Lazy<C> implements OnDestroy {
   }
 
   /**
+   * isLodaing
+   * @returns 
+   */
+  public isLodaing(): boolean {
+    return this.isLoadingMoudle();
+  }
+
+  /**
+   * isLoad
+   * @returns 
+   */
+  public isLoad(): boolean {
+    return this.componentRef != undefined;
+  }
+
+
+  /**
    * safeLoadModule
    */
   private async safeLoadModule(module?: F24LazyModule<C>) {
@@ -252,5 +273,4 @@ export class F24Lazy<C> implements OnDestroy {
       this.componentRef = undefined;
     }
   }
-
 }

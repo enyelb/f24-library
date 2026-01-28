@@ -1,1 +1,10 @@
-<f24-lazy/>
+@for (c of components(); track c.id) {
+  <f24-lazy 
+    [disableLoading]="true"
+    [style]="{ display: c === current()?.component ? 'block' : 'none' }"
+  />
+}
+
+@if (!current()) {
+  <f24-loader/>
+}

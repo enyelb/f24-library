@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 /**
  * F24Status
@@ -9,6 +9,7 @@ import { Component, input } from '@angular/core';
   styleUrl: './status.scss',
   standalone: true,
   imports: [],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class F24Status {
 

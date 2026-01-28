@@ -7,6 +7,8 @@ f24-container {
   display: flex;
   flex-direction: column;
 
+  flex: 1;
+
   f24-container {
     border-radius: 0px;
     border: none;

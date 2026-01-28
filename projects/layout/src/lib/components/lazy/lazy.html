@@ -1,2 +1,4 @@
 <ng-container #componentViewContainerRef/>
-<f24-loader [isLoading]="loading()"/>
+@if (loading() && !disableLoading()) { 
+  <f24-loader/>
+}

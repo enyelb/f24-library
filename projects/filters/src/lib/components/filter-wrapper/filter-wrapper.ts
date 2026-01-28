@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 /**
  * F24FilterWrapper
@@ -9,7 +8,8 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['filter-wrapper.scss'],
   templateUrl: 'filter-wrapper.html',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class F24FilterWrapper {
 
