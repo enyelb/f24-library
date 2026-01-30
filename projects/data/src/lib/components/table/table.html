@@ -45,7 +45,7 @@
         @if (dataSource().options.total() === 0) {  
           <div class="f24-item-no-result">
             @if (dataSource().options.loading()) {
-              <mat-spinner></mat-spinner>
+              <f24-loader/>
             } @else {
               <mat-icon>inbox</mat-icon>
               <p>{{ noResultLabel() }} </p>

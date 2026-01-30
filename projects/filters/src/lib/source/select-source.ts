@@ -1,20 +1,20 @@
 import { signal } from "@angular/core";
-import { F24FilterSourceInput, F24FilterSourceInputParams } from "./input-source";
+
+import { F24FilterSourceForm, F24FilterSourceFormParams } from "./form-source";
 
 /**
- * F24FilterSourceSelectType
+ * Params
  */
 export type F24FilterSourceSelectType = string | number | [];
-
 /**
  * F24FilterSourceParams
  */
-export interface F24FilterSourceSelectParams<D, T = F24FilterSourceSelectType> extends F24FilterSourceInputParams<T>{
+export interface F24FilterSourceSelectParams<Item, Type extends F24FilterSourceSelectType> extends F24FilterSourceFormParams<Type> {
   multiple?: boolean
-  items?: D[]
-  formatter?: (data: D) => string | {
-    label: (data: D) => string
-    value: (data: D) => string
+  items?: Item[]
+  formatter?: (data: Item) => string | {
+    label: (data: Item) => string
+    value: (data: Item) => string
   },
   bind?: string | {
     label: string
@@ -24,7 +24,7 @@ export interface F24FilterSourceSelectParams<D, T = F24FilterSourceSelectType> e
 /**
  * F24FilterSourceSelect
  */
-export class F24FilterSourceSelect<D, T = F24FilterSourceSelectType> extends F24FilterSourceInput<T> {
+export class F24FilterSourceSelect<Item, Type extends F24FilterSourceSelectType> extends F24FilterSourceForm<Type> {
   /**
    * multiple
    */
@@ -44,19 +44,18 @@ export class F24FilterSourceSelect<D, T = F24FilterSourceSelectType> extends F24
   /**
    * constructor
    */
-  constructor(params?: F24FilterSourceSelectParams<D, T>) {
+  constructor(params?: F24FilterSourceSelectParams<Item, Type>) {
     super(params);
     this._multiple = signal(params?.multiple ?? false);
     this._items = signal(params?.items ?? []);
     this._bind = signal(this.createBind(params?.bind));
     this._formatter = signal(this.createFormatter(params?.formatter));
-    
   }
   /**
    * update
    * actualiza cada variable si viene en los parametros
    */
-  public override update(params?: F24FilterSourceSelectParams<D, T>) {
+  public override update(params?: F24FilterSourceSelectParams<Item, Type>) {
     super.update(params);
     /**
      * validar exiten los parametros
@@ -114,22 +113,37 @@ export class F24FilterSourceSelect<D, T = F24FilterSourceSelectType> extends F24
     return this._formatter.asReadonly();
   }
   /**
-   * metodo para crear formatters
+   * formatterDefault
    */
-  protected createFormatter(formatters?: any): { label: (data: D) => string, value: (data: D) => string } {
-    const formatter = (bind: string) => (data: D) => {
-      if (!bind || !(data instanceof Object)) {
-        return;
-      }
-      for(const [key, value] of Object.entries(data)) {
-        if (key === bind) {
-          return value;
-        }
+  private formatterDefault(bind: string | undefined, data: Item) {
+    if (!bind || !(data instanceof Object)) {
+      return'';
+    }
+    for(const [key, value] of Object.entries(data)) {
+      if (key === bind) {
+        return value;
       }
     }
+  }
+  /**
+   * formatterLabel
+   */
+  private formatterLabel(data: Item) {
+    return this.formatterDefault(this._bind().label, data);
+  }
+  /**
+   * formatterValue
+   */
+  private formatterValue(data: Item) {
+    return this.formatterDefault(this._bind().value, data);
+  }
+  /**
+   * metodo para crear formatters
+   */
+  protected createFormatter(formatters?: any): { label: (data: Item) => string, value: (data: Item) => string } {
     return {
-      label: (formatters && 'label' in formatters ? formatters.label : formatters) ?? formatter(this._bind().label),
-      value: (formatters && 'value' in formatters ? formatters.value : formatters) ?? formatter(this._bind().value)
+      label: (formatters && 'label' in formatters ? formatters.label : formatters) ?? ((item: Item) => this.formatterLabel(item)),
+      value: (formatters && 'value' in formatters ? formatters.value : formatters) ?? ((item: Item) => this.formatterValue(item)),
     }
   }
   /**
@@ -145,6 +159,12 @@ export class F24FilterSourceSelect<D, T = F24FilterSourceSelectType> extends F24
 /**
  * createFilterSourceSelect
  */
-export const createFilterSourceSelect = <D, T = F24FilterSourceSelectType>(params?: F24FilterSourceSelectParams<D, T>) => {
+export const createFilterSourceSelect = <Item, Type extends F24FilterSourceSelectType>(params?: F24FilterSourceSelectParams<Item, Type>) => {
   return new F24FilterSourceSelect(params);
+}
+/**
+ * createFilterSourceSelectParams
+ */
+export const createFilterSourceSelectParams = <Item, Type extends F24FilterSourceSelectType>(params?: F24FilterSourceSelectParams<Item, Type>) => {
+  return params;
 }

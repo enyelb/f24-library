@@ -1,8 +1,8 @@
 
 .container-loader {
-    position: absolute;
-    top: calc(50vh - 24px);
-    left: calc(50vw - 24px);
+    //position: absolute;
+    //top: calc(50vh - 24px);
+    //left: calc(50vw - 24px);
 
     .loader {
         width: 48px;
@@ -36,3 +36,10 @@
     }
 }
 
+f24-loader {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

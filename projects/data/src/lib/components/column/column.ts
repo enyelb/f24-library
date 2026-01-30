@@ -125,7 +125,7 @@ export class F24Column {
   }
 
   constructor() {
-    effect(() => {
+    /*effect(() => {
       const e = this.matFooterRowDef();
       if(e) {
         console.log('e', e);
@@ -134,6 +134,6 @@ export class F24Column {
         console.log(this.isFooter());
 
       }
-    })
+    })*/
   }
 }

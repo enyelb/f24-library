@@ -20,7 +20,7 @@ import { createFilterSourceSelect, F24FilterSourceSelectParams, F24FilterSourceS
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class F24FilterSelect<D, T = F24FilterSourceSelectType> implements OnInit, OnDestroy {
+export class F24FilterSelect<D, T extends F24FilterSourceSelectType> implements OnInit, OnDestroy {
   /**
    * params
    */
@@ -45,7 +45,8 @@ export class F24FilterSelect<D, T = F24FilterSourceSelectType> implements OnInit
         return;
       }
       untracked(() => {
-        this.source().update(params)
+        this.source().update(params);
+        this.source().init();
       });
     });
   }

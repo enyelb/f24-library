@@ -2,17 +2,17 @@
 
 <div class="f24-filter-date-range-container">
   <!-- DATE RANGE -->
-  <mat-form-field class="f24-filter-date-range" [appearance]="appearance()">
-    <mat-label>{{ label() }}</mat-label>
+  <mat-form-field class="f24-filter-date-range" [appearance]="source().appearance()">
+    <mat-label>{{ source().label() }}</mat-label>
     <mat-date-range-input [rangePicker]="picker">
-      <input matStartDate [formControl]="formStart()" [placeholder]="placeholderStart()">
-      <input matEndDate [formControl]="formEnd()" [placeholder]="placeholderEnd()">
+      <input matStartDate [formControl]="source().forms().start.form" [placeholder]="source().forms().start.placeholder">
+      <input matEndDate [formControl]="source().forms().end.form" [placeholder]="source().forms().end.placeholder">
     </mat-date-range-input>
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-date-range-picker #picker disabled="false" [touchUi]="isTouchUi()">
+    <mat-date-range-picker #picker disabled="false" [touchUi]="source().isTouchUi()">
       <mat-date-range-picker-actions>
-        <button mat-button matDateRangePickerCancel>{{ labelCancel() }}</button>
-        <button mat-raised-button color="primary" matDateRangePickerApply>{{ labelApply() }}</button>
+        <button mat-button matDateRangePickerCancel>{{ source().labelCancel() }}</button>
+        <button mat-raised-button color="primary" matDateRangePickerApply>{{ source().labelApply() }}</button>
       </mat-date-range-picker-actions>
     </mat-date-range-picker>
   </mat-form-field>

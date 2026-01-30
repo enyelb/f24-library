@@ -62,7 +62,7 @@ export class F24RowDirective implements OnDestroy, OnInit {
     });
 
     this.resizeSubject.pipe(
-      debounceTime(100), // Espera 100ms después del último cambio
+      debounceTime(500), // Espera 500ms después del último cambio
       takeUntil(this.destroy$)
     ).subscribe(width => {
       this.checkSize(width);

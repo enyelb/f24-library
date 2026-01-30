@@ -108,7 +108,7 @@ f24-table {
     };
 }
 
-.f24-header-row, .f24-footer-row, .f24-row-no-result {
+/*.f24-header-row, .f24-footer-row,*/ .f24-row-no-result {
     animation: fadeInHeaderRow 0.5s ease forwards;
     opacity: 0;
 }

@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, computed, OnInit, output, viewChild, ViewEncapsulation } from '@angular/core';
 import { AfterViewInit, Component, OnDestroy, input, effect, untracked, contentChildren } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { MatSortHeader } from '@angular/material/sort';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 
 import { Subscription } from 'rxjs';
+
+import { F24Loader } from '@f24/layout';
 
 import { F24DataSource } from '../../source/data-source';
 import { F24Column } from '../column/column';
@@ -24,7 +24,8 @@ import { F24_COLUMN_DEF_TOKEN, F24_FOOTER_ROW_DEF_TOKEN, F24_HEADER_ROW_DEF_TOKE
   templateUrl: 'table.html',
   standalone: true,
   imports: [
-    MatIconModule, MatTableModule, MatProgressBarModule, MatPaginatorModule, MatProgressSpinnerModule
+    MatIconModule, MatTableModule, MatProgressBarModule, MatPaginatorModule,
+    F24Loader
   ],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -129,7 +130,6 @@ export class F24Table<T> implements OnInit, AfterViewInit, OnDestroy {
         .map(column => column instanceof F24Column ? column.matHeaderRowDef() : column)
         .filter(column => !!column);
       untracked(() => {
-        console.log(defs);
         defs.forEach(headerRowDef => this.table().addHeaderRowDef(headerRowDef))
       });
     });
@@ -142,7 +142,6 @@ export class F24Table<T> implements OnInit, AfterViewInit, OnDestroy {
         .filter(column => !!column);
 
       untracked(() => {
-        console.log(defs);
         defs.forEach(footerRowDef => this.table().addFooterRowDef(footerRowDef));
       });
     });
@@ -152,7 +151,7 @@ export class F24Table<T> implements OnInit, AfterViewInit, OnDestroy {
     effect(() => {
       const defs = this.sortHeaders();
       untracked(() => {
-        console.log(defs);
+        //console.log(defs);
       });
     });
   }

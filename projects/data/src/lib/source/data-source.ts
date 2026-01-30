@@ -1,5 +1,7 @@
 import { computed, effect, signal, untracked } from "@angular/core";
 import { DataSource } from '@angular/cdk/collections';
+
+import { format, isDate } from 'date-fns';
 import { BehaviorSubject, debounceTime, Observable, of, Subject, switchMap, takeUntil } from "rxjs";
 
 import { F24Page } from "@f24/api";
@@ -152,7 +154,7 @@ export class F24DataSource<T> extends DataSource<T> {
    * @returns
    */
   public connect(): Observable<T[]> {
-    if (!this._connected()) {
+    if (!this._connected()) { 
       this._connected.set(true);
     }
     return this.stream;
@@ -172,18 +174,33 @@ export class F24DataSource<T> extends DataSource<T> {
     this.destroy$.complete();
   }
   /**
+   * safeFilters
+   * @param filters
+   */
+  private safeFilters(filters: Properties) {
+    for (const key in filters) {
+      const form = filters[key];
+      if (isDate(form)) {
+        filters[key] = format(new Date(form), 'yyyy-MM-dd')
+      } else if (form == null) {
+        delete filters[key];
+      }
+    }
+    this._filters.set(filters);
+  }
+  /**
    * filters
    * @param filters
    */
   public filters(filters: {}) {
-    this._filters.set(filters);
+    this.safeFilters(filters);
   }
   /**
    * filter
    * @param filters
    */
   public filter(name: string, value: any) {
-    this._filters.set({ ...this._filters(), [name]: value });
+    this.safeFilters({ ...this._filters(), [name]: value });
   }
   /**
    * sorts

@@ -94,7 +94,7 @@ export class F24ResponsiveView implements OnInit, OnDestroy {
     });
 
     this.resizeSubject.pipe(
-      debounceTime(100), // Espera 100ms después del último cambio
+      debounceTime(300), // Espera 300ms después del último cambio
       takeUntil(this.destroy$)
     ).subscribe(width => {
       this.checkSize(width);

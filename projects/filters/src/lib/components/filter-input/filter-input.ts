@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { createFilterSourceInput, F24FilterSourceInputParams } from './../../source/input-source';
+import { createFilterSourceInput, createFilterSourceInputParams, F24FilterSourceInputType } from './../../source/input-source';
 
 /**
  * F24FilterInputComponent
@@ -23,11 +23,11 @@ import { createFilterSourceInput, F24FilterSourceInputParams } from './../../sou
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class F24FilterInput<T = string | number> implements OnInit, OnDestroy {
+export class F24FilterInput<T extends F24FilterSourceInputType> implements OnInit, OnDestroy {
   /**
    * params
    */
-  readonly params = input<F24FilterSourceInputParams<T>>();
+  readonly params = input(createFilterSourceInputParams<T>());
   /**
    * source 
    */
@@ -48,7 +48,8 @@ export class F24FilterInput<T = string | number> implements OnInit, OnDestroy {
         return;
       }
       untracked(() => {
-        this.source().update(params)
+        this.source().update(params);
+        this.source().init();
       });
     });
   }
