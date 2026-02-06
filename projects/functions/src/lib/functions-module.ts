@@ -6,6 +6,7 @@ import { F24ToNumberPipe } from './pipes/number-pipe';
 import { F24RoundPipe } from './pipes/round-pipe';
 import { F24ToUSDPipe } from './pipes/to-usd-pipe';
 import { F24ToBSPipe } from './pipes/to-ves-pipe';
+import { F24AbsPipe } from './pipes/abs-pipe';
 
 /**
  * FunctionsModule
@@ -18,7 +19,8 @@ import { F24ToBSPipe } from './pipes/to-ves-pipe';
     F24RoundPipe,
     F24ToNumberPipe,
     F24ToUSDPipe,
-    F24ToBSPipe
+    F24ToBSPipe,
+    F24AbsPipe,
   ],
   exports: [
     F24CurrencyPipe,
@@ -27,7 +29,8 @@ import { F24ToBSPipe } from './pipes/to-ves-pipe';
     F24RoundPipe,
     F24ToNumberPipe,
     F24ToUSDPipe,
-    F24ToBSPipe
+    F24ToBSPipe,
+    F24AbsPipe,
   ]
 })
 export class F24FunctionsModule { }

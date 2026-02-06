@@ -28,7 +28,7 @@ export class F24FilterSelect<D, T extends F24FilterSourceSelectType> implements 
   /**
    * source 
    */
-  readonly source = input(createFilterSourceSelect(this.params()));
+  protected readonly source = input(createFilterSourceSelect(this.params()));
   /**
    * constructor
    */

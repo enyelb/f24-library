@@ -1,19 +1,23 @@
-import { ChangeDetectionStrategy, computed, OnInit, output, viewChild, ViewEncapsulation } from '@angular/core';
-import { AfterViewInit, Component, OnDestroy, input, effect, untracked, contentChildren } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, computed, viewChild, ViewEncapsulation } from '@angular/core';
+import { Component, input, effect, untracked, contentChildren } from '@angular/core';
+import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 
-import { MatSortHeader } from '@angular/material/sort';
-import { MatTable, MatTableModule } from '@angular/material/table';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+
+import { MatSort, MatSortHeader, MatSortModule } from '@angular/material/sort';
+import { MatColumnDef, MatTable, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 
-import { Subscription } from 'rxjs';
+import { distinctUntilChanged, of, switchMap } from 'rxjs';
 
 import { F24Loader } from '@f24/layout';
 
-import { F24DataSource } from '../../source/data-source';
-import { F24Column } from '../column/column';
-import { F24_COLUMN_DEF_TOKEN, F24_FOOTER_ROW_DEF_TOKEN, F24_HEADER_ROW_DEF_TOKEN } from '../../column-token';
+import { F24_COLUMN_DEF_TOKEN, F24_SHORT_HEADER_TOKEN } from '../../column-token';
+import { F24ColumnSelect } from '../column-select/column-select';
+
+import { createDataSource, createDataSourceParams } from '../../source/data-source';
 
 /**
  * Table
@@ -24,235 +28,209 @@ import { F24_COLUMN_DEF_TOKEN, F24_FOOTER_ROW_DEF_TOKEN, F24_HEADER_ROW_DEF_TOKE
   templateUrl: 'table.html',
   standalone: true,
   imports: [
-    MatIconModule, MatTableModule, MatProgressBarModule, MatPaginatorModule,
+    ScrollingModule,
+    MatSortModule, MatIconModule, MatTableModule, MatProgressBarModule, MatPaginatorModule,
     F24Loader
   ],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class F24Table<T> implements OnInit, AfterViewInit, OnDestroy {
+export class F24Table<T> {
+  /**
+   * params
+   */
+  readonly params = input(createDataSourceParams<T>());
+  /**
+   * source 
+   */
+  readonly source = input(createDataSource(this.params()));
 
   //CONFIG
   /**
    * inputs
    */
-  readonly isSticky = input(true);
-  readonly dataSource = input.required<F24DataSource<T>>();
-  readonly pageSize = input(10);
-  readonly pageSizes = input([5, 10, 25, 100]);
-  readonly isPageSizeMaxLength = input(true);
   readonly isPagination = input(true);
-  readonly noResultLabel = input('No data matching the filter');
-  readonly sortFn = input<(name: string, direction: string, data: T[]) => T[]>();
-  readonly changeData = output<T[]>();
-
-  //PAGINATION
-
-  //FILTER INPUT
-
-  /**
-   * pageSizeMaxLength
-   */
-  protected pageSizeMaxLength: number = 100000;
-
-  /**
-   * subscriptionHeaderSort
-   */
-  protected subscriptionHeaderSort!: Subscription;
-
-  /**
-   * subscriptionPage
-   */
-  protected subscriptionPage!: Subscription;
-
-  /**
-   * subscriptionSortChange
-   */
-  protected subscriptionSortChange!: Subscription;
 
   /**
    * view childs
    */
   protected readonly table = viewChild.required(MatTable);
+  protected readonly sorter = viewChild.required(MatSort);
   protected readonly paginator = viewChild(MatPaginator);
 
   /**
    * content childrens
    */
-  protected readonly sortHeaders = contentChildren(MatSortHeader);
-  protected readonly headerRowDefs = contentChildren(F24_HEADER_ROW_DEF_TOKEN);
-  protected readonly footerRowDefs = contentChildren(F24_FOOTER_ROW_DEF_TOKEN);
   protected readonly columnDefs = contentChildren(F24_COLUMN_DEF_TOKEN);
+  protected readonly sortHeaders = contentChildren(F24_SHORT_HEADER_TOKEN);
 
   /**
    * displayed
    */
   protected readonly displayed = computed(() => {
     const defs = this.columnDefs()
-      .map(column => column instanceof F24Column ? column.matColumnDef() : column)
+      .map(column => column instanceof MatColumnDef ? column : column.matColumnDef())
       .filter(column => !!column);
 
     const columns: string[] = [], header: string[] = [], footer: string[] = [];
     
-    untracked(() => defs.forEach(columnDef => {
-      this.table().addColumnDef(columnDef);
-      if (columnDef.headerCell && !columnDef.cell) {
-        header.push(columnDef.name);
-      } else if (columnDef.footerCell) {
-        footer.push(columnDef.name);
-      } else {
-        columns.push(columnDef.name);
-      }
-    }));
+    untracked(() => {
+      defs.forEach(columnDef => {
+        this.table().addColumnDef(columnDef);
+        if (columnDef.headerCell && !columnDef.cell) {
+          header.push(columnDef.name);
+        } else if (columnDef.footerCell) {
+          footer.push(columnDef.name);
+        } else {
+          columns.push(columnDef.name);
+        }
+      })
+    });
     
     return { columns, header, footer }
   });
-
   /**
-   * pageSizeOptions
+   * page
    */
-  protected readonly pageSizeOptions = computed(() => {
-    if (this.isPageSizeMaxLength()) {
-      return [...this.pageSizes(), this.pageSizeMaxLength];
-    }
-    return this.pageSizes();
-  })
+  protected readonly page = toSignal(
+    toObservable(this.paginator).pipe(
+      distinctUntilChanged(),
+      switchMap(p => p?.page ?? of(null)),
+      takeUntilDestroyed()
+    ),
+    { initialValue: null }
+  );
+  /**
+   * sort
+   */
+  protected readonly sort = toSignal(
+    toObservable(this.sorter).pipe(
+      distinctUntilChanged(),
+      switchMap(s => s?.sortChange ?? of((null))),
+      takeUntilDestroyed()
+    ),
+    { initialValue: null }
+  );
 
   /**
    * constructor
    */
   constructor() {
     /**
-     *  Headers
+     * conectar el data source despues de iniciar las vista
+     */
+    afterNextRender(() => {
+      this.source().connect();
+    });
+    /**
+     * efecto para asignar los parametros al source
      */
     effect(() => {
-      const defs = this.headerRowDefs()
-        .map(column => column instanceof F24Column ? column.matHeaderRowDef() : column)
-        .filter(column => !!column);
+      const params = this.params();
       untracked(() => {
-        defs.forEach(headerRowDef => this.table().addHeaderRowDef(headerRowDef))
+        this.source().update(params);
       });
     });
     /**
-     * Footers
+     * efecto para renderizar la tabla
      */
     effect(() => {
-      const defs = this.footerRowDefs()
-        .map(column => column instanceof F24Column ? column.matFooterRowDef() : column)
-        .filter(column => !!column);
-
+      this.source().data();
       untracked(() => {
-        defs.forEach(footerRowDef => this.table().addFooterRowDef(footerRowDef));
+        this.table().renderRows();
       });
     });
     /**
-     * Sorts
+     * efecto para registrar sorts
      */
     effect(() => {
-      const defs = this.sortHeaders();
+      const defs = this.sortHeaders()
+        .map(column => column instanceof MatSortHeader ? column : column.matSortHeader())
+        .filter(column => !!column);
+
+      const sorter = this.sorter();
+
       untracked(() => {
-        //console.log(defs);
+        defs.forEach(column => {
+          if (!sorter.sortables.has(column.id)) {
+            column._sort = sorter;
+            sorter.register(column); 
+          }
+        });
+      });
+    })
+    /**
+     * efecto para pasarle el data source al column select
+     */
+    effect(() => {
+      const dataSource = this.source();
+      untracked(() => {
+        this.columnDefs().filter(column => column instanceof F24ColumnSelect)
+          .forEach(columnSelect => {
+            columnSelect.setDataSource = dataSource;
+          });
       });
     });
-  }
-
-  /**
-   * ngAfterViewInit
-   */
-  ngOnInit(): void {
-  }
-
-  /**
-   * ngAfterViewInit
-   */
-  ngAfterViewInit(): void {
-    const paginator = this.paginator();
-    if (paginator) {
-      this.dataSource().page(1, this.pageSize());
-      this.subscriptionPage = paginator.page.subscribe( () => {
-        this.dataSource().page(
-          paginator.pageIndex + 1,
-          paginator.pageSize
-        );
-      });
-    }
-  }
-
-  /**
-   * ngOnDestroy
-   */
-  ngOnDestroy(): void {
-    if(this.subscriptionHeaderSort) {
-      this.subscriptionHeaderSort.unsubscribe();
-    }
-
-    if(this.subscriptionSortChange) {
-      this.subscriptionSortChange.unsubscribe();
-    }
-
-    if(this.subscriptionPage) {
-      this.subscriptionPage.unsubscribe();
-    }
-  }
-
-
-  /**
-   * paginatorPageSize
-   */
-  protected paginatorPageSize(): number {
-    const paginator = this.paginator();
-    if(paginator) {
-      return paginator.pageSize;
-    } 
-    
-    if (this.pageSizes) {
-      return this.pageSizes()[0];
-    }
-
-    return 25;
-  }
-
-  /**
-   * paginatorPageIndex
-   */
-  protected paginatorPageIndex(): number {
-
-    const paginator = this.paginator();
-    if(paginator) {
-      return paginator.pageIndex + 1;
-    }
-
-    return 1;
-  }
-
-  /**
-   * sortChange
-   */
-  /*sortChange(event: any): void {
-    for(const [_, value] of Object.entries(this.sorts)) {
-      value.setValue('', { emitEvent: false });
-    }
-
-    for(const [name, value] of Object.entries(this.sorts)) {
-      if (name === event.active) {
-        value.setValue(event.direction);
+    /**
+     * efecto para sincronizar page con el data source
+     */
+    effect(() => {
+      const dataSource = this.source();
+      const page = this.page();
+      if (!page) {
         return;
       }
-    }
-
-    if(this.sortFn) {
-      const data = this.sortFn(event.active, event.direction, this.dataSource.data);
-      this.createDataSort(data);
-    }
-  }*/
-
+      untracked(() => {
+        dataSource.update({
+          page: { 
+            index: page.pageIndex,
+            size: page.pageSize
+          }
+        });
+      });
+    });
+    /**
+     * efecto para sincronizar sort con el data source
+     */
+    effect(() => {
+      const dataSource = this.source();
+      const sort = this.sort();
+      if (!sort) {
+        return;
+      }
+      untracked(() => {
+        dataSource.update({
+          sorts: {
+            [sort.active]: sort.direction
+          }
+        });
+      });
+    });
+  }
   /**
-   * refresh
+   * trackBy
    */
-  refresh(data?: T[]): void {
-    if (data) {
-      this.dataSource().data(data)
+  protected trackBy(index: number, item: T) {
+    if (!this.source) {
+      return item;
     }
+    const id = this.source().id();
+    if (typeof id === 'function') {
+      return id(item);
+    }
+
+    const names = id.split('.');
+    let current: any = item;
+    while (names.length > 0) {
+      const name = names.shift();
+      if (name && name in current) {
+        current = current[name];
+      } else {
+        return item;
+      }
+    }
+    
+    return item;
   }
 
   /**
@@ -263,7 +241,7 @@ export class F24Table<T> implements OnInit, AfterViewInit, OnDestroy {
     if (!paginator) {
       return;
     }
-    if (this.isPagination() && this.pageSizes().includes(size)) {
+    if (this.isPagination() && this.source().page().options.includes(size)) {
       paginator.pageSize = size;
       paginator.page.emit();
     }

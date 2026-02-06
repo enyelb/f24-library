@@ -7,6 +7,7 @@ export * from './lib/source/data-source';
 
 export * from './lib/components/table/table';
 export * from './lib/components/column/column';
+export * from './lib/components/column-select/column-select';
 
 export * from './lib/directives/mat-defs';
 export * from './lib/directives/cell';

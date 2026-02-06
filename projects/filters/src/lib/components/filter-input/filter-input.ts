@@ -31,7 +31,7 @@ export class F24FilterInput<T extends F24FilterSourceInputType> implements OnIni
   /**
    * source 
    */
-  readonly source = input(createFilterSourceInput(this.params()));
+  protected readonly source = input(createFilterSourceInput(this.params()));
   /**
    * constructor
    */

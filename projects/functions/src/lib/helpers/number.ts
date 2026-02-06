@@ -5,25 +5,7 @@
  * @returns 
  */
 export function porcentage(value: number | string | undefined, total: number | string | undefined): number {
-  let valueNumber: number = 0, totalNumber: number = 0;
-    
-  try{
-    if(typeof value === 'string') {
-      valueNumber = Number(value);
-    } else if(value){
-      valueNumber = value;
-    }
-    if(typeof total === 'string') {
-      totalNumber = Number(total);
-    } else if(total){
-      totalNumber = total;
-    }
-  } catch {
-    valueNumber = 0;
-    totalNumber = 1;
-  }
-
-  return (valueNumber / totalNumber) * 100;
+  return (toNumber(value) / toNumber(total) || 1) * 100;
 }
 
 /**
@@ -33,8 +15,7 @@ export function porcentage(value: number | string | undefined, total: number | s
  * @returns 
  */
 export function round(value: string | number | undefined, r: number = 2) : number {
-  const number = toNumber(value);
-  return Number(number.toFixed(r));
+  return Number(toNumber(value).toFixed(r));
 }
 
 /**
@@ -81,4 +62,13 @@ export function toNumber(value: number | string | undefined) : number {
     valueNumber = 0;
   }
   return valueNumber;
+}
+
+/**
+ * abs
+ * @param value
+ * @returns 
+*/
+export function abs(value: number | string | undefined): number {
+  return Math.abs(toNumber(value));
 }

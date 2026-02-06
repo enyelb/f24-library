@@ -22,7 +22,6 @@ class CustomMomentDateAdapter extends DateFnsAdapter {
     return 1;
   }
 }
-
 /**
  * F24FilterDateRangeComponent
  */
@@ -70,7 +69,7 @@ export class F24FilterDateRange implements OnInit, OnDestroy {
   /**
    * source 
    */
-  readonly source = input(createFilterSourceDateRange(this.params()));
+  protected readonly source = input(createFilterSourceDateRange(this.params()));
   /**
    * constructor
    */

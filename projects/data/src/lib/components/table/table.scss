@@ -1,10 +1,63 @@
-f24-table {
+f24-table, .f24-table-content{
     height: 100% !important;
     overflow: hidden !important;
     display: flex;
     flex-direction: column;
     flex: 1;
 }
+
+f24-table {
+    table {
+        width: 100%;
+
+        th {
+            padding: 0 10px 0 10px;
+            height: 10px;
+        }
+        td {
+            padding: 0 5px 0 5px;
+            height: 20px;
+        }
+    }
+
+    cdk-virtual-scroll-viewport{
+        contain: none !important;
+        height: 100% !important;
+        overflow: hidden !important;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .cdk-virtual-scroll-content-wrapper {
+        position: relative;
+        flex: 1;
+        overflow: auto;
+    }
+
+    mat-option:last-child:before {
+        content: 'Todos' !important;
+        position: relative !important;
+    }
+
+    mat-option:last-child span{
+        display: none !important;
+    }
+
+    .mat-mdc-header-cell{
+        text-transform: uppercase;
+    }
+
+    .mat-mdc-header-row:first-child {
+        height: var(--mat-table-header-container-height, 40px);
+    }
+
+    .mat-mdc-header-row:not(:first-child) {
+        height: var(--mat-table-header-container-height, 20px)
+    };
+}
+
+
 
 .f24-table-progress-bar {
     display: flex;
@@ -22,12 +75,6 @@ f24-table {
 
 .f24-table-header-content {
     padding: calc(var(--margin-global) / 4);
-}
-
-.f24-table-content {
-    position: relative;
-    flex: 1;
-    overflow: auto;
 }
 
 .f24-table-x2 {
@@ -59,53 +106,18 @@ f24-table {
     height: 100%;
 }
 
-f24-table {
-    table {
-        width: 100%;
 
-        th {
-            padding: 0 10px 0 10px;
-            height: 10px;
-        }
-        td {
-            padding: 0 5px 0 5px;
-            height: 20px;
-        }
-    }
+.f24-row:hover {
+    background-color: #8484842f;
+}
 
-    .f24-row:hover {
-        background-color: #8484842f;
-    }
+.f24-table-pagination-all .mat-mdc-select-value-text:before {
+    content: 'Todos' !important;
+    position: relative !important;
+}
 
-    .f24-table-pagination-all .mat-mdc-select-value-text:before {
-        content: 'Todos' !important;
-        position: relative !important;
-    }
-
-    .f24-table-pagination-all .mat-mdc-select-value-text .mat-mdc-select-min-line{
-        display: none;
-    }
-
-    mat-option:last-child:before {
-        content: 'Todos' !important;
-        position: relative !important;
-    }
-
-    mat-option:last-child span{
-        display: none !important;
-    }
-
-    .mat-mdc-header-cell{
-        text-transform: uppercase;
-    }
-
-    .mat-mdc-header-row:first-child {
-        height: var(--mat-table-header-container-height, 40px);
-    }
-
-    .mat-mdc-header-row:not(:first-child) {
-        height: var(--mat-table-header-container-height, 20px)
-    };
+.f24-table-pagination-all .mat-mdc-select-value-text .mat-mdc-select-min-line{
+    display: none;
 }
 
 /*.f24-header-row, .f24-footer-row,*/ .f24-row-no-result {

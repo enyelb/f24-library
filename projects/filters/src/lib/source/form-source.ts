@@ -140,7 +140,7 @@ export abstract class F24FilterSourceForm<T> extends F24FilterSource {
      */
     const dataSource = this._dataSource();
     const name = this._name();
-    const filtersOLd = dataSource?.options.filters()
+    const filtersOLd = dataSource?.filters()
     const filterOld = filtersOLd && name in filtersOLd ? filtersOLd[name] : null;
     /**
      * destruir las suscripciones anteriores
@@ -162,7 +162,9 @@ export abstract class F24FilterSourceForm<T> extends F24FilterSource {
      */
     if (!filterOld && local) {
       if (dataSource && name) {
-        dataSource.filter(name, local);
+        dataSource.update({
+          filter: { name, value: local }
+        });
       }
     }
     /**
@@ -186,7 +188,9 @@ export abstract class F24FilterSourceForm<T> extends F24FilterSource {
       const name = this._name();
       const dataSource = this._dataSource();
       if (dataSource && name) {
-        dataSource.filter(name, value);
+        dataSource.update({
+          filter: { name, value }
+        });
       }
     });
   }

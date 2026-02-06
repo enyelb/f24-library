@@ -1,9 +1,9 @@
 <!-- PROGRESS BAR -->
-<div class="f24-table-progress-bar">
-  @if (dataSource().options.loading()) {
+@if (source().loading()) {
+  <div class="f24-table-progress-bar">
     <mat-progress-bar color="primary" mode="indeterminate"/>
-  }
-</div>
+  </div>
+}
 
 <!-- HEADER CONTENT -->
 <div class="f24-table-header-content">
@@ -13,57 +13,58 @@
 
 <!-- TABLE CONTENT -->
 <div class="f24-table-content">
+  <cdk-virtual-scroll-viewport itemSize="52"> 
   <!-- TABLE -->
-  <table mat-table [class]="{
-      'f24-table': true,
-      'f24-table-no-result': dataSource().options.total() === 0,
-    }"
-    [dataSource]="dataSource()">
+    <table matSort mat-table 
+      [class]="{'f24-table': true, 'f24-table-no-result': source().total() === 0}"
+      [dataSource]="source().data()" [trackBy]="trackBy">
 
-    <!-- CUSTOM COLUMNS -->
-    <ng-content/>
+      <!-- CUSTOM COLUMNS -->
+      <ng-content/>
 
-    <!-- HEADER ROW TITLE -->
-    @if (displayed().header.length > 0) {
-      <tr mat-header-row *matHeaderRowDef="displayed().header; sticky: isSticky()" class="f24-header-row"></tr>
-    }
+      <!-- HEADER ROW TITLE -->
+      @if (displayed().header.length > 0) {
+        <tr mat-header-row *matHeaderRowDef="displayed().header; sticky: true" class="f24-header-row"></tr>
+      }
 
-    <!-- HEADER ROW -->
-    <tr mat-header-row *matHeaderRowDef="displayed().columns; sticky: isSticky()" class="f24-header-row"></tr>
+      <!-- HEADER ROW -->
+      <tr mat-header-row *matHeaderRowDef="displayed().columns; sticky: true" class="f24-header-row"></tr>
 
-    <!-- COLUMNS DISPLAYED-->
-    <tr mat-row *matRowDef="let row; columns: displayed().columns;" class="f24-row"></tr>
+      <!-- COLUMNS DISPLAYED-->
+      <tr mat-row *matRowDef="let row; columns: displayed().columns;" class="f24-row"></tr>
 
-    <!-- FOOTER ROW TITLE -->
-    @if (displayed().footer.length > 0) {
-      <tr mat-footer-row *matFooterRowDef="displayed().footer; sticky: isSticky()" class="f24-footer-row"></tr>
-    }
-    <!-- COLUMNS NO RESULT -->
-    
-    <tr *matNoDataRow class="f24-row-no-result">
-      <td class="f24-cell-no-result" [attr.colspan]="displayed().columns.length">
-        @if (dataSource().options.total() === 0) {  
-          <div class="f24-item-no-result">
-            @if (dataSource().options.loading()) {
-              <f24-loader/>
-            } @else {
-              <mat-icon>inbox</mat-icon>
-              <p>{{ noResultLabel() }} </p>
-            }
-          </div>
-        }
-      </td>
-    </tr>
-  </table>
+      <!-- FOOTER ROW TITLE -->
+      @if (displayed().footer.length > 0) {
+        <tr mat-footer-row *matFooterRowDef="displayed().footer; sticky: true" class="f24-footer-row"></tr>
+      }
+      <!-- COLUMNS NO RESULT -->
+      
+      <tr *matNoDataRow class="f24-row-no-result">
+        <td class="f24-cell-no-result" [attr.colspan]="displayed().columns.length">
+          @if (source().total() === 0) {  
+            <div class="f24-item-no-result">
+              @if (source().loading()) {
+                <f24-loader/>
+              } @else {
+                <mat-icon>inbox</mat-icon>
+                <p>{{ source().noResultLabel() }} </p>
+              }
+            </div>
+          }
+        </td>
+      </tr>
+    </table>
+  </cdk-virtual-scroll-viewport>
 </div>
 <!-- PAGINATION -->
 @if (isPagination()) {
   <mat-paginator  #paginator showFirstLastButtons class="f24-teble-pagination"
     [class]="{
-      'f24-table-pagination-all': paginator.pageSize === pageSizeMaxLength
+      'f24-table-pagination-all': paginator.pageSize === 100000
     }"
-    [length]="dataSource().options.total()"
-    [pageSize]="dataSource().options.size()"
-    [pageSizeOptions]="pageSizeOptions()">
+    [pageIndex]="source().page().index"
+    [pageSize]="source().page().size"
+    [length]="source().total()"
+    [pageSizeOptions]="source().page().options">
   </mat-paginator>
 }
