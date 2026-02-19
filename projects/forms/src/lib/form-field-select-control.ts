@@ -11,7 +11,7 @@ import { FormFieldControl } from './form-field-control';
 @Component({
   template: ''
 })
-export abstract class FormFieldSelectControl<T> extends FormFieldControl<T> {
+export abstract class FormFieldSelectControl<I, T> extends FormFieldControl<T> {
   
   /**
    * inputs
@@ -20,7 +20,7 @@ export abstract class FormFieldSelectControl<T> extends FormFieldControl<T> {
   readonly inputBindTitle = input<string>('title', { alias: 'bindTitle'});
   readonly inputBindIcon = input<string>('icon', { alias: 'bindIcon'});
   readonly inputBindImage = input<string>('image', { alias: 'bindImage'});
-  readonly inputItems = input<{ [key: string ]: any }[]>([], { alias: 'items'});
+  readonly inputItems = input<I[]>([], { alias: 'items'});
   readonly inputLimit = input<number>(30, { alias: 'limit'});
 
   /**
@@ -28,10 +28,14 @@ export abstract class FormFieldSelectControl<T> extends FormFieldControl<T> {
    */
   protected readonly itemsMaps = computed(() => {
     return this.items.map((item) => ({
-      value: item[this.bindValue]?.toString() ?? '',
-      title: item[this.bindTitle]?.toString() ?? '',
-      image: item[this.bindImage]?.toString() ?? '',
-      icon: item[this.bindIcon]?.toString() ?? '' ,
+      value: '',
+      title: '',
+      image: '',
+      icon: '',
+      //value: item[this.bindValue]?.toString() ?? '',
+      //title: item[this.bindTitle]?.toString() ?? '',
+      //image: item[this.bindImage]?.toString() ?? '',
+      //icon: item[this.bindIcon]?.toString() ?? '' ,
       isMaterialIcon: signal(true),
       isSVGIcon: signal(true)
     }));
@@ -130,11 +134,11 @@ export abstract class FormFieldSelectControl<T> extends FormFieldControl<T> {
   /**
    * items
    */
-  private _items = signal<{ [key: string ]: any }[]>([]);
-  get items(): { [key: string ]: any }[] {
+  private _items = signal<I[]>([]);
+  get items(): I[] {
     return this._items();
   }
-  set items(value: { [key: string ]: any }[]) {
+  set items(value: I[]) {
     this._items.set(value);
   }
 

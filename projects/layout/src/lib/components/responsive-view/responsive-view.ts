@@ -1,6 +1,6 @@
 import { Component, OnDestroy, ElementRef, input, ViewEncapsulation, ChangeDetectionStrategy, viewChildren, computed, signal, OnInit } from '@angular/core';
 
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Subject, takeUntil, throttleTime } from 'rxjs';
 
 import { F24Lazy, F24LazyId, F24LazyInputs, F24LazyModule, F24LazyPost } from "../lazy/lazy";
 import { F24Loader } from '../loader/loader';
@@ -75,26 +75,29 @@ export class F24ResponsiveView implements OnInit, OnDestroy {
   /**
    * resizeObserver
    */
-  private resizeObserver: ResizeObserver;
+  private resizeObserver: ResizeObserver | null = null;
   private destroy$ = new Subject<void>();
   private resizeSubject = new Subject<number>();
+  private rafId: number | null = null;
   /**
    * constructor
    */
   constructor(protected elementRef: ElementRef) {
-    let rafId = 0;
     this.resizeObserver = new ResizeObserver(entries => {
       // Cancelar frame anterior
-      if (rafId) cancelAnimationFrame(rafId);
+      if (this.rafId) {
+        cancelAnimationFrame(this.rafId);
+      }
       
       // Procesar en nuevo frame
-      rafId = requestAnimationFrame(() => {
-        this.resizeSubject.next(entries[0].contentRect.width);
+      this.rafId = requestAnimationFrame(() => {
+        const width = entries[0].contentRect.width;
+        this.resizeSubject.next(width);
       });
     });
 
     this.resizeSubject.pipe(
-      debounceTime(300), // Espera 300ms después del último cambio
+      throttleTime(50, undefined, { leading: true, trailing: true }),
       takeUntil(this.destroy$)
     ).subscribe(width => {
       this.checkSize(width);
@@ -104,14 +107,27 @@ export class F24ResponsiveView implements OnInit, OnDestroy {
    * ngOnInit
    */
   ngOnInit(): void {
-    this.resizeObserver.observe(this.elementRef.nativeElement);
+    const initialWidth = this.elementRef.nativeElement.clientWidth;
+    this.checkSize(initialWidth);
+    if (this.resizeObserver) {
+      this.resizeObserver.observe(this.elementRef.nativeElement);
+    }
   }
   /**
    * ngOnDestroy
    */
   ngOnDestroy(): void {
-    this.resizeObserver.unobserve(this.elementRef.nativeElement);
-    this.resizeObserver.disconnect();
+    this.destroy$.next();
+    this.destroy$.complete();
+    
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+    }
+    
+    if (this.resizeObserver) {
+      this.resizeObserver.unobserve(this.elementRef.nativeElement);
+      this.resizeObserver.disconnect();
+    }
   }
   /**
    * checkSize
@@ -125,7 +141,7 @@ export class F24ResponsiveView implements OnInit, OnDestroy {
     else if (width >= this.breakpoints.lg) newSize = 'l';
     else if (width >= this.breakpoints.md) newSize = 'm';
     else if (width >= this.breakpoints.sm) newSize = 's';
-    else newSize = 'xs';
+    else if (width >= this.breakpoints.xs) newSize = 'xs';
     
 
     const view = this.views().find(view => view.component.sizes.includes(newSize));

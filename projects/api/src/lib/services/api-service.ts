@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
 
 import { map, Observable } from 'rxjs';
 
@@ -46,11 +45,12 @@ export interface F24RequestMessage<Generic> {
  * RequestOptions
  */
 export interface F24RequestOptions {
+  url: string,
+  body?: {} | string, 
   params?: {}
   filters?: {}
   sorts?: {}
   options?: {}
-  url?: boolean
   cache?: string
   index?: boolean
 };
@@ -62,87 +62,75 @@ export interface F24RequestOptions {
   providedIn: 'root'
 })
 export abstract class F24APIService {
-
   /**
    * _cache
    */
   private _cache: { [key:string] : any } = {};
-
   /**
    * _url
    */
   protected _url: string = '';
-
   /**
    * _http
    */
   private _http: HttpClient = inject(HttpClient);
-
   /**
    * get
+   * @param options
    */
-  public get<Generic>(url: string, options: F24RequestOptions = {}) : Observable<Generic> {
-    return F24APICache.api(this._cache, options.cache, () => {
-      return this.index(
-        this._http.get<Generic>(this.url(url, options.params, options.filters, options.sorts), options.options), options
-      );
-    });
+  public get<Generic>(options: F24RequestOptions) : Observable<Generic> {
+    /**
+     * create request
+     */
+    return this.request((options) => this._http.get<Generic>(options.url, options.options), options);
   }
-
   /**
    * post
+   * @param options
    */
-  public post<Generic>(url: string, body = {}, options: F24RequestOptions = {}) : Observable<Generic> {
-    return F24APICache.api(this._cache, options.cache, () => {
-      return this.index(
-        this._http.post<Generic>(this.url(url, options.params, options.filters, options.sorts), body, options.options), options
-      );
-    });
+  public post<Generic>(options: F24RequestOptions) : Observable<Generic> {
+    /**
+     * create request
+     */
+    return this.request((options) => this._http.post<Generic>(options.url, options.body ?? {}, options.options), options);
   }
-
   /**
    * put
+   * @param options
    */
-  public put<Generic>(url: string, body = {}, options: F24RequestOptions = {}) : Observable<Generic> {
-    return F24APICache.api(this._cache, options.cache, () => {
-      return this.index(
-        this._http.put<Generic>(this.url(url, options.params, options.filters, options.sorts), body, options.options), options
-      );
-    });
+  public put<Generic>(options: F24RequestOptions) : Observable<Generic> {
+    /**
+     * create request
+     */
+    return this.request((options) => this._http.put<Generic>(options.url, options.body ?? {}, options.options), options);
   }
-
   /**
    * delete
+   * @param options
    */
-  public delete<Generic>(url: string, options: F24RequestOptions = {}) : Observable<Generic> {
-    return F24APICache.api(this._cache, options.cache, () => {
-      return this.index(
-        this._http.delete<Generic>(this.url(url, options.params, options.filters, options.sorts), options.options), options
-      );
-    });
+  public delete<Generic>(options: F24RequestOptions) : Observable<Generic> {
+    /**
+     * create request
+     */
+    return this.request((options) => this._http.delete<Generic>(options.url, options.options), options);
   }
-
   /**
-   * url
+   * request
    */
-  private url(url: string, params: {} | undefined = {}, filters: {} | undefined, sorts: {} | undefined, onlyUrl: boolean | undefined = false) : string {
-    let newurl = (onlyUrl ? '' : this._url) + url;
-    const paramsurl = this.params(params);
-    if (paramsurl.length > 0) {
-      newurl += `${newurl.includes('?') ? '&' : '?'}${paramsurl}`
-    }
-    const filtersurl = this.filters(filters);
-    if (filtersurl.length > 0) {
-      newurl += `${newurl.includes('?') ? '&' : '?'}${filtersurl}`
-    }
-    const sortsurl = this.sorts(sorts);
-    if (sortsurl.length > 0) {
-      newurl += `${newurl.includes('?') ? '&' : '?'}${sortsurl}`
-    }
-    return newurl;
+  private request<Generic>(requestFn: (options: F24RequestOptions) => Observable<Generic>, options: F24RequestOptions) : Observable<Generic> {
+    /**
+     * create safe options
+     */
+    const safeOptions = this.safeOptions(options);
+    /**
+     * create index
+     */
+    const indexFn = () => this.index(requestFn(safeOptions), options);
+    /**
+     * create cache
+     */
+    return F24APICache.api(this._cache, options.cache, indexFn);
   }
-
-
   /**
    * index
    */
@@ -157,7 +145,6 @@ export abstract class F24APIService {
     }
     return request;
   }
-
   /**
    * isPage
    * @param request
@@ -166,25 +153,29 @@ export abstract class F24APIService {
   private isPage<Data>(request: F24Page<Data> | any): request is F24Page<Data> {
     return 'data' in request;
   }
-
   /**
-   * filters
+   * url
    */
-  private filters(filters: {} | undefined = {}) : string {
-    return this.params(filters, 'filter_');
+  private url(options:  F24RequestOptions) : string {
+    let newurl = this._url + options.url;
+    const paramsurl = this.params(options.params);
+    if (paramsurl.length > 0) {
+      newurl += `${newurl.includes('?') ? '&' : '?'}${paramsurl}`
+    }
+    const filtersurl = this.params(options.filters, 'filter_');
+    if (filtersurl.length > 0) {
+      newurl += `${newurl.includes('?') ? '&' : '?'}${filtersurl}`
+    }
+    const sortsurl = this.params(options.sorts, 'sort_');
+    if (sortsurl.length > 0) {
+      newurl += `${newurl.includes('?') ? '&' : '?'}${sortsurl}`
+    }
+    return newurl;
   }
-
-  /**
-   * sorts
-   */
-  private sorts(filters: {} | undefined = {}) : string {
-    return this.params(filters, 'sort_');
-  }
-
   /**
    * params
    */
-  private params(params: {} | undefined = {}, prefix : string = '') : string {
+  private params(params?: {}, prefix : string = '') : string {
     let paramss = '';
     if (params) {
       for (const [name, param] of Object.entries(params)) {
@@ -196,30 +187,61 @@ export abstract class F24APIService {
     }
     return paramss;
   }
-
   /**
-   * filters
+   * parseSafeProperties
    */
-  public static filters(forms: {[key: string]: FormControl} = {}) : {[key: string] : any} {
-    let filters: {[key: string] : any} = {};
+  private parseSafeProperties(forms: {[key: string]: any} = {}) : {[key: string] : any} {
     for (const [key, form] of Object.entries(forms)) {
-      if (form.value) {
-        filters[key] = isDate(form.value) ? format(new Date(form.value), 'yyyy-MM-dd') : form.value ? form.value: '';
+      if (isDate(form)) {
+        forms[key] = format(new Date(form), 'yyyy-MM-dd');
       }
     }
-    return filters;
+    return forms;
   }
 
   /**
-   * filters
+   * body
+   * @param options
    */
-  public static sorts(forms: {[key: string]: FormControl} = {}) : {[key: string] : any} {
-    let sorts: {[key: string] : any} = {};
-    for (const [key,form] of Object.entries(forms)) {
-      if (form.value) {
-        sorts[key] = form.value;
+  private safeBody(options: F24RequestOptions) {
+    if (typeof options.body === 'string') {
+      return options.body;
+    }
+    const safeBody = this.parseSafeProperties(options.body);
+
+    const isFormData = Object.values(safeBody).some((value) => value instanceof File);
+    if (!isFormData) {
+      return safeBody;
+    }
+    
+    const formData = new FormData();
+    for (const [key, value] of Object.entries(safeBody)) {
+      if (value instanceof Array) {
+        for (const item of value) {
+          formData.append(`${key}[]`, item);
+        }
+      } else if (value) {
+        formData.append(key, value);
       }
     }
-    return sorts;
+    return formData;
+  }
+  /**
+   * 
+   */
+  private safeOptions(options: F24RequestOptions): F24RequestOptions {
+    if (options.url) {
+      options.url = this.url(options);
+    }
+    if (options.params) {
+      options.params = this.parseSafeProperties(options.params);
+    }
+    if (options.filters) {
+      options.filters = this.parseSafeProperties(options.filters);
+    }
+    if (options.body) {
+      options.body = this.safeBody(options);
+    }
+    return options;
   }
 }

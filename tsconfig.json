@@ -26,6 +26,9 @@
       "@f24/notification": [
         "./dist/notification"
       ],
+      "buttons": [
+        "./dist/buttons"
+      ],
       "filters": [
         "./dist/filters"
       ],
@@ -115,6 +118,12 @@
     },
     {
       "path": "./projects/preview/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/buttons/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/buttons/tsconfig.spec.json"
     }
   ]
 }

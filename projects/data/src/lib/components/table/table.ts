@@ -1,11 +1,11 @@
-import { afterNextRender, ChangeDetectionStrategy, computed, viewChild, ViewEncapsulation } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, computed, ElementRef, signal, viewChild, viewChildren, ViewEncapsulation } from '@angular/core';
 import { Component, input, effect, untracked, contentChildren } from '@angular/core';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 
 import { MatSort, MatSortHeader, MatSortModule } from '@angular/material/sort';
-import { MatColumnDef, MatTable, MatTableModule } from '@angular/material/table';
+import { MatColumnDef, MatRow, MatTable, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
@@ -57,6 +57,10 @@ export class F24Table<T> {
   protected readonly table = viewChild.required(MatTable);
   protected readonly sorter = viewChild.required(MatSort);
   protected readonly paginator = viewChild(MatPaginator);
+  protected readonly rowElements = viewChildren(MatRow, { read: ElementRef });
+  protected readonly virtualScroll = viewChild(CdkVirtualScrollViewport, { read: ElementRef });
+
+  protected readonly itemSize = signal(52);
 
   /**
    * content childrens
@@ -79,9 +83,11 @@ export class F24Table<T> {
         this.table().addColumnDef(columnDef);
         if (columnDef.headerCell && !columnDef.cell) {
           header.push(columnDef.name);
-        } else if (columnDef.footerCell) {
+        } 
+        if (columnDef.footerCell) {
           footer.push(columnDef.name);
-        } else {
+        }
+        if (columnDef.cell) {
           columns.push(columnDef.name);
         }
       })
@@ -123,22 +129,72 @@ export class F24Table<T> {
       this.source().connect();
     });
     /**
+     * controlar la velocidad del scroll esto es para solventar el error del vitual scroll en la version 21.1.x
+     */
+    effect((onCleanup) => {
+      const scroll = this.virtualScroll()?.nativeElement;
+      if (!scroll) {
+        return;
+      }
+      const wheelHandler = (e: WheelEvent) => {
+        e.preventDefault();
+        scroll.scrollTop += e.deltaY * 0.5;
+      };
+      const controller = new AbortController();
+      scroll.addEventListener('wheel', wheelHandler, { 
+        passive: false, 
+        signal: controller.signal 
+      });
+      
+      onCleanup(() => controller.abort());
+    })
+    /**
+     * controlar la velocidad del scroll
+     */
+    effect((onCleanup) => {
+      const elements = this.rowElements().filter((elementRef, index) => index === 0).map(elementRef => elementRef.nativeElement);
+      
+      const rafId = requestAnimationFrame(() => {
+        untracked(() => {
+          const newItemSize = elements.reduce((height, elementRef) => {
+            return height > elementRef.getBoundingClientRect().height ? height : elementRef.getBoundingClientRect().height;
+          }, this.itemSize());
+          if (this.itemSize() == newItemSize) {
+            return;
+          }
+          console.log(newItemSize);
+          this.itemSize.set(newItemSize);
+        });
+      });
+      onCleanup(() => cancelAnimationFrame(rafId));
+    });
+    /**
      * efecto para asignar los parametros al source
      */
-    effect(() => {
+    effect((onCleanup) => {
       const params = this.params();
-      untracked(() => {
-        this.source().update(params);
+      const rafId = requestAnimationFrame(() => {
+        untracked(() => {
+          this.source().update(params);
+        });
       });
+      
+      onCleanup(() => cancelAnimationFrame(rafId));
     });
     /**
      * efecto para renderizar la tabla
      */
-    effect(() => {
+    effect((onCleanup) => {
       this.source().data();
-      untracked(() => {
-        this.table().renderRows();
+    
+      // Usar requestAnimationFrame para sincronizar con el ciclo de renderizado
+      const rafId = requestAnimationFrame(() => {
+        untracked(() => {
+          this.table().renderRows();
+        });
       });
+      
+      onCleanup(() => cancelAnimationFrame(rafId));
     });
     /**
      * efecto para registrar sorts
@@ -174,37 +230,43 @@ export class F24Table<T> {
     /**
      * efecto para sincronizar page con el data source
      */
-    effect(() => {
+    effect((onCleanup) => {
       const dataSource = this.source();
       const page = this.page();
       if (!page) {
         return;
       }
-      untracked(() => {
-        dataSource.update({
-          page: { 
-            index: page.pageIndex,
-            size: page.pageSize
-          }
+      const rafId = requestAnimationFrame(() => {
+        untracked(() => {
+          dataSource.update({
+            page: { 
+              index: page.pageIndex,
+              size: page.pageSize
+            }
+          });
         });
       });
+      onCleanup(() => cancelAnimationFrame(rafId));
     });
     /**
      * efecto para sincronizar sort con el data source
      */
-    effect(() => {
+    effect((onCleanup) => {
       const dataSource = this.source();
       const sort = this.sort();
       if (!sort) {
         return;
       }
-      untracked(() => {
-        dataSource.update({
-          sorts: {
-            [sort.active]: sort.direction
-          }
+      const rafId = requestAnimationFrame(() => {
+        untracked(() => {
+          dataSource.update({
+            sorts: {
+              [sort.active]: sort.direction
+            }
+          });
         });
       });
+      onCleanup(() => cancelAnimationFrame(rafId));
     });
   }
   /**

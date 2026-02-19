@@ -1,11 +1,11 @@
 {
   "name": "notification",
-  "version": "20.3.13",
+  "version": "21.0.0",
   "peerDependencies": {
-    "@angular/common": "^20.3.13",
-    "@angular/core": "^20.3.13",
-    "@angular/material": "^20.3.13",
-    "ngx-toastr": "^19.1.0",
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/material": "^21.0.0",
+    "ngx-toastr": "^20.0.5",
     "sweetalert2": "^11.26.3"
   },
   "dependencies": {

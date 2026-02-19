@@ -45,7 +45,7 @@ export class F24Note {
         this.isMaterialIcon.set(true);
         this.isSVGIcon.set(false);
       }
-    });
+    }, { debugName: 'F24Note' });
     effect(() => {
       const icon = this.icon();
       if (icon) {
@@ -55,7 +55,7 @@ export class F24Note {
           this.isSVGIcon.set( svg !== null);
         });
       }
-    })
+    }, { debugName: 'F24Note' })
     
   }
 }

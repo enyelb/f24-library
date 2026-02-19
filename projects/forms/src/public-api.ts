@@ -3,17 +3,18 @@
  */
 export * from './lib/froms.module';
 
-export * from './lib/form-date';
-export * from './lib/form-input';
-export * from './lib/form-phone';
-export * from './lib/form-file';
-export * from './lib/form-radio';
-export * from './lib/form-checkbox';
-export * from './lib/form-errors';
+export * from './lib/components/form-date';
+export * from './lib/components/form-input';
+export * from './lib/components/form-phone';
+export * from './lib/components/form-file';
+export * from './lib/components/form-radio';
+export * from './lib/components/form-checkbox';
+export * from './lib/components/form-select';
+export * from './lib/components/form-errors';
 
-export * from './lib/input-phone';
-export * from './lib/input-radio'
-export * from './lib/input-checkbox';
+export * from './lib/components/input-phone';
+export * from './lib/components/input-radio'
+export * from './lib/components/input-checkbox';
 
 export * from './lib/validators';
-export * from './lib/form';
+export * from './lib/components/form';

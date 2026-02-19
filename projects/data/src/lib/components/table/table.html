@@ -12,8 +12,8 @@
 </div>
 
 <!-- TABLE CONTENT -->
-<div class="f24-table-content">
-  <cdk-virtual-scroll-viewport itemSize="52"> 
+<div [class]="{ 'f24-table-content': true, 'f24-table-content-no-result': source().total() === 0 }">
+  <cdk-virtual-scroll-viewport [itemSize]="itemSize()" [maxBufferPx]="itemSize() * 40" [minBufferPx]="itemSize() * 10"> 
   <!-- TABLE -->
     <table matSort mat-table 
       [class]="{'f24-table': true, 'f24-table-no-result': source().total() === 0}"

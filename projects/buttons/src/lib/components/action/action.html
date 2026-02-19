@@ -1,0 +1,12 @@
+<section [class]="{'f24-actions': true, 'f24-actions-open': show() }">
+  <button class="f24-action-toggle" matButton="filled" color="primary" (click)="toggleShow()">
+    <mat-icon>
+      {{show() ? 'close': 'more_vert'}}
+    </mat-icon>
+  </button>
+  @if (show()) {
+    <section class="f24-action-content" animate.enter="f24-action-fade-in" animate.leave="f24-action-fade-out">
+      <ng-content></ng-content>
+    </section>
+  }
+</section>

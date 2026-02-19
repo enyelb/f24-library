@@ -173,32 +173,37 @@ export class F24DataSource<T> {
     /**
      * efecto para recargar data solo con sort
      */
-    effect(() => {
+    effect((onCleanup) => {
       const sorts = this._sorts();
       const sort = this._sort();
-      untracked(() => {  
-        /**
-         * validate si se aplican los filtros por funcion
-         */
-        if (this.applySortsFn(this._data(), sorts, sort)) {
-          return;
-        }   
-        this.reload.next();
-      });   
-    });
+      const rafId = requestAnimationFrame(() => {
+        untracked(() => {  
+          /**
+           * validate si se aplican los filtros por funcion
+           */
+          if (this.applySortsFn(this._data(), sorts, sort)) {
+            return;
+          }   
+          this.reload.next();
+        })
+      });
+      onCleanup(() => cancelAnimationFrame(rafId));
+    }, { debugName: 'F24DataSource' });
     /**
      * efecto para recargar data
      */
-    effect(() => {
+    effect((onCleanup) => {
       this._filters();
       this._page();
       this._request();
       this._connected();
-
-      untracked(() => {    
-        this.reload.next();
+      const rafId = requestAnimationFrame(() => {
+        untracked(() => {    
+          this.reload.next();
+        });
       });
-    });
+      onCleanup(() => cancelAnimationFrame(rafId));
+    }, { debugName: 'F24DataSource' });
   }
   /**
    * metodo para obtener id
@@ -379,9 +384,10 @@ export class F24DataSource<T> {
 
     for (const key in newFilters) {
       const form = newFilters[key];
-      if (isDate(form)) {
+      /*if (isDate(form)) {
         newFilters[key] = format(new Date(form), 'yyyy-MM-dd')
-      } else if (form == null) {
+      } else*/
+      if (form == null) {
         delete newFilters[key];
       }
     }
@@ -412,7 +418,7 @@ export class F24DataSource<T> {
       size,
       index,
       isMaxLength,
-      options: isMaxLength ? [...options, 100000] : options,
+      options: isMaxLength ? [...new Set([...options, 100000])] : options,
     }
   }
   /**

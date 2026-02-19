@@ -58,7 +58,6 @@ export class F24Column {
    * sort este es el nombre que tendra el matSortHeader
    */
   readonly sort = input<string>();
-  readonly sortType = input<'local' | 'remote'>('remote');
   /**
    * tooltip este el valor que tendra matTooltip en el header
    */

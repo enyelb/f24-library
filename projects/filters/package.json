@@ -1,10 +1,10 @@
 {
   "name": "filters",
-  "version": "20.3.0",
+  "version": "21.0.0",
   "peerDependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0",
-    "@ng-matero/extensions": "^20.3.1",
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@ng-matero/extensions": "^21.0.0",
     "rxjs": "~7.8.0"
   },
   "dependencies": {

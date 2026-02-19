@@ -51,7 +51,7 @@ export class F24FilterInput<T extends F24FilterSourceInputType> implements OnIni
         this.source().update(params);
         this.source().init();
       });
-    });
+    }, { debugName: 'F24FilterInput' });
   }
   /**
    * ngOnInit

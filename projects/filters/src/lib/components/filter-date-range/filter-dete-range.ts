@@ -89,7 +89,7 @@ export class F24FilterDateRange implements OnInit, OnDestroy {
         this.source().update(params)
         this.source().init();
       });
-    });
+    }, { debugName: 'F24FilterDateRange' });
   }
   /**
    * ngOnInit

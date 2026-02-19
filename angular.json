@@ -241,6 +241,32 @@
           }
         }
       }
+    },
+    "buttons": {
+      "projectType": "library",
+      "root": "projects/buttons",
+      "sourceRoot": "projects/buttons/src",
+      "prefix": "f24",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/buttons/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/buttons/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/buttons/tsconfig.spec.json"
+          }
+        }
+      }
     }
   }
 }

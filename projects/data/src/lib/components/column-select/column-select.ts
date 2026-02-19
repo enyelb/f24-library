@@ -122,7 +122,7 @@ export class F24ColumnSelect<T> {
           this.selectList(index, isSelected);
         });
       });
-    })
+    }, { debugName: 'F24ColumnSelect' })
     /**
      * efecto para actualizar isAllSelected y isIndeterminate
      */
@@ -162,7 +162,7 @@ export class F24ColumnSelect<T> {
 
       this.isAllSelected.set(selectedCountOnPage === data.length);
       this.isIndeterminate.set(selectedCountOnPage > 0 && selectedCountOnPage < data.length);
-    });
+    }, { debugName: 'F24ColumnSelect' });
   }
   /**
    * dataSource

@@ -8,6 +8,12 @@
   .f24-filter-input {
     width: 100%;
   }
+
+  --mat-sys-corner-extra-small: 20px;
+
+  //.mdc-notched-outline__trailing, .mdc-notched-outline__leading, .mdc-notched-outline__notch {
+    //background: var(--filter-background, red);
+  //}
 }
 
 :host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {

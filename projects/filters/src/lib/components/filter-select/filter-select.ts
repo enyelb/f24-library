@@ -48,7 +48,7 @@ export class F24FilterSelect<D, T extends F24FilterSourceSelectType> implements 
         this.source().update(params);
         this.source().init();
       });
-    });
+    }, { debugName: 'F24FilterSelect' });
   }
   /**
    * ngOnInit

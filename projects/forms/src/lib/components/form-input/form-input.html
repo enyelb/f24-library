@@ -1,0 +1,23 @@
+<div class="f24-form-input-container">
+  <mat-form-field appearance="outline" class="f24-form-input">
+
+    <mat-label>{{ source().label() }}</mat-label>
+
+    <input
+      matInput
+      [placeholder]="source().placeholder()"
+      [type]="source().type()"
+      [formControl]="source().form()"
+      [disabled]="source().disabled()"
+    >
+
+    <!-- Mostrar errores -->
+    <mat-error>
+      <f24-form-errors [errors]="source().form().errors"/>
+    </mat-error>
+    <!-- Icono de estado -->
+    @if (source().form().valid) {
+      <mat-icon matSuffix color="primary">check</mat-icon>
+    }
+  </mat-form-field>
+</div>

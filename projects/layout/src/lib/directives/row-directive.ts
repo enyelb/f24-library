@@ -1,6 +1,6 @@
-import { contentChildren, Directive, effect, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { contentChildren, Directive, effect, ElementRef, OnDestroy, OnInit, untracked } from '@angular/core';
 import { F24ColDirective } from './col-directive';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Subject, takeUntil, throttleTime } from 'rxjs';
 
 /**
  * F24RowDirective
@@ -33,10 +33,10 @@ export class F24RowDirective implements OnDestroy, OnInit {
   /**
    * resizeObserver
    */
-  private resizeObserver: ResizeObserver;
+  private resizeObserver: ResizeObserver | null = null;
   private destroy$ = new Subject<void>();
   private resizeSubject = new Subject<number>();
-
+  private rafId: number | null = null;
   /**
    * columns
    * Content children of type F24ColDirective
@@ -49,31 +49,38 @@ export class F24RowDirective implements OnDestroy, OnInit {
    * @param renderer Renderer2
    */
   constructor(protected el: ElementRef) {
-    let rafId = 0;
     this.resizeObserver = new ResizeObserver(entries => {
       // Cancelar frame anterior
-      if (rafId) cancelAnimationFrame(rafId);
+      if (this.rafId) {
+        cancelAnimationFrame(this.rafId);
+      }
       
       // Procesar en nuevo frame
-      rafId = requestAnimationFrame(() => {
-        this.resizeSubject.next(entries[0].contentRect.width);
+      this.rafId = requestAnimationFrame(() => {
+        const width = entries[0].contentRect.width;
+        this.resizeSubject.next(width);
       });
       
     });
 
     this.resizeSubject.pipe(
-      debounceTime(500), // Espera 500ms después del último cambio
+      throttleTime(50, undefined, { leading: true, trailing: true }),
       takeUntil(this.destroy$)
     ).subscribe(width => {
       this.checkSize(width);
     });
 
-    effect(() => {
+    effect((onCleanup) => {
       const columns = this.columns();
       if (columns.length > 0) {
-        this.checkColumnsNotSize(this.el.nativeElement.clientWidth);
+        const rafId = requestAnimationFrame(() => {
+          untracked(() => {
+            this.checkSize(this.el.nativeElement.clientWidth);
+          });
+        });
+        onCleanup(() => cancelAnimationFrame(rafId));
       }
-    })
+    }, { debugName: 'F24RowDirective' })
   }
 
   /**
@@ -91,15 +98,26 @@ export class F24RowDirective implements OnDestroy, OnInit {
       `;
     });
     
-    this.resizeObserver.observe(element);
+    if (this.resizeObserver) {
+      this.resizeObserver.observe(element);
+    }
   }
 
   /**
    * ngOnDestroy
    */
   ngOnDestroy(): void {
-    this.resizeObserver.unobserve(this.el.nativeElement);
-    this.resizeObserver.disconnect();
+    this.destroy$.next();
+    this.destroy$.complete();
+    
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+    }
+
+    if (this.resizeObserver) {
+      this.resizeObserver.unobserve(this.el.nativeElement);
+      this.resizeObserver.disconnect();
+    }
   }
 
 

@@ -66,7 +66,7 @@ export class F24ColDirective {
         })
         
       }
-    })
+    }, { debugName: 'F24ColDirective' })
   }
 
   /**
