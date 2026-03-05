@@ -8,6 +8,9 @@ import { F24Currency } from './components/currency/currency';
 import { F24Description } from './components/description/description';
 import { F24Image } from './components/image/image';
 import { F24Status } from './components/status/status';
+import { F24Icon } from './components/icon/icon';
+import { F24Copy } from './components/copy/copy';
+import { F24Divider } from './components/divider/divider';
 
 import { F24ColDirective } from './directives/col-directive';
 import { F24RowDirective } from './directives/row-directive';
@@ -26,6 +29,9 @@ import { F24RowDirective } from './directives/row-directive';
     F24Description,
     F24Image,
     F24Status,
+    F24Icon,
+    F24Copy,
+    F24Divider,
     F24ColDirective,
     F24RowDirective
   ],
@@ -38,6 +44,9 @@ import { F24RowDirective } from './directives/row-directive';
     F24Description,
     F24Image,
     F24Status,
+    F24Icon,
+    F24Copy,
+    F24Divider,
     F24ColDirective,
     F24RowDirective
   ]

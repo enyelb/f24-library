@@ -4,7 +4,14 @@
       {{ label }}
     </p>
   }
-  <p class="f24-preview-text">
-    {{ value() }}
-  </p>
+  @if (value(); as value) {
+    <div class="f24-preview-content">
+      <p class="f24-preview-text">
+        {{ value }}
+      </p>
+      @if(copyText(); as copyText) {
+        <f24-copy [copy]="copyText"/>
+      }
+    </div>
+  }
 </div>

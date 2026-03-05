@@ -3,18 +3,13 @@
     <p class="title">
       {{ description() }}
       @if (icon() && !icon()?.hide) {
-        <mat-icon
-          [matTooltip]="icon()?.tooltip ?? ''"
-          class="icon"
-        >
-          {{icon()?.name}}
-        </mat-icon>
+        <f24-icon class="icon" [icon]="icon()?.name ?? ''" [matTooltip]="icon()?.tooltip ?? ''"/>
       }
     </p>
 
     <div class="list">
       @for (item of items(); track $index) {
-        <mat-icon>{{item.icon}}</mat-icon> <p>{{ item.text }}</p>
+        <f24-icon [icon]="item.icon"/><p>{{ item.text }}</p>
       }
     </div>
   </div>

@@ -1,0 +1,12 @@
+@if (copy(); as copy) {
+  @if (text(); as text) {
+    <button matButton [cdkCopyToClipboard]="copy" [disabled]="copied()" (cdkCopyToClipboardCopied)="onCopy()">
+      <span>{{ text }}</span>
+      <mat-icon>{{copied() ? 'done' : 'content_copy' }}</mat-icon>
+    </button>  
+  } @else {
+    <button matIconButton [cdkCopyToClipboard]="copy" [disabled]="copied()" (cdkCopyToClipboardCopied)="onCopy()">
+      <mat-icon>{{copied() ? 'done' : 'content_copy' }}</mat-icon>
+    </button>
+  }
+}

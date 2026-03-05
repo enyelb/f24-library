@@ -9,7 +9,9 @@
     }
     <div class="f24-note-content">
       <p class="f24-note-title">{{ title() }}</p>
-      <span class="f24-note-description"> {{  description() }}</span>
+      @if (description()) {
+        <span class="f24-note-description"> {{  description() }}</span>
+      }
     </div>
   </div>
 </div>

@@ -1,11 +1,10 @@
 import { Component, input} from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { DateFnsAdapter } from '@angular/material-date-fns-adapter';
@@ -30,10 +29,10 @@ class CustomMomentDateAdapter extends DateFnsAdapter {
  */
 export const MY_DATE_FORMATS = {
   parse: {
-    dateDate: ['dd/MM/yyyy'], // Format for parsing input
+    dateInput: ['dd/MM/yyyy'], // Format for parsing input
   },
   display: {
-    dateDate: 'dd/MM/yyyy', // Format for displaying in input
+    dateInput: 'dd/MM/yyyy', // Format for displaying in input
     monthYearLabel: 'MMM yyyy', // Format for month year label
     dateA11yLabel: 'dd/MM/yyyy', // Format for accessibility
     monthYearA11yLabel: 'MMMM yyyy', // Format for accessibility
@@ -46,7 +45,11 @@ export const MY_DATE_FORMATS = {
 @Component({
   selector: 'f24-form-date',
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatIconModule, FormErrors],
+  imports: [
+    ReactiveFormsModule, FormsModule,
+    MatFormFieldModule, MatNativeDateModule, MatInputModule, MatDatepickerModule, 
+    FormErrors
+  ],
   templateUrl: './form-date.html',
   styleUrl: './form-date.scss',
   providers: [

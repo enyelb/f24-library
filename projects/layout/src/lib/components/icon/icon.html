@@ -1,0 +1,6 @@
+
+@if (isMaterialIcon()) {
+  <mat-icon (error)="isMaterialIcon.set(false)">{{ icon() }}</mat-icon>
+} @else if (isSVGIcon()) {
+  <mat-icon (error)="isSVGIcon.set(false)" [svgIcon]="icon()"></mat-icon>
+}

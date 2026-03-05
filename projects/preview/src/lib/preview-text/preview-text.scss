@@ -1,5 +1,16 @@
 .f24-preview-container {
   padding: calc(var(--margin-global, 20px) / 4);
+
+  .f24-preview-content {
+    border-radius: 0 10px 10px 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--border-primary);
+    background: var(--input-bg);
+    font-weight: 500;
+  }
   
   .f24-preview-label{
     margin: 0px;
@@ -11,11 +22,8 @@
   }
 
   .f24-preview-text {
-    border: 1px solid var(--border-primary);
     padding: 5px;
     margin: 0px;
-    background: var(--input-bg);
-    font-weight: 500;
   }
 }
 

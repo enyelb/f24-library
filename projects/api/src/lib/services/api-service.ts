@@ -211,14 +211,14 @@ export abstract class F24APIService {
 
     const isFormData = Object.values(safeBody).some((value) => value instanceof File);
     if (!isFormData) {
-      return safeBody;
+      return JSON.stringify(safeBody);
     }
     
     const formData = new FormData();
     for (const [key, value] of Object.entries(safeBody)) {
       if (value instanceof Array) {
         for (const item of value) {
-          formData.append(`${key}[]`, item);
+          formData.append(`${key}[]`, JSON.stringify(item));
         }
       } else if (value) {
         formData.append(key, value);

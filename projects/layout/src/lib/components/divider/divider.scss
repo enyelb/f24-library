@@ -1,0 +1,20 @@
+.f24-divider {
+  padding: 20px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  mat-divider {
+    width: 100%;
+  }
+  mat-icon {
+    overflow: visible;
+  }
+
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: fit-content;
+  }
+}

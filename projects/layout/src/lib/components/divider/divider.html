@@ -1,0 +1,12 @@
+<div class="f24-divider">
+  <mat-divider/>
+  @if (icon(); as icon) {
+    <mat-icon>{{ icon }}</mat-icon>
+  }
+  @if (title(); as title) {
+    <span>{{ title }}</span>
+  }
+  @if (title() || icon()) {
+    <mat-divider/>
+  }
+</div>

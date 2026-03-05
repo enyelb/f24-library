@@ -23,7 +23,7 @@ import { FormFieldSelectControl } from '../../form-field-select-control';
     '[id]': 'id',
   },
 })
-export class InputRadio<I, T> extends FormFieldSelectControl<I, T> {
+export class InputRadio extends FormFieldSelectControl<string | number | boolean> {
   /**
    * view childs
    */

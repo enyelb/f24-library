@@ -23,7 +23,7 @@ import { MatFormFieldControl } from '@angular/material/form-field';
     '[id]': 'id',
   },
 })
-export class InputCheckbox<I, T> extends FormFieldSelectControl<I, T> {
+export class InputCheckbox extends FormFieldSelectControl<Array<string | number | boolean>> {
   
   /**
    * view childs
@@ -48,15 +48,15 @@ export class InputCheckbox<I, T> extends FormFieldSelectControl<I, T> {
    * onChange
    */
   onChange(event: MatCheckboxChange) {
-    /*const values = this.value || [];
+    const values = this.value || [];
 
     if (event.checked) {
-      values.push(event.source.value as T);
+      values.push(event.source.value);
     } else {
-      values.splice(values.indexOf(event.source.value as T), 1);
+      values.splice(values.indexOf(event.source.value), 1);
     }
 
-    this.value = values;*/
+    this.value = values;
   }
 
   /**

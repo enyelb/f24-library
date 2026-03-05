@@ -7,7 +7,12 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSourceMap": true,
-    "types": []
+    "types": [],
+    "paths": {
+      "@f24/layout": [
+        "./../../dist/layout"
+      ],
+    }
   },
   "include": [
     "src/**/*.ts"
