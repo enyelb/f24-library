@@ -24,17 +24,19 @@
         }
         <ng-content select="[unchecked-title]"></ng-content>
         <ng-content select="[unchecked]"></ng-content>
+        
+        @if (!auto()) {
+          <div class="f24-preview-actions">
+            <button matButton color="primary" (click)="unchecked()">
+              <mat-icon>delete_sweep</mat-icon> {{ labelClear() }}
+            </button>
+            <button matButton color="primary" (click)="next()">
+              <mat-icon>check</mat-icon> {{ labelNext() }}
+            </button>
+          </div>
+        }
       </div>
     }
-    @if (!auto() && !_checked()) {
-      <div class="f24-preview-actions">
-        <button matButton color="primary" (click)="unchecked()">
-          <mat-icon>delete_sweep</mat-icon> {{ labelClear() }}
-        </button>
-        <button matButton color="primary" (click)="next()">
-          <mat-icon>check</mat-icon> {{ labelNext() }}
-        </button>
-      </div>
-    }
+    
   </section>
 }

@@ -17,4 +17,10 @@ export * from './lib/components/input-radio'
 export * from './lib/components/input-checkbox';
 
 export * from './lib/validators';
-export * from './lib/components/form';
+
+export * from './lib/form/form-field';
+export * from './lib/form/form';
+export * from './lib/form/form-service';
+
+
+//export * from './lib/form/form'

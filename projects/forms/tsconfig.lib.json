@@ -6,8 +6,13 @@
     "outDir": "../../out-tsc/lib",
     "declaration": true,
     "declarationMap": true,
-    "inlineSources": true,
-    "types": []
+    "inlineSourceMap": true,
+    "types": [],
+    "paths": {
+      "@f24/notification": [
+        "../../dist/notification"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts"

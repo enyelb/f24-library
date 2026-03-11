@@ -165,7 +165,6 @@ export class FormFile extends ControlValueAccessor implements OnInit, OnDestroy 
    */
   clearFile(): void {
     this.selectedFileName = '';
-    this.control().setValue(null);
     if (this.fileInput) {
       this.fileInput.nativeElement.value = '';
     }
