@@ -2,6 +2,7 @@
  * Public API Surface of forms
  */
 export * from './lib/froms.module';
+export * from './lib/form-token';
 
 export * from './lib/components/form-date';
 export * from './lib/components/form-input';
@@ -21,6 +22,7 @@ export * from './lib/validators';
 export * from './lib/form/form-field';
 export * from './lib/form/form';
 export * from './lib/form/form-service';
+
 
 
 //export * from './lib/form/form'

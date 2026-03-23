@@ -12,6 +12,12 @@
       "@f24/layout": [
         "./../../dist/layout"
       ],
+      "@f24/alerts": [
+        "./../../dist/alerts"
+      ],
+      "@f24/forms": [
+        "./../../dist/forms"
+      ],
     }
   },
   "include": [

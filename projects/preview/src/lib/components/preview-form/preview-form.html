@@ -1,0 +1,49 @@
+@if (source().visible() && !source().hidden()) {
+  <section>
+    @if (source().checked()) {
+      <div class="f24-preview-checked" animate.enter="fade-in" animate.leave="fade-out"
+        (animate.enter)="onLeaveAnimationDone($event)"
+        (animate.leave)="onEnterAnimationDone($event)"
+      >
+        <ng-content select="[checked]"></ng-content>
+        
+        <button matIconButton color="primary" (click)="updateChecked(false)" [disabled]="!source().clear()">
+          <mat-icon>delete_sweep</mat-icon>
+        </button>
+         
+      </div>
+    } @else {
+      <div class="f24-preview-unchecked" animate.enter="fade-in" animate.leave="fade-out"
+        (animate.enter)="onEnterAnimationDone($event)"
+        (animate.leave)="onLeaveAnimationDone($event)"
+      >
+        @if ((source().title() || source().description()) && source().icon() && source().type()) {
+          <f24-note
+            [icon]="source().icon()" 
+            [type]="source().type()" 
+            [title]="source().title()" 
+            [description]="source().description()"
+          />
+        } @else if (source().title()) {
+          <div class="f24-preview-unchecked-title">
+            {{source().title()}}  
+          </div>
+        }
+        
+        <ng-content></ng-content>
+        
+        @if (!source().auto()) {
+          <div class="f24-preview-actions">
+            <button matButton color="primary" (click)="updateChecked(false)">
+              <mat-icon>delete_sweep</mat-icon> {{ source().labelClear() }}
+            </button>
+            <button matButton color="primary" (click)="updateChecked(true)">
+              <mat-icon>check</mat-icon> {{ source().labelNext() }}
+            </button>
+          </div>
+        }
+      </div>
+    }
+    
+  </section>
+}

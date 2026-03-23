@@ -10,6 +10,7 @@ import { createFormSelectSource, createFormSelectSourceParams } from '../source/
 import { F24SelectComponent } from '../template/select-component';
 
 import { FormErrors } from '../form-errors';
+import { F24_FORM_TOKEN } from '../../form-token';
 
 /**
  * F24FormSelect
@@ -20,8 +21,15 @@ import { FormErrors } from '../form-errors';
   imports: [ReactiveFormsModule, MatFormFieldModule, MtxSelectModule, MatIconModule, FormErrors],
   templateUrl: './form-select.html',
   styleUrl: './form-select.scss',
+  providers: [
+    {
+      provide: F24_FORM_TOKEN,
+      useFactory: (component: F24FormSelect) => component,
+      deps: [F24FormSelect]
+    },
+  ],
 })
-export class F24FormSelect<I, T> extends F24SelectComponent<I, T> {
+export class F24FormSelect<I = string, T = string> extends F24SelectComponent<I, T> {
   /**
    * source 
    */

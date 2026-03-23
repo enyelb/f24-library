@@ -8,7 +8,7 @@ export class ControlValueAccessor implements IControlValueAccessor {
   /**
    * control
    */
-  protected readonly control = signal<FormControl>(new FormControl(''));
+  readonly control = signal<FormControl>(new FormControl(''));
 
   /**
    * writeValue

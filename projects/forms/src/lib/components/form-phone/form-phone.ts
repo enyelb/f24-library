@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { InputPhone } from '../input-phone';
 import { ControlValueAccessor } from '../../control-value';
 import { FormErrors } from '../form-errors';
+import { F24_FORM_TOKEN } from '../../form-token';
 
 /**
  * FormPhone
@@ -21,7 +22,12 @@ import { FormErrors } from '../form-errors';
   templateUrl: './form-phone.html',
   styleUrl: './form-phone.scss',
   providers: [
-  ]
+    {
+      provide: F24_FORM_TOKEN,
+      useFactory: (component: FormPhone) => component,
+      deps: [FormPhone]
+    },
+  ],
 })
 export class FormPhone extends ControlValueAccessor implements OnInit, OnDestroy {
   /**

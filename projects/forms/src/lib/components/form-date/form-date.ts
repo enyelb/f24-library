@@ -14,6 +14,7 @@ import { createFormDateSource, createFormDateSourceParams } from '../source/date
 import { F24DateComponent } from '../template/date-component';
 
 import { FormErrors } from '../form-errors';
+import { F24_FORM_TOKEN } from '../../form-token';
 
 /**
  * CustomMomentDateAdapter
@@ -54,18 +55,23 @@ export const MY_DATE_FORMATS = {
   styleUrl: './form-date.scss',
   providers: [
     {
-        provide: DateAdapter,
-        useClass: CustomMomentDateAdapter,
-        deps: [MAT_DATE_LOCALE]
-      },
-      {
-        provide: MAT_DATE_LOCALE,
-        useValue: es,
-      },
-      {
-        provide: MAT_DATE_FORMATS,
-        useValue: MY_DATE_FORMATS,
-      }
+      provide: DateAdapter,
+      useClass: CustomMomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: es,
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: MY_DATE_FORMATS,
+    },
+    {
+      provide: F24_FORM_TOKEN,
+      useFactory: (component: F24FormDate) => component,
+      deps: [F24FormDate]
+    },
   ]
 })
 export class F24FormDate extends F24DateComponent {

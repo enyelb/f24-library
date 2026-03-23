@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { InputCheckbox } from '../input-checkbox';
 import { ControlValueAccessor } from '../../control-value';
 import { FormErrors } from '../form-errors';
+import { F24_FORM_TOKEN } from '../../form-token';
 
 /**
  * FormCheckbox
@@ -17,6 +18,13 @@ import { FormErrors } from '../form-errors';
   imports: [ReactiveFormsModule, MatIconModule, MatFormFieldModule, InputCheckbox, FormErrors],
   templateUrl: './form-checkbox.html',
   styleUrl: './form-checkbox.scss',
+  providers: [
+    {
+      provide: F24_FORM_TOKEN,
+      useFactory: (component: FormCheckbox) => component,
+      deps: [FormCheckbox]
+    },
+  ],
 })
 export class FormCheckbox extends ControlValueAccessor implements OnInit, OnDestroy {
 

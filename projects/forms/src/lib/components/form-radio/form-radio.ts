@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { InputRadio } from '../input-radio';
 import { ControlValueAccessor } from '../../control-value';
 import { FormErrors } from '../form-errors';
+import { F24_FORM_TOKEN } from '../../form-token';
 
 @Component({
   selector: 'f24-form-radio',
@@ -14,6 +15,13 @@ import { FormErrors } from '../form-errors';
   imports: [ReactiveFormsModule, MatIconModule, MatFormFieldModule, InputRadio, FormErrors],
   templateUrl: './form-radio.html',
   styleUrl: './form-radio.scss',
+  providers: [
+    {
+      provide: F24_FORM_TOKEN,
+      useFactory: (component: FormRadio) => component,
+      deps: [FormRadio]
+    },
+  ],
 })
 export class FormRadio extends ControlValueAccessor implements OnInit, OnDestroy {
 

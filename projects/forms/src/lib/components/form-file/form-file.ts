@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { ControlValueAccessor } from '../../control-value';
 import { FormErrors } from '../form-errors';
+import { F24_FORM_TOKEN } from '../../form-token';
 
 /**
  * FormFile
@@ -23,6 +24,13 @@ import { FormErrors } from '../form-errors';
   ],
   templateUrl: './form-file.html',
   styleUrl: './form-file.scss',
+  providers: [
+    {
+      provide: F24_FORM_TOKEN,
+      useFactory: (component: FormFile) => component,
+      deps: [FormFile]
+    },
+  ],
 })
 export class FormFile extends ControlValueAccessor implements OnInit, OnDestroy {
   /**

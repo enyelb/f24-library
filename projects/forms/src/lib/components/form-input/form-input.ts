@@ -9,6 +9,7 @@ import { createFormInputSource, createFormInputSourceParams } from '../source/in
 import { F24InputComponent } from '../template/input-component';
 
 import { FormErrors } from '../form-errors';
+import { F24_FORM_TOKEN } from '../../form-token';
 
 /**
  * FormInput
@@ -19,8 +20,15 @@ import { FormErrors } from '../form-errors';
   imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule, FormErrors],
   templateUrl: './form-input.html',
   styleUrl: './form-input.scss',
+  providers: [
+    {
+      provide: F24_FORM_TOKEN,
+      useFactory: (component: F24FormInput) => component,
+      deps: [F24FormInput]
+    },
+  ],
 })
-export class F24FormInput<T> extends F24InputComponent<T> {
+export class F24FormInput<T = string> extends F24InputComponent<T> {
   /**
    * source 
    */
