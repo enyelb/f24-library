@@ -6,6 +6,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldControl } from '@angular/material/form-field';
 
+import { F24FilterInput } from '@f24/filters';
+import { F24ColDirective, F24RowDirective } from '@f24/layout';
+
 import { FormFieldSelectControl } from '../../form-field-select-control';
 
 /**
@@ -14,7 +17,10 @@ import { FormFieldSelectControl } from '../../form-field-select-control';
 @Component({
   selector: 'f24-input-radio',
   standalone: true,
-  imports: [MatRadioModule, MatIconModule, MatInputModule, ReactiveFormsModule],
+  imports: [
+    MatRadioModule, MatIconModule, MatInputModule, ReactiveFormsModule,
+    F24FilterInput, F24ColDirective, F24RowDirective,
+  ],
   templateUrl: './input-radio.html',
   styleUrl: './input-radio.scss',
   providers: [{provide: MatFormFieldControl, useExisting: InputRadio}],
@@ -33,6 +39,13 @@ export class InputRadio extends FormFieldSelectControl<string | number | boolean
    * name
    */
   protected override name: string = 'f24-input-radio';
+
+  /**
+   * on change
+   */
+  protected readonly change = (value: string | null) => {
+    this.search.set(value ?? '');
+  }
 
   /**
    * constructor

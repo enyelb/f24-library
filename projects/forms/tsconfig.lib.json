@@ -11,6 +11,12 @@
     "paths": {
       "@f24/notification": [
         "../../dist/notification"
+      ],
+      "@f24/filters": [
+        "../../dist/filters"
+      ],
+      "@f24/layout": [
+        "../../dist/layout"
       ]
     }
   },

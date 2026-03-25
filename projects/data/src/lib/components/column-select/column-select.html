@@ -12,8 +12,8 @@
 
     <!-- cell -->
     <td mat-cell *matCellDef="let row; let i = index">
-      <mat-checkbox [checked]="selectedList[i]() || false"
-        (change)="select(row, i, $event.checked)">
+      <mat-checkbox [checked]="isSelected(row)"
+        (change)="select(row, $event.checked)">
       </mat-checkbox>
     </td>
   </ng-container>

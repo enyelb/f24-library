@@ -56,6 +56,5 @@ export class F24Note {
         });
       }
     }, { debugName: 'F24Note' })
-    
   }
 }

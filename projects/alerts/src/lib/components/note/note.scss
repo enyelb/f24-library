@@ -5,17 +5,17 @@
 .f24-note-icon {
   font-size: 35px !important;
   height: 35px !important;
-  width: 50px !important;
+  width: 40px !important;
 }
 
 .f24-note {
   background: var(--mat-sys-note-container, light-dark(#ebeff4, #232630));
-  padding: calc(var(--margin-global, 20px));
+  padding: calc(var(--margin-global, 20px) / 2);
   border-radius: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 20px;
+  gap: calc(var(--margin-global, 20px) / 2);
 }
 
 .f24-note-content {
@@ -26,12 +26,15 @@
 .f24-note-title {
   font-weight: 300;
   letter-spacing: 1.2px;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin: 0px;
 }
 
 .f24-note-description {
-  padding-top: 0.9rem;
+  padding-top: .4rem;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  color: gray;
 }
 
 .f24-note-success {

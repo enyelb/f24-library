@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, effect, input, untracked } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,5 +39,23 @@ export class F24FormInput<T = string> extends F24InputComponent<T> {
    */
   constructor() {
     super();
+    /**
+     * efecto
+     */
+    effect(() => {
+      const source = this.source();
+      if (!source) {
+        return;
+      }
+      const disabled = source.disabled();
+      untracked(() => {
+        const form  = source.form();
+        if (disabled) {
+          form.disable();
+        } else {
+          form.enable();
+        }
+      });
+    })
   }
 }

@@ -1,4 +1,4 @@
-import { signal } from "@angular/core";
+import { effect, signal, untracked } from "@angular/core";
 import { FormControl } from "@angular/forms";
 
 import { F24BaseSource, F24BaseSourceParams } from "./base-source";
@@ -70,6 +70,21 @@ export abstract class F24FormSource<T> extends F24BaseSource {
     this._placeholder = signal(params?.placeholder ?? '');
     this._form = signal(params?.form ?? new FormControl(this._default()));
     this._change = signal(params?.change);
+
+    /**
+     * efecto
+     */
+    effect(() => {
+      const disabled = this._disabled();
+      untracked(() => {
+        const form  = this._form();
+        if (disabled) {
+          form.disable();
+        } else {
+          form.enable();
+        }
+      });
+    })
   }
   /**
    * metodo para obtener name

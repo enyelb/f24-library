@@ -29,6 +29,9 @@
       "buttons": [
         "./dist/buttons"
       ],
+      "core": [
+        "./dist/core"
+      ],
       "filters": [
         "./dist/filters"
       ],
@@ -124,6 +127,12 @@
     },
     {
       "path": "./projects/buttons/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/core/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/core/tsconfig.spec.json"
     }
   ]
 }

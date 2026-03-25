@@ -7,9 +7,15 @@
 >
   <div [class]="class()">
     @if (itemsMaps().length > limit) {
-      <div [class]="class('filter')">
-        <mat-icon [class]="class('icon-search')">search</mat-icon>
-        <input matInput type="text" (input)="onFilter($event)">
+      <div [class]="class('filter')" row>
+        <f24-filter-input 
+          [col]="{ xs: 20, s: 12, m: 11,  l: 10, xl: 9, xxl: 8 }"
+          [params]="{
+            icon: 'search',
+            label: 'Buscar',
+            change: change,
+          }"
+        />
       </div>
     }
     @if (itemsFiltered().length > 0) {

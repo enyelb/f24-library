@@ -6,16 +6,7 @@
     "outDir": "../../out-tsc/lib",
     "declaration": true,
     "declarationMap": true,
-    "inlineSourceMap": true,
-    "types": [],
-    "paths": {
-      "@f24/data": [
-        "../../dist/data"
-      ],
-      "@f24/layout": [
-        "../../dist/layout"
-      ],
-    }
+    "types": []
   },
   "include": [
     "src/**/*.ts"

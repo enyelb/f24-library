@@ -2,12 +2,20 @@
   <!-- FILTER -->
   <mat-form-field class="f24-filter-input" [appearance]="source().appearance()">
     <mat-label>{{ source().label() }}</mat-label>
-    <input matInput placeholder="{{ source().placeholder() }}" #input [formControl]="source().form()" >
+    <input matInput #input 
+      [placeholder]="source().placeholder()" 
+      [formControl]="source().form()"
+      [type]="source().type()"
+    >
 
     @if (source().form().value) {
       <button matSuffix mat-icon-button aria-label="Clear" (click)="source().form().setValue(null)">
-        <mat-icon>close</mat-icon>
+        <f24-icon icon="close"/>
       </button>
+    }
+
+    @if (source().icon(); as icon) {
+      <f24-icon class="f24-filter-prefix-icon" matPrefix [icon]="icon"/>
     }
   </mat-form-field>
   <ng-content></ng-content>

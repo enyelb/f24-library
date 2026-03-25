@@ -4,9 +4,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldControl } from '@angular/material/form-field';
+
+import { F24FilterInput } from '@f24/filters';
+import { F24ColDirective, F24RowDirective } from '@f24/layout';
 
 import { FormFieldSelectControl } from '../../form-field-select-control';
-import { MatFormFieldControl } from '@angular/material/form-field';
+
 
 /**
  * InputCheckbox
@@ -14,7 +18,10 @@ import { MatFormFieldControl } from '@angular/material/form-field';
 @Component({
   selector: 'f24-input-checkbox',
   standalone: true,
-  imports: [MatCheckboxModule, MatInputModule, MatIconModule, ReactiveFormsModule],
+  imports: [
+    MatCheckboxModule, MatInputModule, MatIconModule, ReactiveFormsModule, 
+    F24FilterInput, F24ColDirective, F24RowDirective,
+  ],
   templateUrl: './input-checkbox.html',
   styleUrl: './input-checkbox.scss',
   providers: [{provide: MatFormFieldControl, useExisting: InputCheckbox}],
@@ -34,6 +41,13 @@ export class InputCheckbox extends FormFieldSelectControl<Array<string | number 
    * name
    */
   protected override name: string = 'f24-input-checkbox';
+
+  /**
+   * on change
+   */
+  protected readonly change = (value: string | null) => {
+    this.search.set(value ?? '');
+  }
 
   /**
    * constructor

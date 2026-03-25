@@ -14,6 +14,10 @@
   //.mdc-notched-outline__trailing, .mdc-notched-outline__leading, .mdc-notched-outline__notch {
     //background: var(--filter-background, red);
   //}
+  
+  .f24-filter-prefix-icon {
+    padding-left: 10px;
+  }
 }
 
 :host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
