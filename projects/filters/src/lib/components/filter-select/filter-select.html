@@ -8,18 +8,18 @@
     <!-- select -->
     <mtx-select
       [items]="source().items()"
-      [bindLabel]="source().bind().label"
-      [bindValue]="source().bind().value"
+      [bindLabel]="source().bindLabel()"
+      [bindValue]="source().bindValue()"
       [formControl]="source().form()"
       [multiple]="source().multiple()"
       [placeholder]="source().placeholder()"
     >
         <ng-template ng-label-tmp let-item="item" let-clear="clear" class="m2">
-          {{source().formatter().label(item)}}
+          {{source().formatterLabel()(item)}}
           <span class="ng-value-icon right" (click)="clear(item)">×</span>
         </ng-template>
         <ng-template ng-option-tmp let-item="item">
-          {{ source().formatter().value(item)}} 
+          {{ source().formatterValue()(item)}} 
         </ng-template>
     </mtx-select>
   </mat-form-field>

@@ -1,23 +1,22 @@
 <div class="f24-form-input-container">
-  <mat-form-field appearance="outline" class="f24-form-input">
+  <mat-form-field [appearance]="source().appearance()" class="f24-form-input">
 
     <mat-label>{{ source().label() }}</mat-label>
 
     <mtx-select
       [placeholder]="source().placeholder()"
       [formControl]="source().form()"
-      [disabled]="source().disabled()"
       [items]="source().items()"
-      [bindLabel]="source().bind().label"
-      [bindValue]="source().bind().value"
+      [bindLabel]="source().bindLabel()"
+      [bindValue]="source().bindValue()"
       [multiple]="source().multiple()"
     >
       <ng-template ng-label-tmp let-item="item" let-clear="clear" class="m2">
-        {{ source().formatter().label(item)}}
+        {{ source().formatterLabel()(item)}}
         <span class="ng-value-icon right" (click)="clear(item)">×</span>
       </ng-template>
       <ng-template ng-option-tmp let-item="item">
-        {{ source().formatter().value(item)}} 
+        {{ source().formatterValue()(item)}} 
       </ng-template>
     </mtx-select>
 

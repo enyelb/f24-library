@@ -3,7 +3,7 @@ import { Component, input } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 
 /**
- * FormErrors
+ * F24FormErrors
  */
 @Component({
   selector: 'f24-form-errors',
@@ -12,7 +12,7 @@ import { ValidationErrors } from '@angular/forms';
   templateUrl: './form-errors.html',
   styleUrl: './form-errors.scss',
 })
-export class FormErrors {
+export class F24FormErrors {
 
   /**
    * show

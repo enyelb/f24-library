@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { InputCheckbox } from '../input-checkbox';
 import { ControlValueAccessor } from '../../control-value';
-import { FormErrors } from '../form-errors';
+import { F24FormErrors } from '../form-errors';
 import { F24_FORM_TOKEN } from '../../form-token';
 
 /**
@@ -15,7 +15,7 @@ import { F24_FORM_TOKEN } from '../../form-token';
 @Component({
   selector: 'f24-form-checkbox',
   standalone: true,
-  imports: [ReactiveFormsModule, MatIconModule, MatFormFieldModule, InputCheckbox, FormErrors],
+  imports: [ReactiveFormsModule, MatIconModule, MatFormFieldModule, InputCheckbox, F24FormErrors],
   templateUrl: './form-checkbox.html',
   styleUrl: './form-checkbox.scss',
   providers: [
@@ -73,5 +73,9 @@ export class FormCheckbox extends ControlValueAccessor implements OnInit, OnDest
    */
   ngOnDestroy(): void {
     this.destroy(this.ngControl);
+  }
+
+  get preview() {
+    return this.items().find(item => item[this.bindValue()] === this.control().value);
   }
 }

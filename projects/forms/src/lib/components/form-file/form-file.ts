@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 import { ControlValueAccessor } from '../../control-value';
-import { FormErrors } from '../form-errors';
+import { F24FormErrors } from '../form-errors';
 import { F24_FORM_TOKEN } from '../../form-token';
 
 /**
@@ -20,7 +20,7 @@ import { F24_FORM_TOKEN } from '../../form-token';
   imports: [
     CommonModule,
     ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule,
-    FormErrors
+    F24FormErrors
   ],
   templateUrl: './form-file.html',
   styleUrl: './form-file.scss',
@@ -234,5 +234,12 @@ export class FormFile extends ControlValueAccessor implements OnInit, OnDestroy 
     } else if (Array.isArray(value) && value.every(item => item instanceof File)) {
       this.selectedFileName = `${value.length} archivo(s) seleccionado(s)`;
     }
+  }
+
+  /**
+   * files
+   */
+  get preview() {
+    return this.selectedFileName;
   }
 }

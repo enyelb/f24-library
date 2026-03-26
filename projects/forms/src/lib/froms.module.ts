@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 
 import { F24FormDate } from './components/form-date';
-import { FormErrors } from './components/form-errors';
-import { FormFile } from './components/form-file';
+import { F24FormErrors } from './components/form-errors';
 import { F24FormInput } from './components/form-input';
-import { FormPhone } from './components/form-phone';
+import { F24FormSelect } from './components/form-select';
+import { FormFile } from './components/form-file';
 import { FormRadio } from './components/form-radio';
 import { FormCheckbox } from './components/form-checkbox';
-import { F24FormSelect } from './components/form-select';
 
 /**
  * F24FormModule
@@ -16,21 +15,19 @@ import { F24FormSelect } from './components/form-select';
   declarations: [],
   imports: [
     F24FormDate,
-    FormErrors,
-    FormFile,
+    F24FormErrors,
     F24FormInput,
     F24FormSelect,
-    FormPhone,
+    FormFile,
     FormRadio,
     FormCheckbox
   ],
   exports: [
     F24FormDate,
-    FormErrors,
-    FormFile,
+    F24FormErrors,
     F24FormInput,
     F24FormSelect,
-    FormPhone,
+    FormFile,
     FormRadio,
     FormCheckbox
   ]

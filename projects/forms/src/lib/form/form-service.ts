@@ -89,9 +89,9 @@ export abstract class F24FormService {
    */
   onSubmit(config: { 
     route?: string,
-    labels: {
-      sussess: string
-      error: string
+    labels?: {
+      sussess?: string
+      error?: string
     }
   }): void {
     
@@ -99,11 +99,9 @@ export abstract class F24FormService {
       return;
     }
 
-    const observable = this.request(this.value);
-    
-    observable.subscribe({
+    this.request(this.value).subscribe({
       next: (value) => {
-        this.notifcation.swal.success(config.labels.sussess, ``, {
+        this.notifcation.swal.success(config.labels?.sussess ?? 'Operación realizada con éxito', ``, {
           confirm: () => this.complete(config.route)
         });
         this.isErrorApi.set(false);
@@ -117,7 +115,7 @@ export abstract class F24FormService {
         } else if (error.error.error) {
           message += `\n${error.error.error}`;
         } else {
-          message = config.labels.error;
+          message = config.labels?.error ?? 'Error al realizar la operación';
         }
 
         this.isErrorApi.set(true);
@@ -134,14 +132,18 @@ export abstract class F24FormService {
    */
   onSubmitConfirm(config: {
     route?: string
-    labels: {
-      sussess: string
-      error: string
-      confirm: string
-    }
+    labels?: {
+      sussess?: string
+      error?: string
+      confirm?: string
+    },
+    icon?: 'warning' | 'error' | 'success' | 'info' | 'question',
+    html?: string
   }): void {
-    this.notifcation.swal.confirm(config.labels.confirm, {
+    this.notifcation.swal.confirm(config.labels?.confirm ?? '¿Estas seguro?', {
       confirmButtonText: 'Si',
+      icon: config.icon,
+      html: config.html,
       confirm: () => {
         this.onSubmit(config);
       }

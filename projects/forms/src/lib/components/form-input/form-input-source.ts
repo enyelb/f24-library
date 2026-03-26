@@ -4,15 +4,10 @@ import { FormControl } from "@angular/forms";
 import { takeUntilDestroyed, toObservable, toSignal } from "@angular/core/rxjs-interop";
 import { distinctUntilChanged, switchMap } from "rxjs";
 
-import { F24DataSource } from '@f24/data';
-import { FilterStorage } from "../../filter-storage";
-
 /**
- * F24FilterInputSourceParams
+ * F24FormInputSourceParams
  */
-export interface F24FilterInputSourceParams<Type> {
-  id?: string;
-  dataSource?: F24DataSource<any>;
+export interface F24FormInputSourceParams<Type> {
   label?: string;
   appearance?: 'fill' | 'outline';
   name?: string;
@@ -24,18 +19,9 @@ export interface F24FilterInputSourceParams<Type> {
   change?: (value: Type | null) => void;
 }
 /**
- * F24FilterInputSource
+ * F24FormInputSource
  */
-export class F24FilterInputSource<T> {
-  /**
-   * id para guardar el filtro en local storage
-   */
-  protected readonly _id = signal('');
-  /**
-   * dataSource variable para pasar el filtro 
-   * al datasource cuando cambie este input 
-   */
-  protected readonly _dataSource = signal<F24DataSource<any> | undefined>(undefined);
+export class F24FormInputSource<T> {
   /**
    * label
    * este es el label del mat input
@@ -95,22 +81,10 @@ export class F24FilterInputSource<T> {
   /**
    * constructor
    */
-  constructor(params?: F24FilterInputSourceParams<T>) {
+  constructor(params?: F24FormInputSourceParams<T>) {
     this.update(params);
     /**
-     * obtener los filtros actuales del datasource
-     * para obtener el filtro asociado al este forms
-     */
-    const dataSource = this._dataSource();
-    const filtersOLd = dataSource?.filters();
-
-    const name = this._name();
-    const filterOld = filtersOLd && name in filtersOLd ? filtersOLd[name] : null;
-    const local = FilterStorage.get(this._id());
-    const form = this._form();
-    form.setValue(filterOld ?? local, { emitEvent: !filterOld });
-    /**
-     * efecto para guardar el filtro y ejecutar el cambio en el data source
+     * efecto ejecutar el cambio en la funcion change
      */
     effect(() => {
       const value = this._formValue();
@@ -119,35 +93,8 @@ export class F24FilterInputSource<T> {
         if (change) {
           change(value);
         }
-        /**
-         * guardar el valor en local storage
-         */
-        FilterStorage.set(this._id(), value);
-        /**
-         * si la variable name y datasource existen, setear el valor del filtro
-         */
-        const name = this._name();
-        const dataSource = this._dataSource();
-        if (dataSource && name) {
-          dataSource.update({
-            filter: { name, value }
-          });
-        }
       })
     });
-  
-  }
-  /**
-   * metodo para obtener id
-   */
-  get id() {
-    return this._id.asReadonly();  
-  }
-  /**
-   * metodo para obtener dataSource
-   */
-  get dataSource() {
-    return this._dataSource.asReadonly();  
   }
   /**
    * metodo para obtener label
@@ -207,22 +154,8 @@ export class F24FilterInputSource<T> {
    * update
    * actualiza cada variable si viene en los parametros
    */
-  public update(params?: F24FilterInputSourceParams<T>, params2?: F24FilterInputSourceParams<T>) {
+  public update(params?: F24FormInputSourceParams<T>, params2?: F24FormInputSourceParams<T>) {
     untracked(() => {
-      /**
-       * actualizar el id
-       */
-      const id = params?.id ?? params2?.id;
-      if (id !== undefined && this._id() !== id) {
-        this._id.set(id);
-      }
-      /**
-       * actualizar el dataSource
-       */
-      const dataSource = params?.dataSource ?? params2?.dataSource;
-      if (dataSource !== undefined && this._dataSource() !== dataSource) {
-        this._dataSource.set(dataSource);
-      }
       /**
        * actualizar el label
        */
@@ -290,14 +223,14 @@ export class F24FilterInputSource<T> {
   }
 }
 /**
- * createFilterInputSource
+ * createFormInputSource
  */
-export const createFilterInputSource = <Type>(params?: F24FilterInputSourceParams<Type>) => {
-  return new F24FilterInputSource(params);
+export const createFormInputSource = <Type>(params?: F24FormInputSourceParams<Type>) => {
+  return new F24FormInputSource(params);
 }
 /**
- * createFilterInputSourceParams
+ * createFormInputSourceParams
  */
-export const createFilterInputSourceParams = <Type>(params?: F24FilterInputSourceParams<Type>) => {
+export const createFormInputSourceParams = <Type>(params?: F24FormInputSourceParams<Type>) => {
   return params;
 }

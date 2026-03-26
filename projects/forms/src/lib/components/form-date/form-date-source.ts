@@ -3,39 +3,28 @@ import { FormControl } from "@angular/forms";
 
 import { takeUntilDestroyed, toObservable, toSignal } from "@angular/core/rxjs-interop";
 import { distinctUntilChanged, switchMap } from "rxjs";
-
-import { F24DataSource } from '@f24/data';
-import { FilterStorage } from "../../filter-storage";
+import { isDate } from "date-fns";
 
 /**
- * F24FilterInputSourceParams
+ * F24FormDateSourceParams
  */
-export interface F24FilterInputSourceParams<Type> {
-  id?: string;
-  dataSource?: F24DataSource<any>;
+export interface F24FormDateSourceParams {
   label?: string;
   appearance?: 'fill' | 'outline';
   name?: string;
   icon?: string;
-  default?: Type | null;
+  default?: Date | string | 'TODAY';
   placeholder?: string;
-  form?: FormControl<Type | null>;
+  form?: FormControl<Date | null>;
   type?: 'number' | 'text';
-  change?: (value: Type | null) => void;
+  minDate?: Date | string | 'TODAY';
+  maxDate?: Date | string | 'TODAY';
+  change?: (value: Date | null) => void;
 }
 /**
- * F24FilterInputSource
+ * F24FormDateSource
  */
-export class F24FilterInputSource<T> {
-  /**
-   * id para guardar el filtro en local storage
-   */
-  protected readonly _id = signal('');
-  /**
-   * dataSource variable para pasar el filtro 
-   * al datasource cuando cambie este input 
-   */
-  protected readonly _dataSource = signal<F24DataSource<any> | undefined>(undefined);
+export class F24FormDateSource {
   /**
    * label
    * este es el label del mat input
@@ -60,7 +49,7 @@ export class F24FilterInputSource<T> {
    * dafault
    * este es el valor por defecto que se usa
    */
-  protected readonly _default = signal<T | null>(null);
+  protected readonly _default = signal<Date | null>(null);
   /**
    * placeholder
    * este es el placeholder del mat input
@@ -70,7 +59,7 @@ export class F24FilterInputSource<T> {
    * form
    * este es el form del mat input
    */
-  protected readonly _form = signal(new FormControl<T | null>(null));
+  protected readonly _form = signal(new FormControl<Date | null>(null));
   /**
    * type
    * este es el tipo de input
@@ -80,7 +69,17 @@ export class F24FilterInputSource<T> {
    * change
    * esta funcion emite los cambios del filtro
    */
-  protected readonly _change = signal<(value: T | null) => void>((value: T | null) => {});
+  protected readonly _change = signal<(value: Date | null) => void>((value: Date | null) => {});
+  /**
+   * min date
+   * fecha minima permitida
+   */
+  protected readonly _minDate = signal(new Date('1900-01-01'));
+  /**
+   * max date
+   * fecha maxima permitida
+   */
+  protected readonly _maxDate = signal(new Date('2100-01-01'));
   /**
    * es un signal que tendra el valor del form
    */
@@ -95,22 +94,10 @@ export class F24FilterInputSource<T> {
   /**
    * constructor
    */
-  constructor(params?: F24FilterInputSourceParams<T>) {
+  constructor(params?: F24FormDateSourceParams) {
     this.update(params);
     /**
-     * obtener los filtros actuales del datasource
-     * para obtener el filtro asociado al este forms
-     */
-    const dataSource = this._dataSource();
-    const filtersOLd = dataSource?.filters();
-
-    const name = this._name();
-    const filterOld = filtersOLd && name in filtersOLd ? filtersOLd[name] : null;
-    const local = FilterStorage.get(this._id());
-    const form = this._form();
-    form.setValue(filterOld ?? local, { emitEvent: !filterOld });
-    /**
-     * efecto para guardar el filtro y ejecutar el cambio en el data source
+     * efecto ejecutar el cambio en la funcion change
      */
     effect(() => {
       const value = this._formValue();
@@ -119,35 +106,8 @@ export class F24FilterInputSource<T> {
         if (change) {
           change(value);
         }
-        /**
-         * guardar el valor en local storage
-         */
-        FilterStorage.set(this._id(), value);
-        /**
-         * si la variable name y datasource existen, setear el valor del filtro
-         */
-        const name = this._name();
-        const dataSource = this._dataSource();
-        if (dataSource && name) {
-          dataSource.update({
-            filter: { name, value }
-          });
-        }
       })
     });
-  
-  }
-  /**
-   * metodo para obtener id
-   */
-  get id() {
-    return this._id.asReadonly();  
-  }
-  /**
-   * metodo para obtener dataSource
-   */
-  get dataSource() {
-    return this._dataSource.asReadonly();  
   }
   /**
    * metodo para obtener label
@@ -204,25 +164,23 @@ export class F24FilterInputSource<T> {
     return this._change.asReadonly();
   }
   /**
+   * metodo para obtener fecha minima
+   */
+  get minDate() {
+    return this._minDate.asReadonly();
+  }
+  /**
+   * metodo para obtener fecha maxima
+   */
+  get maxDate() {
+    return this._maxDate.asReadonly();
+  }
+  /**
    * update
    * actualiza cada variable si viene en los parametros
    */
-  public update(params?: F24FilterInputSourceParams<T>, params2?: F24FilterInputSourceParams<T>) {
+  public update(params?: F24FormDateSourceParams, params2?: F24FormDateSourceParams) {
     untracked(() => {
-      /**
-       * actualizar el id
-       */
-      const id = params?.id ?? params2?.id;
-      if (id !== undefined && this._id() !== id) {
-        this._id.set(id);
-      }
-      /**
-       * actualizar el dataSource
-       */
-      const dataSource = params?.dataSource ?? params2?.dataSource;
-      if (dataSource !== undefined && this._dataSource() !== dataSource) {
-        this._dataSource.set(dataSource);
-      }
       /**
        * actualizar el label
        */
@@ -252,13 +210,6 @@ export class F24FilterInputSource<T> {
         this._icon.set(icon);
       }
       /**
-       * actualizar el default
-       */
-      const default2 = params?.default ?? params2?.default
-      if (default2 !== undefined && this._default() !== default2) {
-        this._default.set(default2);
-      }
-      /**
        * actualizar el placeholder
        */
       const placeholder = params?.placeholder ?? params2?.placeholder;
@@ -271,6 +222,18 @@ export class F24FilterInputSource<T> {
       const form = params?.form ?? params2?.form;
       if (form !== undefined && this._form() !== form) {
         this._form.set(form);
+      }
+      /**
+       * actualizar el default
+       */
+      const default2 = params?.default ?? params2?.default
+      if (default2 !== undefined && this._default() !== default2) {
+        if (default2 === 'TODAY') {
+          this._default.set(new Date());
+        } else if (isDate(default2)) {
+          this._default.set(new Date(default2));
+        }
+        this._form().setValue(this._default());
       }
       /**
        * actualizar el tipo
@@ -286,18 +249,40 @@ export class F24FilterInputSource<T> {
       if (change !== undefined && this._change() !== change) {
         this._change.set(change);
       }
+      /**
+       * actualizar la fecha meinima
+       */
+      const minDate = params?.minDate ?? params2?.minDate;
+      if (minDate !== undefined && this._minDate() !== minDate) {
+        if (minDate === 'TODAY') {
+          this._minDate.set(new Date());
+        } else if (isDate(minDate)) {
+          this._minDate.set(new Date(minDate));
+        }
+      }
+      /**
+       * actualizar la fecha maxima
+       */
+      const maxDate = params?.maxDate ?? params2?.maxDate;
+      if (maxDate !== undefined && this._maxDate() !== maxDate) {
+        if (maxDate === 'TODAY') {
+          this._maxDate.set(new Date());
+        } else if (isDate(maxDate)) {
+          this._maxDate.set(new Date(maxDate));
+        }
+      }
     });
   }
 }
 /**
- * createFilterInputSource
+ * createFormDateSource
  */
-export const createFilterInputSource = <Type>(params?: F24FilterInputSourceParams<Type>) => {
-  return new F24FilterInputSource(params);
+export const createFormDateSource = (params?: F24FormDateSourceParams) => {
+  return new F24FormDateSource(params);
 }
 /**
- * createFilterInputSourceParams
+ * createFormDateSourceParams
  */
-export const createFilterInputSourceParams = <Type>(params?: F24FilterInputSourceParams<Type>) => {
+export const createFormDateSourceParams = (params?: F24FormDateSourceParams) => {
   return params;
 }

@@ -5,12 +5,16 @@
         (animate.enter)="onLeaveAnimationDone($event)"
         (animate.leave)="onEnterAnimationDone($event)"
       >
-        <ng-content select="[checked]"></ng-content>
-        
+        <div class="f24-preview-checked-header">
+          <span class="f24-preview-checked-index"> {{source().index()}}</span>
+          @for (prewiew of prewiews(); track $index) {
+            <f24-preview-text [label]="prewiew.label" [value]="prewiew.value"/>
+          }
+          <ng-content select="[checked]"></ng-content>
+        </div>
         <button matIconButton color="primary" (click)="updateChecked(false)" [disabled]="!source().clear()">
-          <mat-icon>delete_sweep</mat-icon>
+          <mat-icon>edit</mat-icon>
         </button>
-         
       </div>
     } @else {
       <div class="f24-preview-unchecked" animate.enter="fade-in" animate.leave="fade-out"

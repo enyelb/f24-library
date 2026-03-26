@@ -1,10 +1,12 @@
-import { AnimationCallbackEvent, Component, contentChildren, effect, input, untracked } from '@angular/core';
+import { AnimationCallbackEvent, Component, computed, contentChildren, effect, input } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 import { F24Note } from '@f24/alerts';
-import { F24_FORM_TOKEN, FormCheckbox, FormFile, FormPhone, FormRadio } from '@f24/forms';
+import { F24_FORM_TOKEN, FormCheckbox, FormFile, FormRadio } from '@f24/forms';
+
+import { F24PreviewText } from '../preview-text/preview-text';
 
 import { createPreviewFormSource, createPreviewFormSourceParams, F24PreviewFormSourceParams } from './preview-form-source';
 
@@ -15,7 +17,7 @@ import { createPreviewFormSource, createPreviewFormSourceParams, F24PreviewFormS
   selector: 'f24-preview-form',
   imports: [
     MatButtonModule, MatIconModule,
-    F24Note
+    F24Note, F24PreviewText
   ],
   templateUrl: './preview-form.html',
   styleUrl: './preview-form.scss',
@@ -48,6 +50,27 @@ export class F24PreviewForm {
    */
   protected readonly contentForms = contentChildren(F24_FORM_TOKEN, { descendants: true });
   /**
+   * 
+   */
+  protected readonly prewiews = computed(() => {
+    //if (!this.contentForms() || this.contentForms().length === 0 || !this.source().isValid()) {
+      return [];
+    //}
+    return this.contentForms().map((form) => {
+      if (form instanceof FormCheckbox || form instanceof FormRadio || form instanceof FormFile) {
+        return {
+          label: form.label(),
+          value: form.preview
+        };
+      } else {
+        return {
+          label: form.source().label(),
+          value: form.source().form().value
+        }
+      }
+    })
+  }); 
+  /**
    * constructor
    */
   constructor() {
@@ -72,14 +95,13 @@ export class F24PreviewForm {
         animation: this.animation()
       }, this.params());
     });
-
     /**
      * efecto para asignar contentForms
      */
     effect(() => {
       const content = this.contentForms();
       const forms = content.map((form) => {
-        if (form instanceof FormCheckbox || form instanceof FormRadio || form instanceof FormFile || form instanceof FormPhone) {
+        if (form instanceof FormCheckbox || form instanceof FormRadio || form instanceof FormFile) {
           return form.control();
         } else {
           return form.source().form();

@@ -1,5 +1,5 @@
 <div class="f24-form-input-container">
-  <mat-form-field appearance="outline" class="f24-form-input">
+  <mat-form-field [appearance]="source().appearance()" class="f24-form-input">
 
     <mat-label>{{ source().label() }}</mat-label>
 
@@ -17,6 +17,10 @@
     <!-- Icono de estado -->
     @if (source().form().valid) {
       <mat-icon matSuffix color="primary">check</mat-icon>
+    }
+    <!-- Icono principal -->
+    @if (source().icon(); as icon) {
+      <f24-icon class="f24-filter-prefix-icon" matPrefix [icon]="icon"/>
     }
   </mat-form-field>
 </div>

@@ -116,6 +116,12 @@ export class F24PreviewFormSource {
    */
   protected readonly _animation = signal(false);
   /**
+   * index
+   * para mostrar el numero de cuando este chequeado
+   */
+  protected readonly _index = signal(1);
+  
+  /**
    * constructor
    */
   constructor(params?: F24PreviewFormSourceParams) {
@@ -144,6 +150,7 @@ export class F24PreviewFormSource {
       const linked = this._linked();
       if (!linked) {
         this._visible.set(true);
+        this._index.set(1);
         return;
       }
       const visible = linked.source().visible();
@@ -152,10 +159,12 @@ export class F24PreviewFormSource {
       const hidden = linked.source().hidden();
 
       untracked(() => {
+        const index = linked.source()._index();
         if (checked === false && this._clearAll()) {
            this.update({ checked: false });
         }
         this._visible.set((visible && checked && !animation) || (visible && hidden));
+        this._index.set(visible && !hidden ? index + 1 : index);
       });
     });
   }
@@ -254,6 +263,12 @@ export class F24PreviewFormSource {
    */
   get animation() {
     return this._animation.asReadonly();  
+  }
+  /**
+   * metodo para obtener el index
+   */
+  get index() {
+    return this._index.asReadonly();  
   }
   /**
    * update

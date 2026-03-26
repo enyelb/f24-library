@@ -34,7 +34,7 @@ export class SwalService {
   /**
    * swalBase
    */
-  private swalBase(title: string, text: string, icon: 'warning' | 'error' | 'success' | 'info' | 'question', options: CustomSweetAlertOptions) {
+  private swalBase(title: string, text: string, icon: 'warning' | 'error' | 'success' | 'info' | 'question' | undefined, options: CustomSweetAlertOptions) {
 
     options.title = title;
     options.icon = icon;

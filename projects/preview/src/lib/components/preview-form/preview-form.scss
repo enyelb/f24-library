@@ -8,6 +8,20 @@
   margin: calc(var(--margin-global, 20px) / 2) calc(var(--margin-global, 20px) / 4);
 }
 
+.f24-preview-checked-header {
+  display: flex;
+  align-items: center;
+}
+
+.f24-preview-checked-index {
+  font-weight: 500;
+  padding: 2px 8px;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  margin: 0px 10px 0px 6px;
+  border-radius: 50%;
+}
+
 .f24-preview-unchecked {
   display: flex;
   gap: calc((var(--margin-global, 20px) / 4) + 2px);
