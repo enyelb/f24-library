@@ -30,7 +30,7 @@ import { FormFieldSelectControl } from '../../form-field-select-control';
     '[id]': 'id',
   },
 })
-export class InputCheckbox extends FormFieldSelectControl<Array<string | number | boolean>> {
+export class InputCheckbox<Item> extends FormFieldSelectControl<Array<string | number | boolean>> {
   
   /**
    * view childs

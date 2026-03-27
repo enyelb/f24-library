@@ -4,24 +4,14 @@ import { FormControl } from "@angular/forms";
 import { takeUntilDestroyed, toObservable, toSignal } from "@angular/core/rxjs-interop";
 import { distinctUntilChanged, switchMap } from "rxjs";
 
-import { F24DataSource } from '@f24/data';
-
-import { FilterStorage } from "../../filter-storage";
-
 /**
- * F24FilterSelectFormatterSourceParams
+ * F24FormRadioBindSourceParams
  */
-export type F24FilterSelectFormatterSourceParams<Item> = (data: Item) => string;
+export type F24FormRadioBindSourceParams = string;
 /**
- * F24FilterSelectBindSourceParams
+ * F24FormRadioSourceParams
  */
-export type F24FilterSelectBindSourceParams = string;
-/**
- * F24FilterSelectSourceParams
- */
-export interface F24FilterSelectSourceParams<Type, Item> {
-  id?: string;
-  dataSource?: F24DataSource<any>;
+export interface F24FormRadioSourceParams<Type, Item> {
   label?: string;
   appearance?: 'fill' | 'outline';
   name?: string;
@@ -31,30 +21,18 @@ export interface F24FilterSelectSourceParams<Type, Item> {
   form?: FormControl<Type | null>;
   type?: 'number' | 'text';
   change?: (value: Type | null) => void;
-  multiple?: boolean;
-  items?: Item[];
-  formatter?: F24FilterSelectFormatterSourceParams<Item> | {
-    label?: F24FilterSelectFormatterSourceParams<Item>;
-    value?: F24FilterSelectFormatterSourceParams<Item>;
-  };
-  bind?: F24FilterSelectBindSourceParams | {
-    label?: F24FilterSelectBindSourceParams
-    value?: F24FilterSelectBindSourceParams
+  bind?: {
+    value?: F24FormRadioBindSourceParams;
+    label?: F24FormRadioBindSourceParams;
+    icon?: F24FormRadioBindSourceParams;
   }
+  items?: Item[];
+  limit?: number;
 }
 /**
- * F24FilterSelectSource
+ * F24FormRadioSource
  */
-export class F24FilterSelectSource<T, I> {
-  /**
-   * id para guardar el filtro en local storage
-   */
-  protected readonly _id = signal('');
-  /**
-   * dataSource variable para pasar el filtro 
-   * al datasource cuando cambie este input 
-   */
-  protected readonly _dataSource = signal<F24DataSource<any> | undefined>(undefined);
+export class F24FormRadioSource<T, I> {
   /**
    * label
    * este es el label del mat input
@@ -101,25 +79,10 @@ export class F24FilterSelectSource<T, I> {
    */
   protected readonly _change = signal<(value: T | null) => void>((value: T | null) => {});
   /**
-   * multiple
-   * esta variable permite seleccion multiple
-   */
-  protected readonly _multiple = signal(false);
-  /**
    * items
    * esta variable es la lista de opciones
    */
   protected readonly _items = signal<I[]>([]);
-  /**
-   * formatterLabel
-   * funcion para formatear el item seleccionado y mostarar en la lista
-   */
-  protected readonly _formatterLabel = signal((item: I) => this.formatterDefault(this._bindLabel(), item));
-  /**
-   * formatterValue
-   * funcion para formatear el item seleccionado y mostrar en el input
-   */
-  protected readonly _formatterValue = signal((item: I) => this.formatterDefault(this._bindValue(), item));
   /**
    * bindLabel
    * variable para enlazar una propiedad del item con el label
@@ -130,6 +93,15 @@ export class F24FilterSelectSource<T, I> {
    * variable para enlazar una porpiedad del item con el value
    */
   protected readonly _bindValue = signal<string>('value');
+  /**
+   * bindIcon
+   * variable para enlazar una porpiedad del item con el icon
+   */
+  protected readonly _bindIcon = signal<string>('icon');
+  /**
+   * es un signal que tendra el limite visible
+   */
+  protected readonly _limit = signal(10);
   /**
    * es un signal que tendra el valor del form
    */
@@ -144,22 +116,10 @@ export class F24FilterSelectSource<T, I> {
   /**
    * constructor
    */
-  constructor(params?: F24FilterSelectSourceParams<T, I>) {
+  constructor(params?: F24FormRadioSourceParams<T, I>) {
     this.update(params);
     /**
-     * obtener los filtros actuales del datasource
-     * para obtener el filtro asociado al este forms
-     */
-    const dataSource = this._dataSource();
-    const filtersOLd = dataSource?.filters();
-
-    const name = this._name();
-    const filterOld = filtersOLd && name in filtersOLd ? filtersOLd[name] : null;
-    const local = FilterStorage.get(this._id());
-    const form = this._form();
-    form.setValue(filterOld ?? local, { emitEvent: !filterOld });
-    /**
-     * efecto para guardar el filtro y ejecutar el cambio en el data source
+     * efecto ejecutar el cambio en la funcion change
      */
     effect(() => {
       const value = this._formValue();
@@ -168,34 +128,8 @@ export class F24FilterSelectSource<T, I> {
         if (change) {
           change(value);
         }
-        /**
-         * guardar el valor en local storage
-         */
-        FilterStorage.set(this._id(), value);
-        /**
-         * si la variable name y datasource existen, setear el valor del filtro
-         */
-        const name = this._name();
-        const dataSource = this._dataSource();
-        if (dataSource && name) {
-          dataSource.update({
-            filter: { name, value }
-          });
-        }
       })
     });
-  }
-  /**
-   * metodo para obtener id
-   */
-  get id() {
-    return this._id.asReadonly();  
-  }
-  /**
-   * metodo para obtener dataSource
-   */
-  get dataSource() {
-    return this._dataSource.asReadonly();  
   }
   /**
    * metodo para obtener label
@@ -252,74 +186,41 @@ export class F24FilterSelectSource<T, I> {
     return this._change.asReadonly();
   }
   /**
-   * metodo para obtener multiple
-   */
-  get multiple() {
-    return this._multiple.asReadonly();
-  }
-  /**
    * metodo para obtener items
    */
   get items() {
     return this._items.asReadonly();
   }
   /**
-   * metodo para obtener formatterLabel
-   */
-  get formatterLabel() {
-    return this._formatterLabel.asReadonly();
-  }
-  /**
-   * metodo para obtener formatterValue
-   */ 
-  get formatterValue() {
-    return this._formatterValue.asReadonly();
-  }
-  /**
-   * metodo para obtener bindLabel
-   */
-  get bindLabel() {
-    return this._bindLabel.asReadonly();
-  }
-  /**
-   * metodo para obtener bindValue
+   * metodo para obtener el enlace al valor
    */
   get bindValue() {
     return this._bindValue.asReadonly();
   }
   /**
-   * formatterDefault
+   * metodo para obtener el enlace al label
    */
-  private formatterDefault(bind: string | undefined, data: I): any {
-    if (!bind || !(data instanceof Object)) {
-      return '';
-    }
-    for(const [key, value] of Object.entries(data)) {
-      if (key === bind) {
-        return value;
-      }
-    }
+  get bindLabel() {
+    return this._bindLabel.asReadonly();
+  }
+  /**
+   * metodo para obtener el enlace al icono
+   */
+  get bindIcon() {
+    return this._bindIcon.asReadonly();
+  }
+  /**
+   * metodo para obtener el limite
+   */
+  get limit() {
+    return this._limit.asReadonly();
   }
   /**
    * update
    * actualiza cada variable si viene en los parametros
    */
-  public update(params?: F24FilterSelectSourceParams<T, I>, params2?: F24FilterSelectSourceParams<T, I>) {
+  public update(params?: F24FormRadioSourceParams<T, I>, params2?: F24FormRadioSourceParams<T, I>) {
     untracked(() => {
-      /**
-       * actualizar el id
-       */
-      const id = params?.id ?? params2?.id;
-      if (id !== undefined && this._id() !== id) {
-        this._id.set(id);
-      }
-      /**
-       * actualizar el dataSource
-       */
-      const dataSource = params?.dataSource ?? params2?.dataSource;
-      if (dataSource !== undefined && this._dataSource() !== dataSource) {
-        this._dataSource.set(dataSource);
-      }
       /**
        * actualizar el label
        */
@@ -384,32 +285,11 @@ export class F24FilterSelectSource<T, I> {
         this._change.set(change);
       }
       /**
-       * actualizar el multiple
-       */
-      const multiple = params?.multiple ?? params2?.multiple;
-      if (multiple !== undefined && this._multiple() !== multiple) {
-        this._multiple.set(multiple);
-      }
-      /**
        * actualizar el items
        */
       const items = params?.items ?? params2?.items;
       if (items !== undefined && this._items() !== items) {
         this._items.set(items);
-      }
-      /**
-       * actualizar el pormato para los labels
-       */
-      const formatterLabel = (typeof params?.formatter === 'object' ? params.formatter?.label : params?.formatter) ?? (typeof params2?.formatter === 'object' ? params2.formatter?.label : params2?.formatter);
-      if (formatterLabel !== undefined && this._formatterLabel() !== formatterLabel) {
-        this._formatterLabel.set(formatterLabel);
-      }
-      /**
-       * actualizar el formato para los values
-       */
-      const formatterValue = (typeof params?.formatter === 'object' ? params.formatter?.value : params?.formatter) ?? (typeof params2?.formatter === 'object' ? params2.formatter?.value : params2?.formatter);
-      if (formatterValue !== undefined && this._formatterValue() !== formatterValue) {
-        this._formatterValue.set(formatterValue);
       }
       /**
        * actualizar el enlaze label
@@ -425,20 +305,32 @@ export class F24FilterSelectSource<T, I> {
       if (bindValue !== undefined && this._bindValue() !== bindValue) {
         this._bindValue.set(bindValue);
       }
+      /**
+       * actualizar el enlaze icono
+       */
+      const bindIcon =(typeof params?.bind === 'object' ? params.bind?.icon : params?.bind) ?? (typeof params2?.bind === 'object' ? params2.bind?.icon : params2?.bind);
+      if (bindIcon !== undefined && this._bindIcon() !== bindIcon) {
+        this._bindIcon.set(bindIcon);
+      }
+      /**
+       * actualizar el limite
+       */
+      const limit = params?.limit ?? params2?.limit;
+      if (limit !== undefined && this._limit() !== limit) {
+        this._limit.set(limit);
+      }
     });
-
-    
   }
 }
 /**
- * createFilterSelectSource
+ * createFormRadioSource
  */
-export const createFilterSelectSource = <Type, Item>(params?: F24FilterSelectSourceParams<Type, Item>) => {
-  return new F24FilterSelectSource(params);
+export const createFormRadioSource = <Type, Item>(params?: F24FormRadioSourceParams<Type, Item>) => {
+  return new F24FormRadioSource(params);
 }
 /**
- * createFilterSelectSourceParams
+ * createFormRadioSourceParams
  */
-export const createFilterSelectSourceParams = <Type, Item>(params?: F24FilterSelectSourceParams<Type, Item>) => {
+export const createFormRadioSourceParams = <Type, Item>(params?: F24FormRadioSourceParams<Type, Item>) => {
   return params;
 }

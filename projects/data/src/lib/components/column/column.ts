@@ -12,7 +12,6 @@ import { F24CellDirective } from '../../directives/cell';
 import { F24FooterDirective } from '../../directives/footer';
 import { F24HeaderDirective } from '../../directives/header';
 
-
 /**
  * F24Column
  */

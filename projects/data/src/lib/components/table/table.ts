@@ -209,7 +209,7 @@ export class F24Table<T> {
       untracked(() => {
         defs.forEach(column => {
           if (!sorter.sortables.has(column.id)) {
-            column._sort = sorter;
+            (column as any)._sort = sorter;
             sorter.register(column); 
           }
         });

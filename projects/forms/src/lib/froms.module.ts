@@ -5,8 +5,8 @@ import { F24FormErrors } from './components/form-errors';
 import { F24FormInput } from './components/form-input';
 import { F24FormSelect } from './components/form-select';
 import { FormFile } from './components/form-file';
-import { FormRadio } from './components/form-radio';
-import { FormCheckbox } from './components/form-checkbox';
+import { F24FormRadio } from './components/form-radio';
+import { F24FormCheckbox } from './components/form-checkbox';
 
 /**
  * F24FormModule
@@ -19,8 +19,8 @@ import { FormCheckbox } from './components/form-checkbox';
     F24FormInput,
     F24FormSelect,
     FormFile,
-    FormRadio,
-    FormCheckbox
+    F24FormRadio,
+    F24FormCheckbox
   ],
   exports: [
     F24FormDate,
@@ -28,8 +28,8 @@ import { FormCheckbox } from './components/form-checkbox';
     F24FormInput,
     F24FormSelect,
     FormFile,
-    FormRadio,
-    FormCheckbox
+    F24FormRadio,
+    F24FormCheckbox
   ]
 })
 export class F24FormModule { }

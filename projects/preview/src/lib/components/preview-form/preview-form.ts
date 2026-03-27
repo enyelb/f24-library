@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 import { F24Note } from '@f24/alerts';
-import { F24_FORM_TOKEN, FormCheckbox, FormFile, FormRadio } from '@f24/forms';
+import { F24_FORM_TOKEN, F24FormCheckbox, F24FormRadio, FormFile } from '@f24/forms';
 
 import { F24PreviewText } from '../preview-text/preview-text';
 
@@ -57,7 +57,7 @@ export class F24PreviewForm {
       return [];
     //}
     return this.contentForms().map((form) => {
-      if (form instanceof FormCheckbox || form instanceof FormRadio || form instanceof FormFile) {
+      if (form instanceof FormFile) {
         return {
           label: form.label(),
           value: form.preview
@@ -101,13 +101,13 @@ export class F24PreviewForm {
     effect(() => {
       const content = this.contentForms();
       const forms = content.map((form) => {
-        if (form instanceof FormCheckbox || form instanceof FormRadio || form instanceof FormFile) {
+        if (form instanceof FormFile) {
           return form.control();
         } else {
           return form.source().form();
         }
       })
-      const onlyRadioOrCheckbox = !content.some((form) => !(form instanceof FormCheckbox || form instanceof FormRadio));
+      const onlyRadioOrCheckbox = !content.some((form) => !(form instanceof F24FormCheckbox || form instanceof F24FormRadio));
       this.source().update({
         form: forms,
         auto: onlyRadioOrCheckbox

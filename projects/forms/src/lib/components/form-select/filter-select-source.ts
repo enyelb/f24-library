@@ -331,38 +331,32 @@ export class F24FormSelectSource<T, I> {
         this._items.set(items);
       }
       /**
-       * actualizar los formatos
+       * actualizar el pormato para los labels
        */
-      const formatters = params?.formatter ?? params2?.formatter;
-      if (formatters !== undefined) {
-        if (typeof formatters === 'function') {
-          this._formatterLabel.set(formatters);
-          this._formatterValue.set(formatters);
-        } else {
-          if (formatters['label']) {
-            this._formatterLabel.set(formatters['label'])
-          }
-          if (formatters['value']) {
-            this._formatterValue.set(formatters['value'])
-          }
-        }
+      const formatterLabel = (typeof params?.formatter === 'object' ? params.formatter?.label : params?.formatter) ?? (typeof params2?.formatter === 'object' ? params2.formatter?.label : params2?.formatter);
+      if (formatterLabel !== undefined && this._formatterLabel() !== formatterLabel) {
+        this._formatterLabel.set(formatterLabel);
       }
       /**
-       * actualizar los formatos
+       * actualizar el formato para los values
        */
-      const binds = params?.bind ?? params2?.bind;
-      if (binds !== undefined) {
-        if (typeof binds === 'string') {
-          this._bindLabel.set(binds);
-          this._bindValue.set(binds);
-        } else {
-          if (binds['label']) {
-            this._bindLabel.set(binds['label'])
-          }
-          if (binds['value']) {
-            this._bindValue.set(binds['value'])
-          }
-        }
+      const formatterValue = (typeof params?.formatter === 'object' ? params.formatter?.value : params?.formatter) ?? (typeof params2?.formatter === 'object' ? params2.formatter?.value : params2?.formatter);
+      if (formatterValue !== undefined && this._formatterValue() !== formatterValue) {
+        this._formatterValue.set(formatterValue);
+      }
+      /**
+       * actualizar el enlaze label
+       */
+      const bindLabel = (typeof params?.bind === 'object' ? params.bind?.label : params?.bind) ?? (typeof params2?.bind === 'object' ? params2.bind?.label : params2?.bind);
+      if (bindLabel !== undefined && this._bindLabel() !== bindLabel) {
+        this._bindLabel.set(bindLabel);
+      }
+      /**
+       * actualizar el enlaze value
+       */
+      const bindValue =(typeof params?.bind === 'object' ? params.bind?.value : params?.bind) ?? (typeof params2?.bind === 'object' ? params2.bind?.value : params2?.bind);
+      if (bindValue !== undefined && this._bindValue() !== bindValue) {
+        this._bindValue.set(bindValue);
       }
     });
   }
