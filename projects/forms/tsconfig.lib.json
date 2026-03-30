@@ -17,7 +17,10 @@
       ],
       "@f24/layout": [
         "../../dist/layout"
-      ]
+      ],
+      "@f24/core": [
+        "../../dist/core"
+      ],
     }
   },
   "include": [

@@ -3,6 +3,7 @@ import { Component, input, effect, untracked, contentChildren } from '@angular/c
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkTableModule } from '@angular/cdk/table';
 
 import { MatSort, MatSortHeader, MatSortModule } from '@angular/material/sort';
 import { MatColumnDef, MatRow, MatTable, MatTableModule } from '@angular/material/table';
@@ -28,7 +29,7 @@ import { createDataSource, createDataSourceParams } from '../../source/data-sour
   templateUrl: 'table.html',
   standalone: true,
   imports: [
-    ScrollingModule,
+    ScrollingModule, CdkTableModule,
     MatSortModule, MatIconModule, MatTableModule, MatProgressBarModule, MatPaginatorModule,
     F24Loader
   ],
@@ -40,9 +41,6 @@ export class F24Table<T> {
    * params
    */
   readonly params = input(createDataSourceParams<T>());
-  /**
-   * source 
-   */
   readonly source = input(createDataSource(this.params()));
 
   //CONFIG
@@ -131,7 +129,7 @@ export class F24Table<T> {
     /**
      * controlar la velocidad del scroll esto es para solventar el error del vitual scroll en la version 21.1.x
      */
-    effect((onCleanup) => {
+    /*effect((onCleanup) => {
       const scroll = this.virtualScroll()?.nativeElement;
       if (!scroll) {
         return;
@@ -151,40 +149,33 @@ export class F24Table<T> {
     /**
      * controlar la velocidad del scroll
      */
-    effect((onCleanup) => {
+    effect(() => {
       const elements = this.rowElements().filter((elementRef, index) => index === 0).map(elementRef => elementRef.nativeElement);
       
-      const rafId = requestAnimationFrame(() => {
-        untracked(() => {
-          const newItemSize = elements.reduce((height, elementRef) => {
-            return height > elementRef.getBoundingClientRect().height ? height : elementRef.getBoundingClientRect().height;
-          }, this.itemSize());
-          if (this.itemSize() == newItemSize) {
-            return;
-          }
-          console.log(newItemSize);
-          this.itemSize.set(newItemSize);
-        });
+      untracked(() => {
+        const newItemSize = elements.reduce((height, elementRef) => {
+          return height > elementRef.getBoundingClientRect().height ? height : elementRef.getBoundingClientRect().height;
+        }, this.itemSize());
+        if (this.itemSize() == newItemSize) {
+          return;
+        }
+        this.itemSize.set(newItemSize);
       });
-      onCleanup(() => cancelAnimationFrame(rafId));
     });
     /**
      * efecto para asignar los parametros al source
      */
-    effect((onCleanup) => {
+    effect(() => {
       const params = this.params();
-      const rafId = requestAnimationFrame(() => {
-        untracked(() => {
-          this.source().update(params);
-        });
-      });
       
-      onCleanup(() => cancelAnimationFrame(rafId));
+      untracked(() => {
+        this.source().update(params);
+      });
     });
     /**
      * efecto para renderizar la tabla
      */
-    effect((onCleanup) => {
+    /*effect((onCleanup) => {
       this.source().data();
     
       // Usar requestAnimationFrame para sincronizar con el ciclo de renderizado
@@ -195,7 +186,7 @@ export class F24Table<T> {
       });
       
       onCleanup(() => cancelAnimationFrame(rafId));
-    });
+    });*/
     /**
      * efecto para registrar sorts
      */
@@ -230,43 +221,38 @@ export class F24Table<T> {
     /**
      * efecto para sincronizar page con el data source
      */
-    effect((onCleanup) => {
+    effect(() => {
       const dataSource = this.source();
       const page = this.page();
       if (!page) {
         return;
       }
-      const rafId = requestAnimationFrame(() => {
-        untracked(() => {
-          dataSource.update({
-            page: { 
-              index: page.pageIndex,
-              size: page.pageSize
-            }
-          });
+      
+      untracked(() => {
+        dataSource.update({
+          page: { 
+            index: page.pageIndex,
+            size: page.pageSize
+          }
         });
       });
-      onCleanup(() => cancelAnimationFrame(rafId));
     });
     /**
      * efecto para sincronizar sort con el data source
      */
-    effect((onCleanup) => {
+    effect(() => {
       const dataSource = this.source();
       const sort = this.sort();
       if (!sort) {
         return;
       }
-      const rafId = requestAnimationFrame(() => {
-        untracked(() => {
-          dataSource.update({
-            sorts: {
-              [sort.active]: sort.direction
-            }
-          });
+      untracked(() => {
+        dataSource.update({
+          sorts: {
+            [sort.active]: sort.direction
+          }
         });
       });
-      onCleanup(() => cancelAnimationFrame(rafId));
     });
   }
   /**
@@ -303,7 +289,7 @@ export class F24Table<T> {
     if (!paginator) {
       return;
     }
-    if (this.isPagination() && this.source().page().options.includes(size)) {
+    if (this.isPagination() && this.source().pageOptions().includes(size)) {
       paginator.pageSize = size;
       paginator.page.emit();
     }

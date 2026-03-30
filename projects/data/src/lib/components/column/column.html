@@ -27,23 +27,15 @@
     @if(isCell()) {
       @if (cellTemplate(); as cell) {
         <td mat-cell *matCellDef="let row" [class]="class()">
-          @defer (on viewport; on interaction; prefetch on hover) {
-            <ng-container *ngTemplateOutlet="cell.template; context: { $implicit: row }"/>
-          } @placeholder {
-            <div class="skeleton-loader"></div>
-          }
+          <ng-container *ngTemplateOutlet="cell.template; context: { $implicit: row }"/>
         </td>
       } @else if (cell(); as cell) {
         <td mat-cell *matCellDef="let row">
-          @defer (on viewport; on interaction; prefetch on hover) {
-            @if (cell in row) {
-              <p [class]="class()">{{ transform(row[cell]) }}</p>
-            }
-            @else {
-              <p [class]="class()">{{ transform(value(row, cell)) }}</p>
-            }
-          } @placeholder {
-            <div class="skeleton-loader"></div>
+          @if (cell in row) {
+            <p [class]="class()">{{ transform(row[cell]) }}</p>
+          }
+          @else {
+            <p [class]="class()">{{ transform(value(row, cell)) }}</p>
           }
         </td>
       }

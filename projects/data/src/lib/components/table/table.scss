@@ -38,6 +38,10 @@ f24-table {
             flex: 1;
             overflow: auto;
         }
+
+        tbody {
+            height: 100% !important;
+        }
     }
 
     

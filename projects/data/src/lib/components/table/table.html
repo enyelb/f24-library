@@ -62,9 +62,9 @@
     [class]="{
       'f24-table-pagination-all': paginator.pageSize === 100000
     }"
-    [pageIndex]="source().page().index"
-    [pageSize]="source().page().size"
+    [pageIndex]="source().pageIndex()"
+    [pageSize]="source().pageSize()"
     [length]="source().total()"
-    [pageSizeOptions]="source().page().options">
+    [pageSizeOptions]="source().pageOptions()">
   </mat-paginator>
 }

@@ -5,8 +5,8 @@
   <mat-form-field class="f24-filter-date-range" [appearance]="source().appearance()">
     <mat-label>{{ source().label() }}</mat-label>
     <mat-date-range-input [rangePicker]="picker">
-      <input matStartDate [formControl]="source().from.form()" [placeholder]="source().from.placeholder()">
-      <input matEndDate [formControl]="source().to.form()" [placeholder]="source().to.placeholder()">
+      <input matStartDate [formControl]="source().fromForm()" [placeholder]="source().fromPlaceholder()">
+      <input matEndDate [formControl]="source().toForm()" [placeholder]="source().toPlaceholder()">
     </mat-date-range-input>
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-date-range-picker #picker disabled="false" [touchUi]="source().isTouchUi()">

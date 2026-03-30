@@ -1,9 +1,12 @@
-import { effect, signal, untracked } from "@angular/core";
+import { effect, untracked } from "@angular/core";
 import { FormControl } from "@angular/forms";
 
 import { takeUntilDestroyed, toObservable, toSignal } from "@angular/core/rxjs-interop";
 import { distinctUntilChanged, switchMap } from "rxjs";
-import { isDate } from "date-fns";
+
+import { signalSource, transformDate } from "@f24/core";
+
+/**
 
 /**
  * F24FormDateSourceParams
@@ -29,62 +32,73 @@ export class F24FormDateSource {
    * label
    * este es el label del mat input
    */
-  protected readonly _label = signal('');
+  protected readonly _label = signalSource('');
+  readonly label = this._label.asReadonly();
   /**
    * appearance
    * esta es la apariencia del mat input
    */
-  protected readonly _appearance = signal<'fill' | 'outline'>('outline');
+  protected readonly _appearance = signalSource<'fill' | 'outline'>('outline');
+  readonly appearance = this._appearance.asReadonly();
   /**
    * name 
    * este nombre se usa para identificar el valor cuando se envia al data source 
    */
-  protected readonly _name = signal('');
+  protected readonly _name = signalSource('');
+  readonly name = this._name.asReadonly();
   /**
    * icon
    * este es el icono que se usa para que apareca delante del input
    */
-  protected readonly _icon = signal('');
+  protected readonly _icon = signalSource('');
+  readonly icon = this._icon.asReadonly();
   /**
    * dafault
    * este es el valor por defecto que se usa
    */
-  protected readonly _default = signal<Date | null>(null);
+  protected readonly _default = signalSource<Date | null>(null);
+  readonly default = this._default.asReadonly();
   /**
    * placeholder
    * este es el placeholder del mat input
    */
-  protected readonly _placeholder = signal('');
+  protected readonly _placeholder = signalSource('');
+  readonly placeholder = this._placeholder.asReadonly();
   /**
    * form
    * este es el form del mat input
    */
-  protected readonly _form = signal(new FormControl<Date | null>(null));
+  protected readonly _form = signalSource(new FormControl<Date | null>(null));
+  readonly form = this._form.asReadonly();
   /**
    * type
    * este es el tipo de input
    */
-  protected readonly _type = signal<'number' | 'text'>('text');
+  protected readonly _type = signalSource<'number' | 'text'>('text');
+  readonly type = this._type.asReadonly();
   /**
    * change
    * esta funcion emite los cambios del filtro
    */
-  protected readonly _change = signal<(value: Date | null) => void>((value: Date | null) => {});
+  protected readonly _change = signalSource<(value: Date | null) => void>((value: Date | null) => {});
+  readonly change = this._change.asReadonly();
   /**
    * min date
    * fecha minima permitida
    */
-  protected readonly _minDate = signal(new Date('1900-01-01'));
+  protected readonly _minDate = signalSource(new Date('1900-01-01'));
+  readonly minDate = this._minDate.asReadonly();
   /**
    * max date
    * fecha maxima permitida
    */
-  protected readonly _maxDate = signal(new Date('2100-01-01'));
+  protected readonly _maxDate = signalSource(new Date('2100-01-01'));
+  readonly maxDate = this._maxDate.asReadonly();
   /**
    * es un signal que tendra el valor del form
    */
-  protected readonly _formValue = toSignal(
-    toObservable(this._form).pipe(
+  readonly formValue = toSignal(
+    toObservable(this._form.value).pipe(
       distinctUntilChanged(),
       switchMap(form => form.valueChanges),
       takeUntilDestroyed()
@@ -100,80 +114,24 @@ export class F24FormDateSource {
      * efecto ejecutar el cambio en la funcion change
      */
     effect(() => {
-      const value = this._formValue();
+      const value = this.formValue();
       untracked(() => {
-        const change = this._change();
+        const change = this.change();
         if (change) {
           change(value);
         }
       })
     });
-  }
-  /**
-   * metodo para obtener label
-   */
-  get label() {
-    return this._label.asReadonly();  
-  }
-  /**
-   * metodo para obtener appearance
-   */
-  get appearance() {
-    return this._appearance.asReadonly();
-  }
-  /**
-   * metodo para obtener name
-   */
-  get name() {
-    return this._name.asReadonly();  
-  }
-  /**
-   * metodo para obtener icon
-   */
-  get icon() {
-    return this._icon.asReadonly();  
-  }
-  /**
-   * metodo para obtener default
-   */
-  get default() {
-    return this._default.asReadonly();  
-  }
-  /**
-   * metodo para obtener placeholder
-   */
-  get placeholder() {
-    return this._placeholder.asReadonly();  
-  }
-  /**
-   * metodo para obtener form
-   */
-  get form() {
-    return this._form.asReadonly();  
-  }
-  /**
-   * metodo para obtener el tipo
-   */
-  get type() {
-    return this._type.asReadonly();  
-  }
-  /**
-   * metodo para obtener fn change
-   */
-  get change() {
-    return this._change.asReadonly();
-  }
-  /**
-   * metodo para obtener fecha minima
-   */
-  get minDate() {
-    return this._minDate.asReadonly();
-  }
-  /**
-   * metodo para obtener fecha maxima
-   */
-  get maxDate() {
-    return this._maxDate.asReadonly();
+    /**
+     * efecto para asognar valor por defecto al formulario
+     */
+    effect(() => {
+      const dafault2 = this.default();
+      const form = this.form();
+      if (dafault2 && form) {
+        form.setValue(dafault2, { emitEvent: false });
+      }
+    })
   }
   /**
    * update
@@ -181,96 +139,17 @@ export class F24FormDateSource {
    */
   public update(params?: F24FormDateSourceParams, params2?: F24FormDateSourceParams) {
     untracked(() => {
-      /**
-       * actualizar el label
-       */
-      const label = params?.label ?? params2?.label;
-      if (label !== undefined && this._label() !== label) {
-        this._label.set(label);
-      }
-      /**
-       * actualizar el appearance
-       */
-      const appearance = params?.appearance ?? params2?.appearance;
-      if (appearance !== undefined && this._appearance() !== appearance) {
-        this._appearance.set(appearance);
-      }
-      /**
-       * actualizar el nombre
-       */
-      const name = params?.name ?? params2?.name;
-      if (name !== undefined && this._name() !== name) {
-        this._name.set(name);
-      }
-      /**
-       * actualizar el icono
-       */
-      const icon = params?.icon ?? params2?.icon;
-      if (icon !== undefined && this._icon() !== icon) {
-        this._icon.set(icon);
-      }
-      /**
-       * actualizar el placeholder
-       */
-      const placeholder = params?.placeholder ?? params2?.placeholder;
-      if (placeholder !== undefined && this._placeholder() !== placeholder) {
-        this._placeholder.set(placeholder);
-      }
-      /**
-       * actualizar el form
-       */
-      const form = params?.form ?? params2?.form;
-      if (form !== undefined && this._form() !== form) {
-        this._form.set(form);
-      }
-      /**
-       * actualizar el default
-       */
-      const default2 = params?.default ?? params2?.default
-      if (default2 !== undefined && this._default() !== default2) {
-        if (default2 === 'TODAY') {
-          this._default.set(new Date());
-        } else if (isDate(default2)) {
-          this._default.set(new Date(default2));
-        }
-        this._form().setValue(this._default());
-      }
-      /**
-       * actualizar el tipo
-       */
-      const type = params?.type ?? params2?.type;
-      if (type !== undefined && this._type() !== type) {
-        this._type.set(type);
-      }
-      /**
-       * actualizar el change
-       */
-      const change = params?.change ?? params2?.change;
-      if (change !== undefined && this._change() !== change) {
-        this._change.set(change);
-      }
-      /**
-       * actualizar la fecha meinima
-       */
-      const minDate = params?.minDate ?? params2?.minDate;
-      if (minDate !== undefined && this._minDate() !== minDate) {
-        if (minDate === 'TODAY') {
-          this._minDate.set(new Date());
-        } else if (isDate(minDate)) {
-          this._minDate.set(new Date(minDate));
-        }
-      }
-      /**
-       * actualizar la fecha maxima
-       */
-      const maxDate = params?.maxDate ?? params2?.maxDate;
-      if (maxDate !== undefined && this._maxDate() !== maxDate) {
-        if (maxDate === 'TODAY') {
-          this._maxDate.set(new Date());
-        } else if (isDate(maxDate)) {
-          this._maxDate.set(new Date(maxDate));
-        }
-      }
+      this._label.setExectUndefined(params?.label ?? params2?.label);
+      this._appearance.setExectUndefined(params?.appearance ?? params2?.appearance);
+      this._name.setExectUndefined(params?.name ?? params2?.name);
+      this._icon.setExectUndefined(params?.icon ?? params2?.icon);
+      this._default.setExectUndefined(params?.default ?? params2?.default, transformDate);
+      this._minDate.setExectUndefined(params?.minDate ?? params2?.minDate, transformDate);
+      this._maxDate.setExectUndefined(params?.maxDate ?? params2?.maxDate, transformDate);
+      this._placeholder.setExectUndefined(params?.placeholder ?? params2?.placeholder);
+      this._form.setExectUndefined(params?.form ?? params2?.form);
+      this._type.setExectUndefined(params?.type ?? params2?.type);
+      this._change.setExectUndefined(params?.change ?? params2?.change);
     });
   }
 }
