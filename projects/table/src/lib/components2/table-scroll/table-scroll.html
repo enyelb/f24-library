@@ -1,0 +1,11 @@
+@if(pageSize() > 90) {
+  <cdk-virtual-scroll-viewport [itemSize]="itemSize()" [maxBufferPx]="itemSize() * 40" [minBufferPx]="itemSize() * 10">
+    <ng-container *ngTemplateOutlet="f24Table"></ng-container>
+  </cdk-virtual-scroll-viewport>
+} @else {
+  <ng-container *ngTemplateOutlet="f24Table"></ng-container>
+}
+
+<ng-template #f24Table>
+  <ng-content></ng-content>
+</ng-template>

@@ -1,15 +1,34 @@
-<div class="description-container">
-  <div class="description">
-    <p class="title">
-      {{ description() }}
+<div class="f24-description-container">
+  <div class="f24-description">
+    <p class="f24-description-title">
+      {{ title() }}
       @if (icon() && !icon()?.hide) {
-        <f24-icon class="icon" [icon]="icon()?.name ?? ''" [matTooltip]="icon()?.tooltip ?? ''"/>
+        <f24-icon class="f24-description-title-icon" [icon]="icon()?.name ?? ''" [matTooltip]="icon()?.tooltip ?? ''"/>
       }
     </p>
-
-    <div class="list">
+    @if(subtitle(); as subtitle) {
+      <p class="f24-description-subtitle">
+        {{ subtitle }}
+      </p>
+    }
+    <div class="f24-description-list">
       @for (item of items(); track $index) {
-        <f24-icon [icon]="item.icon"/><p>{{ item.text }}</p>
+        @if (!item.hide) {
+          <div class="f24-description-list-item" [matTooltip]="item.tooltip">
+            @if (item.label) {
+              <span>{{ item.label }}</span>
+            }
+            @if (item.icon) {
+              <f24-icon [icon]="item.icon" />
+            }
+            <p [class]="[
+              'f24-description-list-item-text',
+              'f24-description-list-item-text-' + (item.color ?? 'none')
+            ]">
+              {{ item.text }}
+            </p>
+          </div>
+        }
       }
     </div>
   </div>

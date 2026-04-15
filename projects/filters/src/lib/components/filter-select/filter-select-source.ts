@@ -166,17 +166,25 @@ export class F24FilterSelectSource<T, I> {
   constructor(params?: F24FilterSelectSourceParams<T, I>) {
     this.update(params);
     /**
-     * obtener los filtros actuales del datasource
-     * para obtener el filtro asociado al este forms
+     * efecto para asignar los filtros locales
      */
-    const dataSource = this.dataSource();
-    const filtersOLd = dataSource?.filters();
+    effect(() => {
+      /**
+       * obtener los filtros actuales del datasource
+       * para obtener el filtro asociado al este forms
+       */
+      const name = this.name();
+      const id = this.id();
+      const form = this.form();
 
-    const name = this.name();
-    const filterOld = filtersOLd && name in filtersOLd ? filtersOLd[name] : null;
-    const local = FilterStorage.get(this.id());
-    const form = this.form();
-    form.setValue(filterOld ?? local, { emitEvent: !filterOld });
+      untracked(() => {
+        const dataSource = this.dataSource();
+        const filtersOLd = dataSource?.filters();
+        const filterOld = filtersOLd && name in filtersOLd ? filtersOLd[name] : null;
+        const local = FilterStorage.get(id);
+        form.setValue(filterOld ?? local, { emitEvent: !filterOld });
+      });
+    });
     /**
      * efecto para guardar el filtro y ejecutar el cambio en el data source
      */

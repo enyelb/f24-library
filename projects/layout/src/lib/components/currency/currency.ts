@@ -22,8 +22,10 @@ export class F24Currency {
    * ves
    */
   readonly ves = input.required<number | undefined>();
+  readonly showVes = input<boolean>(true);
   /**
    * usd
    */
   readonly usd = input.required<number | undefined>();
+  readonly showUsd = input<boolean>(true);
 }

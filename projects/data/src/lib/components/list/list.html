@@ -1,0 +1,39 @@
+<!-- PROGRESS BAR -->
+@if (source().loading()) {
+  <div class="f24-list-progress-bar">
+    <mat-progress-bar color="primary" mode="indeterminate"/>
+  </div>
+}
+
+<!-- HEADER CONTENT -->
+<div class="f24-list-header-content">
+  <!-- HEADER CONTENT EXTRA -->
+  <ng-content select="[header]"></ng-content>
+</div>
+
+<!-- LIST CONTENT -->
+<div [class]="{ 'f24-list-content': true, 'f24-list-content-no-result': source().total() === 0 }">
+  <cdk-virtual-scroll-viewport [itemSize]="itemSize()" [maxBufferPx]="itemSize() * 40" [minBufferPx]="itemSize() * 10"> 
+    <!-- ITEMS -->
+    <ng-container *cdkVirtualFor="let item of source().data();">
+      <div #itemContent class="f24-list-item-content">
+        @if (itemTemplate(); as template) {
+          <ng-container *ngTemplateOutlet="template.template; context: { $implicit: item }"/>
+        }
+      </div>
+    </ng-container>
+  </cdk-virtual-scroll-viewport>
+</div>
+
+<!-- PAGINATION -->
+@if (isPagination()) {
+  <mat-paginator  #paginator showFirstLastButtons class="f24-teble-pagination"
+    [class]="{
+      'f24-list-pagination-all': paginator.pageSize === 100000
+    }"
+    [pageIndex]="source().pageIndex()"
+    [pageSize]="source().pageSize()"
+    [length]="source().total()"
+    [pageSizeOptions]="source().pageOptions()">
+  </mat-paginator>
+}

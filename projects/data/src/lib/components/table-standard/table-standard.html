@@ -1,0 +1,148 @@
+<!-- TABLE -->
+<table matSort [class]="{
+  'f24-table': true, 
+  'f24-table-no-result': source().total() === 0,
+}">
+
+  <!-- HEADER -->
+  <thead #f24TableHead role="rowgroup" class="f24-table-head">
+    <!-- HEADER ROW TITLE -->
+    @if (displayed().headers.length > 0) {
+      <tr role="row" class="f24-header-row">
+        @for(column of displayed().headers; track column.column()) {
+          <!-- TH ROW TITLE -->
+          <th role="columnheader" [class]="['f24-header-cell', 'f24-header-cell-' + column.column(), ...column.class()]" [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()"> 
+            @if (column.headerTemplate(); as header) {
+              <ng-container *ngTemplateOutlet="header.template;"/>
+            } @else {
+              {{ column.header() }}
+            }
+          </th>
+        }
+      </tr>
+    }
+    <!-- HEADER ROW -->
+    <tr role="row" class="f24-header-row">
+      <!-- TH ROW SELECT-->
+      @for (column of columnSelects(); track column.column()) {
+        <th role="columnheader" [class]="['f24-header-cell', 'f24-header-cell-' + column.column()]"> 
+          <mat-checkbox [checked]="column.isAllSelected()" [indeterminate]="column.isIndeterminate()"
+            (change)="column.selectAll($event.checked)">
+          </mat-checkbox>
+        </th>
+      }
+      @for(column of displayed().columns; track column.column()) {
+        @if (column.sort(); as sort) {
+          <!-- TH ROW SORT -->
+          <th role="columnheader" [mat-sort-header]="sort" [class]="['f24-header-cell', 'f24-header-cell-' + column.column(), ...column.class()]" [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()"> 
+            @if (column.headerTemplate(); as header) {
+              <ng-container *ngTemplateOutlet="header.template;"/>
+            } @else {
+              {{ column.header() }}
+            }
+          </th>
+        } @else {
+          <!-- TH ROW -->
+          <th role="columnheader" [class]="['f24-header-cell', 'f24-header-cell-' + column.column(), ...column.class()]" [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()"> 
+            @if (column.headerTemplate(); as header) {
+              <ng-container *ngTemplateOutlet="header.template;"/>
+            } @else {
+              {{ column.header() }}
+            }
+          </th>
+        } 
+        
+      }
+    </tr>
+  </thead>    
+
+  <!-- BODY -->
+  <tbody #f24TableBody role="rowgroup" class="f24-table-body">
+    <!-- CELL ROW -->
+    @if(source().total() > 0) {
+      @if(isVitualScroll()) {
+        <!-- CELL VIRTUAL SCROLL -->
+        <ng-container *cdkVirtualFor="let row of source().data();">
+          @defer (on immediate) {
+            <tr role="row" class="f24-row">
+              <!-- TD CELL SELECT VIRTUAL SCROLL -->
+              @for (column of columnSelects(); track column.column()) {
+                <td [class]="['f24-cell', 'f24-cell-' + column.column()]"> 
+                  <mat-checkbox [checked]="column.isSelected(row)"
+                    (change)="column.select(row, $event.checked)">
+                  </mat-checkbox>
+                </td>
+              }
+              <!-- TD CELL VITUAL SCROLL -->
+              @for (column of displayed().columns; track column.column()) {
+                <td [class]="['f24-cell', 'f24-cell-' + column.column(), ...column.class()]"> 
+                  @if (column.cellTemplate(); as cell) {
+                    <ng-container *ngTemplateOutlet="cell.template; context: { $implicit: row }"/>
+                  } @else if (column.cell(); as cell) {
+                    <p [class]="column.class()">{{ column.transform(column.value(row, cell)) }}</p>
+                  }
+                </td>
+              }
+            </tr>
+          } @placeholder {
+            <tr class="f24-row f24-row-loading"><td class="f24-cell f24-cell-loading" [attr.colspan]="displayed().columns.length">
+              <div class="f24-bouncing-loader"><span></span><span></span><span></span></div>
+            </td></tr>
+          }
+        </ng-container>
+      } @else {
+        <!-- CELL FOR -->
+        @for (row of source().data(); track source().trackBy()($index, row)) {
+          @defer (on immediate) {
+            <tr role="row" class="f24-row">
+              <!-- TD CELL SELECT FOR -->
+              @for (column of columnSelects(); track column.column()) {
+                <td [class]="['f24-cell', 'f24-cell-' + column.column()]"> 
+                  <mat-checkbox [checked]="column.isSelected(row)"
+                    (change)="column.select(row, $event.checked)">
+                  </mat-checkbox>
+                </td>
+              }
+              <!-- TD CELL FOR -->
+              @for (column of displayed().columns; track column.column()) {
+                <td [class]="['f24-cell', 'f24-cell-' + column.column(), ...column.class()]"> 
+                  @if (column.cellTemplate(); as cell) {
+                    <ng-container *ngTemplateOutlet="cell.template; context: { $implicit: row }"/>
+                  } @else if (column.cell(); as cell) {
+                    <p [class]="column.class()">{{ column.transform(column.value(row, cell)) }}</p>
+                  }
+                </td>
+              }
+            </tr>
+          } @placeholder {
+            <tr class="f24-row f24-row-loading"><td class="f24-cell f24-cell-loading" [attr.colspan]="displayed().columns.length">
+              <div class="f24-bouncing-loader"><span></span><span></span><span></span></div>
+            </td></tr>
+          }
+        }
+      }
+    }
+    <!-- CELL NO RESULT -->
+    @else {
+      <tr class="f24-row-no-result">
+        <td class="f24-cell-no-result" [attr.colspan]="displayed().columns.length">
+          @if (source().total() === 0) {  
+            <div class="f24-item-no-result">
+              @if (source().loading()) {
+                <f24-loader/>
+              } @else {
+                <mat-icon>inbox</mat-icon>
+                <p>{{ source().noResultLabel() }} </p>
+              }
+            </div>
+          }
+        </td>
+      </tr>
+    }
+  </tbody>
+
+  <tfoot role="rowgroup">
+    <!-- FOOTER -->
+  </tfoot>
+  
+</table>

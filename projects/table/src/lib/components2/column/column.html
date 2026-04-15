@@ -1,0 +1,56 @@
+
+  <!-- column -->
+<ng-template #templateColumn>
+  <ng-container [matColumnDef]="column()"> 
+
+    <!-- header -->
+    @if(isHeader()) {
+      @if (headerTemplate(); as header) {
+        @if(sort(); as sort) { 
+          <th mat-header-cell *matHeaderCellDef [mat-sort-header]="sort ?? null" [attr.colspan]="colspan()" [matTooltip]="tooltip()" [class]="class()">
+            <ng-container *ngTemplateOutlet="header.template;"/>
+          </th> 
+        } @else {
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="colspan()" [matTooltip]="tooltip()" [class]="class()">
+            <ng-container *ngTemplateOutlet="header.template;"/>
+          </th> 
+        }
+      } @else {
+        @if(sort(); as sort) { 
+          <th mat-header-cell *matHeaderCellDef [mat-sort-header]="sort" [attr.colspan]="colspan()" [matTooltip]="tooltip()" [class]="class()"> {{ header() }} </th>
+        } @else {
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="colspan()" [matTooltip]="tooltip()" [class]="class()"> {{ header() }} </th>
+        }
+      }
+    }
+    
+    <!-- cell -->
+    @if(isCell()) {
+      @if (cellTemplate(); as cell) {
+        <td mat-cell *matCellDef="let row" [class]="class()">
+          <ng-container *ngTemplateOutlet="cell.template; context: { $implicit: row }"/>
+        </td>
+      } @else if (cell(); as cell) {
+        <td mat-cell *matCellDef="let row">
+          @if (cell in row) {
+            <p [class]="class()">{{ transform(row[cell]) }}</p>
+          }
+          @else {
+            <p [class]="class()">{{ transform(value(row, cell)) }}</p>
+          }
+        </td>
+      }
+    }
+
+    <!-- footer -->
+    @if (isFooter()) {
+      @if (footerTemplate(); as footer) {
+        <th mat-footer-cell *matFooterCellDef [attr.colspan]="colspan()" [class]="class()">
+          <ng-container *ngTemplateOutlet="footer.template;"/>
+        </th>
+      } @else if (footer(); as footer) {
+        <th mat-footer-cell *matFooterCellDef [attr.colspan]="colspan()" [class]="class()"> {{ footer }} </th>
+      }
+    }
+  </ng-container>
+</ng-template>

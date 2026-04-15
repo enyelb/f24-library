@@ -168,23 +168,34 @@ export class F24FilterDateRangeSource {
   constructor(params?: F24FilterDateRangeSourceParams) {
     this.update(params);
     /**
-     * obtener los filtros actuales del datasource
-     * para obtener el filtro asociado al este forms
+     * efecto para asignar los filtros locales
      */
-    const dataSource = this.dataSource();
-    const filtersOLd = dataSource?.filters();
+    effect(() => {
+      /**
+       * obtener los filtros actuales del datasource
+       * para obtener el filtro asociado al este forms
+       */
+      const toName = this.toName();
+      const toId = this.id() + '_to';
+      const toForm = this.toForm();
 
-    const fromName = this.fromName();
-    const fromFilterOld = filtersOLd && fromName in filtersOLd ? filtersOLd[fromName] : null;
-    const fromLocal = FilterStorage.get(this.id() + 'from');
-    const fromForm = this.fromForm();
-    fromForm.setValue(fromFilterOld ?? fromLocal, { emitEvent: !fromFilterOld });
+      const fromName = this.fromName();
+      const fromId = this.id() + '_from';
+      const fromForm = this.fromForm();
 
-    const toName = this.toName();
-    const toFilterOld = filtersOLd && toName in filtersOLd ? filtersOLd[toName] : null;
-    const toLocal = FilterStorage.get(this.id() + 'to');
-    const toForm = this.toForm();
-    toForm.setValue(toFilterOld ?? toLocal, { emitEvent: !toFilterOld });
+      untracked(() => {
+        const dataSource = this.dataSource();
+        const filtersOLd = dataSource?.filters();
+
+        const toFilterOld = filtersOLd && toName in filtersOLd ? filtersOLd[toName] : null;
+        const toLocal = FilterStorage.get(toId);
+        toForm.setValue(toFilterOld ?? toLocal, { emitEvent: !toFilterOld });
+
+        const fromFilterOld = filtersOLd && fromName in filtersOLd ? filtersOLd[fromName] : null;
+        const fromLocal = FilterStorage.get(fromId);
+        fromForm.setValue(fromFilterOld ?? fromLocal, { emitEvent: !fromFilterOld });
+      });
+    });
     /**
      * efecto para guardar el filtro y ejecutar el cambio en el data source
      */
@@ -204,8 +215,8 @@ export class F24FilterDateRangeSource {
         /**
          * guardar el valor en local storage
          */
-        FilterStorage.set(this.id() + 'to', toValue);
-        FilterStorage.set(this.id() + 'from', fromValue);
+        FilterStorage.set(this.id() + '_to', toValue);
+        FilterStorage.set(this.id() + '_from', fromValue);
         /**
          * si la variable name y datasource existen, setear el valor del filtro
          */

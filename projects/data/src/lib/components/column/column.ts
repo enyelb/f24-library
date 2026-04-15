@@ -1,13 +1,7 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChild, input, viewChild } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
-
-import { MatSortHeader, MatSortModule } from '@angular/material/sort';
-import { MatColumnDef, MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChild, input } from '@angular/core';
 
 import { date, toNumber, currency, round } from '@f24/functions';
 
-import { F24_COLUMN_DEF_TOKEN, F24_SHORT_HEADER_TOKEN } from '../../column-token';
 import { F24CellDirective } from '../../directives/cell';
 import { F24FooterDirective } from '../../directives/footer';
 import { F24HeaderDirective } from '../../directives/header';
@@ -17,22 +11,10 @@ import { F24HeaderDirective } from '../../directives/header';
  */
 @Component({
   selector: 'f24-column',
-  imports: [MatTableModule, MatSortModule, MatTooltipModule, NgTemplateOutlet],
+  imports: [],
   templateUrl: './column.html',
   styleUrl: './column.scss',
   standalone: true,
-  providers: [
-    {
-      provide: F24_COLUMN_DEF_TOKEN,
-      useFactory: (component: F24Column) => component,
-      deps: [F24Column]
-    },
-    {
-      provide: F24_SHORT_HEADER_TOKEN,
-      useFactory: (component: F24Column) => component,
-      deps: [F24Column]
-    }
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class F24Column {
@@ -68,7 +50,12 @@ export class F24Column {
   /**
    * class se le pasa al html del header, cell y el footer
    */
-  readonly class = input<string>();
+  readonly class = input([], { transform: (value: string[] | string) => {
+    if (typeof value === 'string') {
+      return value.split(' ');
+    }
+    return value;
+  }});
   /**
    * date recibe el formato de fecha 
    */
@@ -99,23 +86,15 @@ export class F24Column {
   /**
    * cellTemplate este template *f24-cell="let row"
    */
-  protected readonly cellTemplate = contentChild(F24CellDirective);
+  readonly cellTemplate = contentChild(F24CellDirective);
   /**
    * headerTemplate este template *f24-header
    */
-  protected readonly headerTemplate = contentChild(F24HeaderDirective);
+  readonly headerTemplate = contentChild(F24HeaderDirective);
   /**
    * footerTemplate este template *f24-footer
    */
-  protected readonly footerTemplate = contentChild(F24FooterDirective);
-  /**
-   * matColumnDef esta columna se usa para pasarla al matTable
-   */
-  readonly matColumnDef = viewChild(MatColumnDef);
-  /**
-   * matSortHeader esta columna se usa para pasarla al matTable
-   */
-  readonly matSortHeader = viewChild(MatSortHeader);
+  readonly footerTemplate = contentChild(F24FooterDirective);
   /**
    * isCell esta varaible es para saber si se mostrara la celda 
    */
@@ -131,7 +110,7 @@ export class F24Column {
   /**
    * value este metodo procesa la propiedad del objeto 
    */
-  protected value(data: any, property: string): any {
+  value(data: any, property: string): any {
     let current = data;
     const names = property.split('.');
     while (names.length > 0) {
@@ -147,7 +126,7 @@ export class F24Column {
   /**
    * transform este metodo procesa los pipes
    */
-  protected transform(value: any): any {
+  transform(value: any): any {
     let current = value;
     if (this.date() && (value instanceof Date || typeof value === 'string')) {
       current = date(current, this.date());

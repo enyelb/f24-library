@@ -1,0 +1,39 @@
+<article class="f24-item-template-one">
+  <div class="f24-item-template-one-image">
+    @if (image(); as image) {
+      <f24-image [src]="image" [alt]="''"/>
+    }
+
+    <div class="f24-item-template-one-post-image">
+      <ng-content select="[post-image]"></ng-content>
+      @if (templatePostImage(); as templatePostImage) {
+        <ng-container *ngTemplateOutlet="templatePostImage"></ng-container>
+      }
+    </div>
+  </div>
+  
+  <div class="f24-item-template-one-description">
+    <f24-description 
+      [title]="title()"
+      [subtitle]="subtitle()" 
+      [items]="itemsMap()"
+    />
+    <div class="f24-item-template-one-post-description">
+      <ng-content select="[post-description]"></ng-content>
+      @if (templatePostDecription(); as templatePostDecription) {
+        <ng-container *ngTemplateOutlet="templatePostDecription"></ng-container>
+      }
+    </div>
+    <div class="f24-item-template-one-details">
+      <div class="f24-item-template-one-quantity">
+        @if (quantity(); as quantity) {
+          <f24-icon [icon]="quantityIcon()"/>
+          <span>{{ quantity }}</span>
+        }
+      </div>
+      <div class="f24-item-template-one-price">
+        <f24-currency [ves]="ves()" [usd]="usd()"/>
+      </div>
+    </div>
+  </div>
+</article>

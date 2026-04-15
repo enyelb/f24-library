@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -82,4 +82,9 @@ export class F24FilterSelect<Type, Item> {
       }, this.params());
     });
   }
+  /**
+   * unique
+   */
+  protected readonly unique = Date.now();
+
 }

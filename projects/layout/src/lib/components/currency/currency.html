@@ -2,10 +2,11 @@
   @if(label()) {
     <p class="label">{{ label() }}</p>
   }
-  @if(ves(); as ves) {
-    <p class="ves">Bs.<span>{{ ves | f24currency }}</span></p>
+  
+  @if(showVes()) {
+    <p class="ves">Bs.<span>{{ (ves() ?? 0) | f24currency }}</span></p>
   }
-  @if(usd(); as usd) {
-    <p class="usd">USD.<span>{{ usd | f24currency }}</span></p>
+  @if(showUsd()) {
+    <p class="usd">USD.<span>{{ (usd() ?? 0) | f24currency }}</span></p>
   }
 </div>

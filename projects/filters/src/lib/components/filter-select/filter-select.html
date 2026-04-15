@@ -13,6 +13,7 @@
       [formControl]="source().form()"
       [multiple]="source().multiple()"
       [placeholder]="source().placeholder()"
+      [appendTo]="'.f24-filter-select-container-' + unique"
     >
         <ng-template ng-label-tmp let-item="item" let-clear="clear" class="m2">
           {{source().formatterLabel()(item)}}
@@ -25,3 +26,5 @@
   </mat-form-field>
   <ng-content></ng-content>
 </div>
+
+<div [class]="'f24-filter-select-container-' + unique" style="position: fixed; z-index: 1050;"></div>

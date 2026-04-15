@@ -35,11 +35,17 @@
       "filters": [
         "./dist/filters"
       ],
+      "list": [
+        "./dist/list"
+      ],
       "preview": [
         "./dist/preview"
       ],
       "previews": [
         "./dist/previews"
+      ],
+      "table": [
+        "./dist/table"
       ]
     },
     "noImplicitOverride": true,
@@ -133,6 +139,18 @@
     },
     {
       "path": "./projects/core/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/table/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/table/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/list/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/list/tsconfig.spec.json"
     }
   ]
 }

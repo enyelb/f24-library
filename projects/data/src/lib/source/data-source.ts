@@ -1,4 +1,4 @@
-import { effect, signal, untracked } from "@angular/core";
+import { effect, TrackByFunction, untracked } from "@angular/core";
 
 import { format, isDate } from 'date-fns';
 import { debounceTime, Observable, of, Subject, switchMap, takeUntil } from "rxjs";
@@ -9,7 +9,6 @@ import { signalSource } from "@f24/core";
 /**
  * Properties
  */
-type Id = string | ((item: any) => any);
 type Filters = { [key: string]: any };
 type FilterFn<T> = (filters: Filters, data: T[]) => T[] | undefined;
 type Sorts = { [key: string]: string };
@@ -20,7 +19,7 @@ type Request<T> = (filters: Filters, sorts: Sorts) => Observable<T[]> | T[]
  * F24DataSourceParams
  */
 export interface F24DataSourceParams<T> {
-  id?: string | ((item: any) => any);
+  trackBy?: TrackByFunction<T>;
   data?: T[];
   allSelected?: T[];
   filters?: Filters;
@@ -62,10 +61,10 @@ export class F24DataSource<T> {
   private readonly _connected = signalSource(false);
   readonly connected = this._connected.asReadonly();
   /**
-   * id para identificar cada item en el trackBy
+   * trackBy para identificar cada item por id
    */
-  protected readonly _id = signalSource<Id>((item: T) => item);
-  readonly id = this._id.asReadonly();
+  protected readonly _trackBy = signalSource((index: number, item: T) => index as any);
+  readonly trackBy = this._trackBy.asReadonly();
   /**
    * data
    */
@@ -134,7 +133,7 @@ export class F24DataSource<T> {
   /**
    * noResultLabel
    */
-  protected readonly _noResultLabel = signalSource<string>('No data matching the filter');
+  protected readonly _noResultLabel = signalSource<string>('Sin resultados');
   readonly noResultLabel = this._noResultLabel.asReadonly()
   /**
    * constructor
@@ -201,7 +200,7 @@ export class F24DataSource<T> {
         });
       });
       onCleanup(() => cancelAnimationFrame(rafId));
-    }, { debugName: 'F24DataSource' });
+    });
   }
   /**
    * update
@@ -209,7 +208,7 @@ export class F24DataSource<T> {
    */
   public update(params?: F24DataSourceParams<T>, params2?: F24DataSourceParams<T>) {
     untracked(() => {
-      this._id.setExectUndefined(params?.id ?? params2?.id);
+      this._trackBy.setExectUndefined(params?.trackBy ?? params2?.trackBy);
       this._data.setExectUndefined(params?.data ?? params2?.data);
       this._total.setExectUndefined(params?.data?.length ?? params2?.data?.length);
       this._allSelected.setExectUndefined(params?.allSelected ?? params2?.allSelected);

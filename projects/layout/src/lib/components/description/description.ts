@@ -2,6 +2,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { F24Icon } from '../icon/icon';
 
 /**
@@ -17,8 +18,12 @@ export interface F24IconOpts {
  * F24ItemsOpts
  */
 export interface F24ItemsOpts {
-  icon: string,
-  text: string
+  icon?: string,
+  label?: string, 
+  text: string | number,
+  tooltip?: string;
+  hide?: boolean;
+  color?: 'none' | 'primary' | 'accent' | 'warn';
 }
 
 /**
@@ -37,7 +42,8 @@ export class F24Description {
   /**
    * inputs
    */
-  readonly description = input.required<string>();
+  readonly title = input.required<string>();
+  readonly subtitle = input<string>();
   readonly icon = input<F24IconOpts>();
   readonly items = input<F24ItemsOpts[]>([]);
 }

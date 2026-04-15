@@ -1,0 +1,213 @@
+f24-list, .f24-list-content{
+  height: 100% !important;
+  overflow: hidden !important;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.f24-list-item-content {
+  padding: calc(var(--margin-global, 20px) / 2);
+  margin: calc(var(--margin-global, 20px) / 2);
+  background: light-dark(#ffffff, #121316);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--margin-global, 20px) / 2);
+}
+
+f24-list {
+  
+  cdk-virtual-scroll-viewport {
+    height: 100% !important;
+  }
+
+  .f24-list-content-no-result {
+    cdk-virtual-scroll-viewport {
+      contain: none !important;
+      height: 100% !important;
+      overflow: hidden !important;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .cdk-virtual-scroll-content-wrapper {
+      position: relative;
+      flex: 1;
+      overflow: auto;
+      width: 100%;
+    }
+
+    tbody {
+      height: 100% !important;
+    }
+  }
+}
+
+.f24-list-progress-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3px;
+}
+
+.f24-item-no-result {
+  text-align: center;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  mat-icon {
+    font-size: 70px;
+    width: 70px;
+    height: 70px;
+  }
+  p {
+    font-size: large;
+    font-weight: 400;
+    margin: 0px;
+    letter-spacing: 2px;
+  }
+}
+
+.f24-list-no-result {
+  height: 100%;
+}
+
+
+.f24-row:hover {
+  background-color: #8484842f;
+}
+
+.f24-list-pagination-all .mat-mdc-select-value-text:before {
+  content: 'Todos' !important;
+  position: relative !important;
+}
+
+.f24-list-pagination-all .mat-mdc-select-value-text .mat-mdc-select-min-line{
+  display: none;
+}
+
+/*.f24-header-row, .f24-footer-row,*/ .f24-row-no-result {
+    //animation: fadeInHeaderRow 0.5s ease forwards;
+    //opacity: 0;
+}
+
+.f24-row {
+    //animation: fadeInCellRow 0.5s ease forwards;
+    //opacity: 0;
+}
+
+@keyframes fadeInHeaderRow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInCellRow {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// HEADER FILTERS
+.f24-list-header-content {
+  padding: calc(var(--margin-global, 20px) / 3);
+  margin-left: 40px;
+
+  --mat-icon-button-state-layer-size: 36px;
+}
+.f24-list-header-filter {
+  position: relative;
+}
+.f24-list-header-filter-search {
+  position: absolute;
+  z-index: 10;
+  left: calc(-40px - (var(--margin-global, 20px) / 3));
+  top: 0;
+}
+.f24-list-header-filter-search-button {
+  width: 35px;
+  height: 42px;
+  border-style: none;
+  font-size: 20px;
+  font-weight: bold;
+  outline: none;
+  cursor: pointer;
+  position: absolute;
+  right: 0px;
+  color: #ffffff;
+  background-color: transparent;
+  pointer-events: painted;
+}
+.f24-list-header-filter-search-input {
+  height: 16px;
+  width: 0px;
+  border-style: none;
+  padding: 10px 20px 10px 15px;
+  font-size: 18px;
+  outline: none;
+  border-radius: 0px 25px 25px 0px;
+  transition: all 0.5s ease-in-out;
+  background-color: var(--seped-main-color, blue);
+  color: #fff;
+}
+.f24-list-header-filter-search-input::placeholder{
+  color:rgba(255,255,255,.5);
+  font-size: 18px;
+  letter-spacing: 1.5px;
+  font-weight: 100;
+}
+.f24-list-header-filter-search-input:focus {
+  width: calc(100vw - 76px - (var(--margin-global, 20px) / 3));
+  border-bottom:1px solid rgba(255,255,255,.5);
+  transition: all 500ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+// HEADER OPTIONS
+.f24-list-header-options-content {
+  display: flex;
+  justify-content: flex-end;
+  gap: calc(var(--margin-global, 20px) / 2);
+  flex-wrap: nowrap;
+}
+.f24-list-header-options-label {
+  color: var(--seped-main-color);
+  font-weight: 400;
+  font-size: .6rem;
+  background: white;
+  border-radius: 20px;
+  padding: 8px 6px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.f24-list-header-options-button {
+  background: var(--seped-main-color);
+  color: white;
+}
+
+// PAGINATION
+.f24-list-pagination {
+  .mat-mdc-paginator-container {
+    padding: 0px 3px;
+  }
+  .mat-mdc-paginator-page-size-label {
+    display: none;
+  }
+  .mat-mdc-paginator-range-label {
+    margin: 0px 5px;
+  }
+  .mat-mdc-paginator-page-size {
+    margin-right: auto;
+  }
+}

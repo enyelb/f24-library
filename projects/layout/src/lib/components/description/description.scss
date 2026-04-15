@@ -1,40 +1,83 @@
 
 
-.description-container {
+.f24-description-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
 
-  .description {
-    .title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0;
-      font-weight: 700;
-      color: var(--primary-color, var(--seped-main-color, blue));
-      .icon {
-        color: var(--success, var(--seped-green-color, green));
-      }
-    }
-    .list {
-      display: flex;
-      align-items: center;
-      gap: 3px;
+.f24-description {   
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 
-      p {
-        font-size: 10px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        margin: 0;
-      }
-
-      .mat-icon {
-        height: 16px;
-        width: 16px;
-        font-size: 16px;
-      }
-    }
+.f24-description-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-weight: 700;
+  color: var(--primary-color, var(--seped-main-color, blue));
+  f24-icon {
+    height: 24px;
   }
+}
+
+.f24-description-title-icon {
+  color: var(--success, var(--seped-green-color, green));
+}
+
+.f24-description-subtitle {
+  margin: 0;
+  font-weight: 300;
+  font-size: 12px;
+
+}
+
+.f24-description-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3px;
+  line-height: 1;
+}
+
+.f24-description-list-item {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  span {
+    font-size: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0;
+  }
+
+  p {
+    font-size: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0;
+  }
+
+  ::ng-deep .mat-icon {
+    height: 13px;
+    width: 13px;
+    font-size: 13px;
+  }
+}
+
+.f24-description-list-item-text {
+  padding: 2px 5px;
+  border-radius: 20px;
+}
+
+.f24-description-list-item-text-primary {
+  background-color: var(--mat-sys-primary, blue);
+  color: white;
+  font-weight: 500;
 }

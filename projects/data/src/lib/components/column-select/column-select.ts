@@ -1,30 +1,16 @@
-import { ChangeDetectionStrategy, Component, computed, input, signal, viewChild } from '@angular/core';
-
-import { MatSortModule } from '@angular/material/sort';
-import { MatColumnDef, MatHeaderRowDef, MatTableModule } from '@angular/material/table';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
 
 import { F24DataSource } from '../../source/data-source';
-
-import { F24_COLUMN_DEF_TOKEN } from '../../column-token';
 
 /**
  * F24ColumnSelect
  */
 @Component({
   selector: 'f24-column-select',
-  imports: [MatTableModule, MatSortModule, MatTooltipModule, MatCheckboxModule],
+  imports: [],
   templateUrl: './column-select.html',
   styleUrl: './column-select.scss',
   standalone: true,
-  providers: [
-    {
-      provide: F24_COLUMN_DEF_TOKEN,
-      useFactory: (component: F24ColumnSelect<any>) => component,
-      deps: [F24ColumnSelect]
-    },
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class F24ColumnSelect<T> {
@@ -36,14 +22,6 @@ export class F24ColumnSelect<T> {
    * cell este valor se usa para obtener el id de los seleccionados
    */
   readonly cell = input<keyof T | ((item: T) => any)>();
-  /**
-   * matColumnDef este variable es para pasarla al matTable
-   */
-  readonly matColumnDef = viewChild(MatColumnDef);
-  /**
-   * matHeaderRowDef este variable es para pasarla al matTable
-   **/
-  readonly matHeaderRowDef = viewChild(MatHeaderRowDef);
   /**
    * dataSource
    */
@@ -58,26 +36,26 @@ export class F24ColumnSelect<T> {
   /**
    * dataByValues
    */
-  protected readonly dataByValues = computed(() => {
+  readonly dataByValues = computed(() => {
     const cell = this.cell();
     return this.dataSource()?.data().map(item => this.fnSelectedById(item, cell)) ?? [];
   })
   /**
    * isAllSelected esta variable marca el checkbox de seleccionar todos 
    */
-  protected readonly isAllSelected = computed(() => {
+  readonly isAllSelected = computed(() => {
     return this.dataByValues().every(id => this.allSelectedByValues().includes(id));;
   });
   /**
    * isIndeterminate esta variable marca el checkbox de seleccionar todos como indeterminado
    */
-  protected readonly isIndeterminate = computed(() => {
+  readonly isIndeterminate = computed(() => {
     return !this.dataByValues().every(id => this.allSelectedByValues().includes(id)) && this.allSelectedByValues().length > 0;
   });
   /**
    * fnSelectedById
    */
-  protected readonly fnSelectedById = (item: T, cell?: keyof T | ((item: T) => any)) => {
+  readonly fnSelectedById = (item: T, cell?: keyof T | ((item: T) => any)) => {
     if (typeof cell === 'function') {
       return cell(item);
     }
@@ -95,7 +73,7 @@ export class F24ColumnSelect<T> {
    * @param index
    * @param select
    */
-  protected select(item: T, select: boolean = true): void {
+  select(item: T, select: boolean = true): void {
     /**
      * agregar o quitar de la lista de seleccionados el item
      */
@@ -105,7 +83,7 @@ export class F24ColumnSelect<T> {
    * selectAll
    * @param select
    */
-  protected selectAll(select: boolean = true): void {
+  selectAll(select: boolean = true): void {
     /**
      * agregar o quitar de la lista de seleccionados todos los items
      */
@@ -115,7 +93,7 @@ export class F24ColumnSelect<T> {
    * isSelected
    * @param row
    */
-  protected isSelected(row: T) {
+  isSelected(row: T) {
     const dataSource = this.dataSource();
     if (!dataSource) {
       return;
