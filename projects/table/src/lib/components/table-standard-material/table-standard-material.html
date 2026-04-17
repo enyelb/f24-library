@@ -1,0 +1,89 @@
+<!-- TABLE -->
+<table mat-table matSort [class]="{
+  'f24-table': true, 
+  'f24-table-no-result': source().total() === 0,
+}">
+
+  <!-- HEADER ROW TITLE DISPLAYED -->
+  @if (displayed().headers.length > 0) {
+    <tr mat-header-row *matHeaderRowDef="displayed().headers; sticky: true" class="f24-header-row"></tr>
+  }
+
+  <!-- HEADER ROW DISPLAYED -->
+  <tr mat-header-row *matHeaderRowDef="displayed().columns; sticky: true" class="f24-header-row"></tr>
+
+  <!-- COLUMNS DISPLAYED-->
+  <tr mat-row *matRowDef="let row; columns: displayed().columns;" class="f24-row"></tr>
+
+  <!-- FOOTER ROW TITLE DISPLAYED -->
+  @if (displayed().footers.length > 0) {
+    <tr mat-footer-row *matFooterRowDef="displayed().footers; sticky: true" class="f24-footer-row"></tr>
+  }
+
+  <!-- COLUMNS -->
+  @for (column of columns(); track column.column()) {
+    <ng-container [matColumnDef]="column.column()"> 
+
+      <!-- HEADER -->
+      @if(column.isHeader()) {
+        @if (column.headerTemplate(); as header) {
+          @if(column.sort(); as sort) { 
+            <th mat-header-cell *matHeaderCellDef [mat-sort-header]="sort" [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()" [class]="column.class()">
+              <ng-container *ngTemplateOutlet="header.template;"/>
+            </th> 
+          } @else {
+            <th mat-header-cell *matHeaderCellDef [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()" [class]="column.class()">
+              <ng-container *ngTemplateOutlet="header.template;"/>
+            </th> 
+          }
+        } @else {
+          @if(column.sort(); as sort) { 
+            <th mat-header-cell *matHeaderCellDef [mat-sort-header]="sort" [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()" [class]="column.class()"> {{ column.header() }} </th>
+          } @else {
+            <th mat-header-cell *matHeaderCellDef [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()" [class]="column.class()"> {{ column.header() }} </th>
+          }
+        }
+      }
+      
+      <!-- CELL -->
+      @if(column.isCell()) {
+        @if (column.cellTemplate(); as cell) {
+          <td mat-cell *matCellDef="let row" [class]="column.class()">
+            <ng-container *ngTemplateOutlet="cell.template; context: { $implicit: row }"/>
+          </td>
+        } @else if (column.cell(); as cell) {
+          <td mat-cell *matCellDef="let row">
+            <p [class]="column.class()">{{ column.transform(column.value(row, cell)) }}</p>
+          </td>
+        }
+      }
+
+      <!-- FOOTER -->
+      @if (column.isFooter()) {
+        @if (column.footerTemplate(); as footer) {
+          <th mat-footer-cell *matFooterCellDef [attr.colspan]="column.colspan()" [class]="column.class()">
+            <ng-container *ngTemplateOutlet="footer.template;"/>
+          </th>
+        } @else if (column.footer(); as footer) {
+          <th mat-footer-cell *matFooterCellDef [attr.colspan]="column.colspan()" [class]="column.class()"> {{ footer }} </th>
+        }
+      }
+    </ng-container>
+  }
+
+  <!-- COLUMNS NO RESULT -->
+  <tr *matNoDataRow class="f24-row-no-result">
+    <td class="f24-cell-no-result" [attr.colspan]="displayed().columns.length">
+      @if (source().total() === 0) {  
+        <div class="f24-item-no-result">
+          @if (source().loading()) {
+            <f24-loader/>
+          } @else {
+            <mat-icon>inbox</mat-icon>
+            <p>{{ source().noResultLabel() }} </p>
+          }
+        </div>
+      }
+    </td>
+  </tr>
+</table>

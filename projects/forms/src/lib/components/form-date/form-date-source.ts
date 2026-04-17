@@ -71,12 +71,6 @@ export class F24FormDateSource {
   protected readonly _form = signalSource(new FormControl<Date | null>(null));
   readonly form = this._form.asReadonly();
   /**
-   * type
-   * este es el tipo de input
-   */
-  protected readonly _type = signalSource<'number' | 'text'>('text');
-  readonly type = this._type.asReadonly();
-  /**
    * change
    * esta funcion emite los cambios del filtro
    */
@@ -148,7 +142,6 @@ export class F24FormDateSource {
       this._maxDate.setExectUndefined(params?.maxDate ?? params2?.maxDate, transformDate);
       this._placeholder.setExectUndefined(params?.placeholder ?? params2?.placeholder);
       this._form.setExectUndefined(params?.form ?? params2?.form);
-      this._type.setExectUndefined(params?.type ?? params2?.type);
       this._change.setExectUndefined(params?.change ?? params2?.change);
     });
   }

@@ -73,6 +73,7 @@ export class F24FilterDateRange {
     readonly dataSource = input<F24FilterDateRangeSourceParams['dataSource']>();
     readonly label = input<F24FilterDateRangeSourceParams['label']>();
     readonly appearance = input<F24FilterDateRangeSourceParams['appearance']>();
+    readonly default = input<F24FilterDateRangeSourceParams['default']>();
 
     readonly fromName = input<F24FilterDateRangeFormSourceParams['name']>();
     readonly fromDefault = input<F24FilterDateRangeFormSourceParams['default']>();
@@ -98,6 +99,7 @@ export class F24FilterDateRange {
           dataSource: this.dataSource(),
           label: this.label(),
           appearance: this.appearance(),
+          default: this.default(),
           from: {
             name: this.fromName(),
             default: this.fromDefault(),

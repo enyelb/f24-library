@@ -13,6 +13,7 @@ import { createDataSource, createDataSourceParams } from '@f24/data';
 import { F24Column } from '../column/column';
 import { F24ColumnSelect } from '../column-select/column-select';
 import { F24TableStandard } from '../table-standard/table-standard';
+import { F24TableStandardMaterial } from "../table-standard-material/table-standard-material";
 
 
 /**
@@ -23,7 +24,11 @@ import { F24TableStandard } from '../table-standard/table-standard';
   styleUrls: ['table.scss'],
   templateUrl: 'table.html',
   standalone: true,
-  imports: [ScrollingModule, MatProgressBarModule, MatPaginatorModule, F24TableStandard],
+  imports: [
+    ScrollingModule, 
+    MatProgressBarModule, MatPaginatorModule, 
+    F24TableStandard, F24TableStandardMaterial
+  ],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })

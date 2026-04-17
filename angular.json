@@ -345,6 +345,32 @@
           }
         }
       }
+    },
+    "splide": {
+      "projectType": "library",
+      "root": "projects/splide",
+      "sourceRoot": "projects/splide/src",
+      "prefix": "f24",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/splide/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/splide/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/splide/tsconfig.spec.json"
+          }
+        }
+      }
     }
   }
 }

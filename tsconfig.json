@@ -44,6 +44,9 @@
       "previews": [
         "./dist/previews"
       ],
+      "splide": [
+        "./dist/splide"
+      ],
       "table": [
         "./dist/table"
       ]
@@ -151,6 +154,12 @@
     },
     {
       "path": "./projects/list/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/splide/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/splide/tsconfig.spec.json"
     }
   ]
 }

@@ -45,7 +45,7 @@
           <!-- TH ROW -->
           <th role="columnheader" [class]="['f24-header-cell', 'f24-header-cell-' + column.column(), ...column.class()]" [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()"> 
             @if (column.headerTemplate(); as header) {
-              <ng-container *ngTemplateOutlet="header.template;"/>
+              <!--ng-container *ngTemplateOutlet="header.template;"/-->
             } @else {
               {{ column.header() }}
             }

@@ -1,0 +1,45 @@
+.splide__track__padding {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  cursor: grab;
+}
+
+.splide__track__padding:active {
+  cursor: grabbing;
+}
+
+.splide__slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splide__circle {
+  width: 120px;
+  height: 120px;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  background: #fff;
+  border-radius: 50%;
+  border: 2px solid #1D4C7E;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.splide__circle:hover {
+  border-color: RED;
+  box-shadow: 0 6px 12px 0 rgba(29, 76, 126, 0.3), 0 8px 25px 0 rgba(0, 0, 0, 0.25);
+  transform: scale(1.05);
+}
+
+.splide__image {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}

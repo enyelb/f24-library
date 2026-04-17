@@ -1,4 +1,4 @@
-import { effect, untracked } from "@angular/core";
+import { afterRenderEffect, effect, untracked } from "@angular/core";
 import { FormControl } from "@angular/forms";
 
 import { takeUntilDestroyed, toObservable, toSignal } from "@angular/core/rxjs-interop";
@@ -170,36 +170,36 @@ export class F24FilterDateRangeSource {
     /**
      * efecto para asignar los filtros locales
      */
-    effect(() => {
+    afterRenderEffect(() => {
       /**
        * obtener los filtros actuales del datasource
        * para obtener el filtro asociado al este forms
        */
-      const toName = this.toName();
-      const toId = this.id() + '_to';
-      const toForm = this.toForm();
-
       const fromName = this.fromName();
       const fromId = this.id() + '_from';
       const fromForm = this.fromForm();
+
+      const toName = this.toName();
+      const toId = this.id() + '_to';
+      const toForm = this.toForm();
 
       untracked(() => {
         const dataSource = this.dataSource();
         const filtersOLd = dataSource?.filters();
 
-        const toFilterOld = filtersOLd && toName in filtersOLd ? filtersOLd[toName] : null;
-        const toLocal = FilterStorage.get(toId);
-        toForm.setValue(toFilterOld ?? toLocal, { emitEvent: !toFilterOld });
-
         const fromFilterOld = filtersOLd && fromName in filtersOLd ? filtersOLd[fromName] : null;
         const fromLocal = FilterStorage.get(fromId);
         fromForm.setValue(fromFilterOld ?? fromLocal, { emitEvent: !fromFilterOld });
+
+        const toFilterOld = filtersOLd && toName in filtersOLd ? filtersOLd[toName] : null;
+        const toLocal = FilterStorage.get(toId);
+        toForm.setValue(toFilterOld ?? toLocal, { emitEvent: !toFilterOld });
       });
     });
     /**
      * efecto para guardar el filtro y ejecutar el cambio en el data source
      */
-    effect(() => {
+    afterRenderEffect(() => {
       const toValue = this.toFormValue();
       const fromValue = this.fromFormValue();
 
@@ -236,14 +236,16 @@ export class F24FilterDateRangeSource {
     /**
      * efecto para volver a crear los valores por defecto
      */
-    effect(() => {
+    afterRenderEffect(() => {
       const fromForm = this.fromForm();
       const toForm = this.toForm();
       const default2 = this.default();
+      const fromDefault = this.fromDefault() ?? transformDateStart(default2 ?? 'MONTHLY');
+      const toDefault = this.toDefault() ?? transformDateEnd(default2 ?? 'MONTHLY');
 
       untracked(() => {
-        fromForm.setValue(transformDateStart(default2 ?? 'MONTHLY'), { emitEvent: false });
-        toForm.setValue(transformDateEnd(default2 ?? 'MONTHLY'), { emitEvent: false });
+        fromForm.setValue(fromDefault, { emitEvent: false });
+        toForm.setValue(toDefault, { emitEvent: false });
       });
     });
   }
@@ -257,6 +259,7 @@ export class F24FilterDateRangeSource {
       this._dataSource.setExectUndefined(params?.dataSource ?? params2?.dataSource);
       this._label.setExectUndefined(params?.label ?? params2?.label);
       this._appearance.setExectUndefined(params?.appearance ?? params2?.appearance);
+      this._default.setExectUndefined(params?.default ?? params2?.default);
       this._fromName.setExectUndefined(params?.from?.name ?? params2?.from?.name);
       this._fromDefault.setExectUndefined(params?.from?.default ?? params2?.from?.default, transformDateStart);
       this._fromPlaceholder.setExectUndefined(params?.from?.placeholder ?? params2?.from?.placeholder);
@@ -270,7 +273,6 @@ export class F24FilterDateRangeSource {
       this._labelCancel.setExectUndefined(params?.labelCancel ?? params2?.labelCancel);
       this._labelApply.setExectUndefined(params?.labelApply ?? params2?.labelApply);
       this._isTouchUi.setExectUndefined(params?.isTouchUi ?? params2?.isTouchUi);
-      this._default.setExectUndefined(params?.default ?? params2?.default);
     });
   }
 }
