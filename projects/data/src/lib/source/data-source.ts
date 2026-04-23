@@ -1,4 +1,4 @@
-import { effect, TrackByFunction, untracked } from "@angular/core";
+import { effect, Signal, TrackByFunction, untracked } from "@angular/core";
 
 import { format, isDate } from 'date-fns';
 import { debounceTime, Observable, of, Subject, switchMap, takeUntil } from "rxjs";
@@ -20,7 +20,7 @@ type Request<T> = (filters: Filters, sorts: Sorts) => Observable<T[]> | T[]
  */
 export interface F24DataSourceParams<T> {
   trackBy?: TrackByFunction<T>;
-  data?: T[];
+  data?: T[] | Signal<T[]>;
   allSelected?: T[];
   filters?: Filters;
   sorts?: Sorts;

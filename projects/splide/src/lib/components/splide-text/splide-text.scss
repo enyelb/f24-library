@@ -1,0 +1,27 @@
+.f24-splide-text {
+  .splide__slide {
+    width: auto !important;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    white-space: nowrap;
+    background: unset;
+    box-shadow: none;
+  }
+  
+  strong {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 0.60rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .splide__text {
+    background: #1E90FF;
+    padding: 0.1rem 0.5rem;
+    border-radius: 10px
+  }
+  
+}

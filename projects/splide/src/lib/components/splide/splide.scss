@@ -1,0 +1,24 @@
+
+f24-splide {
+  .splide__track__padding {
+    cursor: grab;
+  }
+  
+  .splide__track__padding:active {
+    cursor: grabbing;
+  }
+
+  .splide__slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .splide {
+    width: 100%;
+    display: flex;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+}

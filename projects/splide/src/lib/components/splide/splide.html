@@ -1,0 +1,17 @@
+<ng-content></ng-content>
+
+@if (source().items().length > 0) {
+  <div #splideRoot [id]="source().id()" class="splide" [aria-label]="`Splide Carousel for ${source().id()}`">
+    <div class="splide__track splide__track__padding">
+      <ul class="splide__list">
+        @for (item of source().items(); track trackIdRandomFn($index)) {
+          <li class="splide__slide">
+            <ng-container *ngTemplateOutlet="template().template; context: { $implicit: item }"/>
+          </li>
+        }
+      </ul>
+      <div class="splide__arrows"></div>
+      <div class="splide__pagination"></div>
+    </div>
+  </div>
+}

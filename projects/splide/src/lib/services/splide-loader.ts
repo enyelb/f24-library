@@ -4,12 +4,12 @@ import { F24SplideExtensions, F24SplideOptions } from '../models/splide';
 
 
 /**
- * F24Splide
+ * F24SplideLoader
  */
 @Injectable({
   providedIn: 'root',
 })
-export class F24Splide {
+export class F24SplideLoader {
   /**
    * 
    */

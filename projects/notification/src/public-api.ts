@@ -2,10 +2,10 @@
  * Public API Surface of notification
  */
 
-export * from './lib/notification-service';
+export * from './lib/components/dialog/dialog';
 
-export * from './lib/dialog/dialog-service';
-export * from './lib/snack/snack-service';
-export * from './lib/toast/toast-service';
-export * from './lib/swal/swal-service';
+export * from './lib/services/dialog-service';
+export * from './lib/services/snack-service';
+export * from './lib/services/swal-service';
+export * from './lib/services/toast-service';
 

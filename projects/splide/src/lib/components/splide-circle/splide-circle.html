@@ -1,23 +1,9 @@
-@if (items().length > 0) {
-  <div #splideRoot [id]="id()" class="splide" [aria-label]="`Splide Carousel for ${id()}`">
-    <div class="splide__track splide__track__padding">
-      <ul class="splide__list">
-        @for (item of items(); track item.id) {
-          <li class="splide__slide">
-            <div class="splide__circle">
-              <img class="splide__image" 
-                [src]="item.image" 
-                [alt]="item.name || 'splide autoscroll image'" 
-                loading="lazy" 
-              />
-            </div>
-          </li>
-        }
-      </ul>
-      <div class="splide__arrows"></div>
-      <div class="splide__pagination"></div>
-    </div>
+<f24-splide [source]="source()" class="f24-splide-circle">
+  <div class="splide__circle" *f24-splide-item="let item">
+    <img class="splide__image" 
+      [src]="item.image" 
+      [alt]="item.name || 'splide autoscroll image'" 
+      loading="lazy" 
+    />
   </div>
-} @else {
-    <div class="empty"></div>
-}
+</f24-splide>

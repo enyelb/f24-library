@@ -1,0 +1,7 @@
+@if (source().items().length > 0) {
+  <f24-splide [source]="source()" class="f24-splide-text">
+    <div class="splide__text" *f24-splide-item="let item">
+      <strong>{{ item.text }}</strong>
+    </div>
+  </f24-splide>
+}
