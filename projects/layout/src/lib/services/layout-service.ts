@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from "@angular/core";
+import { Injectable, signal, computed, inject } from "@angular/core";
 import { BreakpointObserver } from '@angular/cdk/layout';
 
 /**
@@ -13,6 +13,8 @@ export class F24LayoutService {
    * changeSize - Signal que contiene el tamaño actual
    */
   private changeSize = signal<string>('');
+  private readonly breakpointObserver = inject(BreakpointObserver);
+
 
   /**
    * SIZE - Signal público con el tamaño actual
@@ -76,7 +78,9 @@ export class F24LayoutService {
   /**
    * Constructor
    */
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor() {
+    this.init();
+  }
 
   /**
    * init - Inicializa el observador de breakpoints
@@ -93,7 +97,6 @@ export class F24LayoutService {
         }
       });
   }
-
   /**
    * values - Retorna valores basados en el tamaño actual
    */
@@ -113,28 +116,24 @@ export class F24LayoutService {
         return values.xxl;
     }
   }
-
   /**
-   * isMobile - Verifica si el tamaño es móvil
+   * s - Verifica si el tamaño es de S
    */
-  isMobile(SIZE: string = this.SIZE()): boolean {
-    return [this.XSMALL, this.SMALL].includes(SIZE);
+  s(): boolean {
+    return this.SMALL === this.SIZE();
   }
-
   /**
-   * isXS - Verifica si el tamaño es XS
+   * xs - Verifica si el tamaño es XS
    */
-  isXS(SIZE: string = this.SIZE()): boolean {
-    return SIZE === this.XSMALL;
+  xs(): boolean {
+    return this.XSMALL === this.SIZE();
   }
-
   /**
-   * isM - Verifica si el tamaño es M
+   * m - verifica si el tamanio es M
    */
-  isM(SIZE: string = this.SIZE()): boolean {
-    return SIZE === this.MEDIUM;
+  m(): boolean {
+    return this.MEDIUM === this.SIZE();
   }
-
   /**
    * is - Verifica si el tamaño actual está incluido en los valores proporcionados
    */
