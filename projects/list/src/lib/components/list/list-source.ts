@@ -13,6 +13,7 @@ export interface F24ListSourceParams<T> {
   filterLabel?: string;
   label?: string;
   dataSource?: F24DataSource<T>;
+  showHeader?: boolean;
  }
 /**
  * F24ListSource
@@ -40,6 +41,11 @@ export class F24ListSource<T> {
   protected readonly _dataSource = signalSource<F24DataSource<T>>(createDataSource<T>());
   readonly dataSource = this._dataSource.asReadonly();
   /**
+   * showHeader variable para ocultar el header
+   */
+  protected readonly _showHeader = signalSource(true);
+  readonly showHeader = this._showHeader.asReadonly();
+  /**
    * constructor
    */
   constructor(params?: F24ListSourceParams<T>) {
@@ -55,6 +61,7 @@ export class F24ListSource<T> {
       this._filterLabel.setExectUndefined(params?.filterLabel ?? params2?.filterLabel);
       this._label.setExectUndefined(params?.label ?? params2?.label);
       this._dataSource.setExectUndefined(params?.dataSource ?? params2?.dataSource);
+      this._showHeader.setExectUndefined(params?.showHeader ?? params2?.showHeader);
     });
   }
 }

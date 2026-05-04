@@ -4,6 +4,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  .status {
+    margin: 0px !important;
+  }
 }
 
 .f24-description {   
@@ -46,7 +50,7 @@
 .f24-description-list-item {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
 
   span {
     font-size: 10px;
@@ -64,7 +68,7 @@
     margin: 0;
   }
 
-  ::ng-deep .mat-icon {
+  .mat-icon {
     height: 13px;
     width: 13px;
     font-size: 13px;

@@ -1,0 +1,19 @@
+
+
+.f24-quantity-label {
+  font-weight: 900;
+  margin: 0px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.f24-quantity-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+
+  span {
+    font-weight: 500;
+  }
+}

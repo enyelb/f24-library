@@ -5,6 +5,11 @@
       @if (icon() && !icon()?.hide) {
         <f24-icon class="f24-description-title-icon" [icon]="icon()?.name ?? ''" [matTooltip]="icon()?.tooltip ?? ''"/>
       }
+      @for (item of status(); track $index) {
+        @if (item.label && !item.hide) {
+          <f24-status class="f24-description-title-item" [status]="item.label", [color]="item.color ?? 'black'" [background]="item.background ?? 'white'"/>
+        }
+      }
     </p>
     @if(subtitle(); as subtitle) {
       <p class="f24-description-subtitle">

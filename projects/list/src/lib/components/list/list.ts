@@ -52,6 +52,7 @@ export class F24List<T> {
   readonly filterLabel = input<F24ListSourceParams<T>['filterLabel']>();
   readonly label = input<F24ListSourceParams<T>['label']>();
   readonly dataSource = input<F24ListSourceParams<T>['dataSource']>();
+  readonly showHeader = input<F24ListSourceParams<T>['showHeader']>();
   /**
    * view childs
    */

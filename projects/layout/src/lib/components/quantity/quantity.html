@@ -1,0 +1,15 @@
+@if (quantity(); as quantity) {
+  <div class="f24-quantity">
+    @if (label(); as label) {
+      <p class="f24-quantity-label">
+        {{ label }}
+      </p>
+    }
+    <div class="f24-quantity-content">
+      @if (icon(); as icon) {
+        <f24-icon [icon]="icon" />
+      }
+      <span>{{ quantity | f24tonumber }}</span>
+    </div>
+  </div>
+}

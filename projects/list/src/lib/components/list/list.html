@@ -6,36 +6,38 @@
 }
 
 <!-- HEADER CONTENT -->
-<div class="f24-list-header-content">
-  @if (source().filterKey(); as key) {
-    <div class="f24-list-header-filter">
-      <div class="f24-list-header-filter-search">
-        <button class="f24-list-header-filter-search-button" (click)="showInput()">
-          <mat-icon>search</mat-icon>
-        </button>
-        <input #input class="f24-list-header-filter-search-input"
-          [type]="'text'" 
-          [placeholder]="source().filterLabel()"
-          (input)="changeInput($event)"
-        />
+@if (source().showHeader()) {
+  <div class="f24-list-header-content">
+    @if (source().filterKey(); as key) {
+      <div class="f24-list-header-filter">
+        <div class="f24-list-header-filter-search">
+          <button class="f24-list-header-filter-search-button" (click)="showInput()">
+            <mat-icon>search</mat-icon>
+          </button>
+          <input #input class="f24-list-header-filter-search-input"
+            [type]="'text'" 
+            [placeholder]="source().filterLabel()"
+            (input)="changeInput($event)"
+          />
+        </div>
       </div>
-    </div>
-  }
-  <div class="f24-list-header-options-content">
-    @if (source().label(); as label) {
-      <span class="f24-list-header-options-label">
-        {{ label }}
-      </span>
     }
-    <ng-content select="[options]"></ng-content>
-    <button matIconButton class="f24-list-header-options-button" (click)="showFilters()">
-      <mat-icon>tune</mat-icon>
-    </button>
+    <div class="f24-list-header-options-content">
+      @if (source().label(); as label) {
+        <span class="f24-list-header-options-label">
+          {{ label }}
+        </span>
+      }
+      <ng-content select="[options]"></ng-content>
+      <button matIconButton class="f24-list-header-options-button" (click)="showFilters()">
+        <mat-icon>tune</mat-icon>
+      </button>
+    </div>
+    <ng-template #filters>
+      <ng-content select="[header]" filters></ng-content>
+    </ng-template>
   </div>
-  <ng-template #filters>
-    <ng-content select="[header]" filters></ng-content>
-  </ng-template>
-</div>
+}
 
 <!-- LIST CONTENT -->
 <div [class]="{ 'f24-list-content': true, 'f24-list-content-no-result': source().dataSource().total() === 0 }">

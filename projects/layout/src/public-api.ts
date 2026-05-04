@@ -9,6 +9,7 @@ export * from './lib/components/loader/loader';
 export * from './lib/components/responsive-view/responsive-view';
 export * from './lib/components/container/container';
 export * from './lib/components/currency/currency';
+export * from './lib/components/quantity/quantity';
 export * from './lib/components/description/description';
 export * from './lib/components/image/image';
 export * from './lib/components/status/status';
