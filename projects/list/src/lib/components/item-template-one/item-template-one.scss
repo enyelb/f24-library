@@ -48,7 +48,7 @@
 .f24-item-template-one-image {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--margin-global, 20px) / 2);
+  gap: calc(var(--global-margin, 20px) / 2);
   width: 100px !important;
 }
 

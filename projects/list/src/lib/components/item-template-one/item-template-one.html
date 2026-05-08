@@ -3,13 +3,11 @@
     @if (image(); as image) {
       <f24-image [src]="image" [alt]="''"/>
     }
-
-    <div class="f24-item-template-one-post-image">
-      <ng-content select="[post-image]"></ng-content>
-      @if (templatePostImage(); as templatePostImage) {
+    @if (templatePostImage(); as templatePostImage) {
+      <div class="f24-item-template-one-post-image">
         <ng-container *ngTemplateOutlet="templatePostImage"></ng-container>
-      }
-    </div>
+      </div>
+    }
   </div>
   
   <div class="f24-item-template-one-description">
@@ -18,12 +16,11 @@
       [subtitle]="subtitle()" 
       [items]="itemsMap()"
     />
-    <div class="f24-item-template-one-post-description">
-      <ng-content select="[post-description]"></ng-content>
-      @if (templatePostDecription(); as templatePostDecription) {
-        <ng-container *ngTemplateOutlet="templatePostDecription"></ng-container>
-      }
-    </div>
+    @if (templatePostDecription(); as templatePostDecription) {
+      <div class="f24-item-template-one-post-description">
+        <ng-container *ngTemplateOutlet="templatePostDecription"></ng-container>    
+      </div>
+    }
     <div class="f24-item-template-one-details">
       <div class="f24-item-template-one-quantity">
         @if (quantity(); as quantity) {
@@ -31,9 +28,11 @@
           <span>{{ quantity }}</span>
         }
       </div>
-      <div class="f24-item-template-one-price">
-        <f24-currency [ves]="ves()" [usd]="usd()"/>
-      </div>
+      @if (ves() || usd()) {
+        <div class="f24-item-template-one-price">
+          <f24-currency [ves]="ves()" [usd]="usd()"/>
+        </div>
+      }
     </div>
   </div>
 </article>

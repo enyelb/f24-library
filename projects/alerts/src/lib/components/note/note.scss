@@ -1,5 +1,5 @@
 .f24-note-container {
-  padding: calc(var(--margin-global, 20px) / 4);
+  padding: calc(var(--global-margin, 20px) / 4);
 }
 
 .f24-note-icon {
@@ -10,12 +10,12 @@
 
 .f24-note {
   background: var(--mat-sys-note-container, light-dark(#ebeff4, #232630));
-  padding: calc(var(--margin-global, 20px) / 2);
+  padding: calc(var(--global-margin, 20px) / 2);
   border-radius: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: calc(var(--margin-global, 20px) / 2);
+  gap: calc(var(--global-margin, 20px) / 2);
 }
 
 .f24-note-content {

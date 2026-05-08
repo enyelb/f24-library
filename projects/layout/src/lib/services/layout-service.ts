@@ -2,59 +2,51 @@ import { Injectable, signal, computed, inject } from "@angular/core";
 import { BreakpointObserver } from '@angular/cdk/layout';
 
 /**
+ * F24LayoutSizes
+ */
+
+export interface F24LayoutSizes<T> {
+  xs?: T;
+  s?: T;
+  m?: T;
+  l?: T;
+  xl?: T;
+  xxl?: T;
+}
+
+/**
  * F24LayoutService
  */
 @Injectable({
   providedIn: 'root'
 })
 export class F24LayoutService {
-
   /**
-   * changeSize - Signal que contiene el tamaño actual
+   * breakpointObserver
    */
-  private changeSize = signal<string>('');
   private readonly breakpointObserver = inject(BreakpointObserver);
-
-
   /**
-   * SIZE - Signal público con el tamaño actual
+   * Signal que contiene el tamaño actual
    */
-  public SIZE = computed(() => this.changeSize());
-
+  private readonly size = signal<string>('');
+  public readonly SIZE = this.size.asReadonly();
   /**
-   * XSMALL
+   * TIPOS DE TAMANIOS
    */
   public readonly XSMALL = "XS";
-
-  /**
-   * SMALL
-   */
   public readonly SMALL = "S";
-
-  /**
-   * MEDIUM
-   */
   public readonly MEDIUM = "M";
-
-  /**
-   * LARGE
-   */
   public readonly LARGE = "L";
-
-  /**
-   * XLARGE
-   */
   public readonly XLARGE = "XL";
-
-  /**
-   * XXLARGE
-   */
   public readonly XXLARGE = "XXL";
-
   /**
-   * breakpoints
+   * breakpoints names
    */
-  private readonly breakpoints: string[] = [
+  private readonly breakpointsNames = [this.XSMALL, this.SMALL, this.MEDIUM, this.LARGE, this.XLARGE, this.XXLARGE];
+  /**
+   * breakpoints media query
+   */
+  private readonly breakpointsMediaQuery: string[] = [
     '(max-width: 575.98px)',
     '(min-width: 576px) and (max-width: 767.98px)',
     '(min-width: 768px) and (max-width: 991.98px)',
@@ -62,45 +54,72 @@ export class F24LayoutService {
     '(min-width: 1200px) and (max-width: 1399.98px)',
     '(min-width: 1400px)'
   ];
-
   /**
-   * displayNames
+   * breakpoints width
    */
-  private readonly displayNames = new Map([
-    [this.breakpoints[0], this.XSMALL],
-    [this.breakpoints[1], this.SMALL],
-    [this.breakpoints[2], this.MEDIUM],
-    [this.breakpoints[3], this.LARGE],
-    [this.breakpoints[4], this.XLARGE],
-    [this.breakpoints[5], this.XXLARGE]
-  ]);
-
+  private breakpointsWidth = [0, 576, 768, 992, 1200, 1400];
   /**
    * Constructor
    */
   constructor() {
-    this.init();
-  }
-
-  /**
-   * init - Inicializa el observador de breakpoints
-   */
-  init(): void {
     this.breakpointObserver
-      .observe(this.breakpoints)
+      .observe(this.breakpointsMediaQuery)
       .subscribe(result => {
         for (const query of Object.keys(result.breakpoints)) {
           if (result.breakpoints[query]) {
-            const size = this.displayNames.get(query) ?? 'Unknown';
-            this.changeSize.set(size);
+            this.size.set(this.mediaQueryToSize(query));
           }
         }
       });
   }
   /**
-   * values - Retorna valores basados en el tamaño actual
+   * mediaQueryToSize devuelve el nombre de la media query
+   * @param query
+   * @returns string
    */
-  values<T>(values: { xs: T, s: T, m: T, l: T, xl: T, xxl: T }, SIZE: string = this.SIZE()): T {
+  mediaQueryToSize(query: string): string {
+    for (let i = 0; i < this.breakpointsMediaQuery.length; i++) {
+      if (query === this.breakpointsMediaQuery[i]) {
+        return this.breakpointsNames[i];
+      }
+    }
+    return this.XXLARGE;
+  }
+  /**
+   * widthToSize devuelve el nombre del tamanio
+   * @param width 
+   * @returns string
+   */
+  widthToSize(width: number): string {
+    for (let i = this.breakpointsWidth.length - 1; i >= 0; i--) {
+      if (width >= this.breakpointsWidth[i]) {
+        return this.breakpointsNames[i];
+      }
+    }
+    return this.XSMALL;
+  }
+  /**
+   * defaultSizes
+   * @param values F24LayoutSizes<T>
+   * @param defaultSize T 
+   * @returns Required<F24LayoutSizes<T>>
+   */
+  defaultSizes<T>(values: F24LayoutSizes<T> | undefined, defaultSize: T): Required<F24LayoutSizes<T>> {
+    const xxl = values?.xxl || defaultSize;
+    const xl = values?.xl || xxl;
+    const l = values?.l || xl;
+    const m = values?.m || l;
+    const s = values?.s || m;
+    const xs = values?.xs || s;
+    return { xxl, xl, l, m, s, xs };  
+  }
+  /**
+   * values - Retorna valores basados en el tamaño actual
+   * @param values Required<F24LayoutSizes<T>>
+   * @param SIZE string
+   * @return T
+   */
+  values<T>(values: Required<F24LayoutSizes<T>>, SIZE: string = this.SIZE()): T {
     switch (SIZE) {
       case this.XSMALL:
         return values.xs;
@@ -119,20 +138,20 @@ export class F24LayoutService {
   /**
    * s - Verifica si el tamaño es de S
    */
-  s(): boolean {
-    return this.SMALL === this.SIZE();
+  s(SIZE: string = this.SIZE()): boolean {
+    return this.SMALL === SIZE;
   }
   /**
    * xs - Verifica si el tamaño es XS
    */
-  xs(): boolean {
-    return this.XSMALL === this.SIZE();
+  xs(SIZE: string = this.SIZE()): boolean {
+    return this.XSMALL === SIZE;
   }
   /**
    * m - verifica si el tamanio es M
    */
-  m(): boolean {
-    return this.MEDIUM === this.SIZE();
+  m(SIZE: string = this.SIZE()): boolean {
+    return this.MEDIUM === SIZE;
   }
   /**
    * is - Verifica si el tamaño actual está incluido en los valores proporcionados

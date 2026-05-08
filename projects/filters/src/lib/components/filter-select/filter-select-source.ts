@@ -41,7 +41,8 @@ export interface F24FilterSelectSourceParams<Type, Item> {
   bind?: F24FilterSelectBindSourceParams | {
     label?: F24FilterSelectBindSourceParams
     value?: F24FilterSelectBindSourceParams
-  }
+  },
+  appendTo?: string;
 }
 /**
  * F24FilterSelectSource
@@ -150,6 +151,12 @@ export class F24FilterSelectSource<T, I> {
   protected readonly _bindValue = signalSource<string>('value');
   readonly bindValue = this._bindValue.asReadonly();
   /**
+   * appendTo
+   * variable para ponser el dropdawn del select en algun elemento del dom
+   */
+  protected readonly _appendTo = signalSource('body');
+  readonly appendTo = this._appendTo.asReadonly();
+  /**
    * es un signalSource que tendra el valor del form
    */
   readonly formValue = toSignal(
@@ -248,6 +255,7 @@ export class F24FilterSelectSource<T, I> {
       this._formatterValue.setExectUndefined((typeof params?.formatter === 'object' ? params.formatter?.value : params?.formatter) ?? (typeof params2?.formatter === 'object' ? params2.formatter?.value : params2?.formatter));
       this._bindLabel.setExectUndefined((typeof params?.bind === 'object' ? params.bind?.label : params?.bind) ?? (typeof params2?.bind === 'object' ? params2.bind?.label : params2?.bind));
       this._bindValue.setExectUndefined((typeof params?.bind === 'object' ? params.bind?.value : params?.bind) ?? (typeof params2?.bind === 'object' ? params2.bind?.value : params2?.bind));
+      this._appendTo.setExectUndefined(params?.appendTo ?? params2?.appendTo);
     });
   }
 }

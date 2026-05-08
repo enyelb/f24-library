@@ -11,14 +11,14 @@
     @if (source().filterKey(); as key) {
       <div class="f24-list-header-filter">
         <div class="f24-list-header-filter-search">
-          <button class="f24-list-header-filter-search-button" (click)="showInput()">
-            <mat-icon>search</mat-icon>
-          </button>
           <input #input class="f24-list-header-filter-search-input"
             [type]="'text'" 
             [placeholder]="source().filterLabel()"
             (input)="changeInput($event)"
           />
+          <button class="f24-list-header-filter-search-button" (click)="showInput()">
+            <mat-icon>search</mat-icon>
+          </button>
         </div>
       </div>
     }
@@ -29,19 +29,19 @@
         </span>
       }
       <ng-content select="[options]"></ng-content>
-      <button matIconButton class="f24-list-header-options-button" (click)="showFilters()">
+      <button matIconButton class="f24-list-header-options-button" (click)="dialog.open()">
         <mat-icon>tune</mat-icon>
       </button>
     </div>
-    <ng-template #filters>
+    <f24-dialog #dialog [title]="'Filtros'" [accept]="'Aceptar'" [cancel]="'Cancelar'">
       <ng-content select="[header]" filters></ng-content>
-    </ng-template>
+    </f24-dialog>
   </div>
 }
 
 <!-- LIST CONTENT -->
-<div [class]="{ 'f24-list-content': true, 'f24-list-content-no-result': source().dataSource().total() === 0 }">
-  <cdk-virtual-scroll-viewport [itemSize]="itemSize()" [maxBufferPx]="itemSize() * 40" [minBufferPx]="itemSize() * 10"> 
+<div #listContent [class]="{ 'f24-list-content': true, 'f24-list-content-no-result': source().dataSource().total() === 0 }" [responsiveClass]="source().columnsClass()">
+  <cdk-virtual-scroll-viewport [itemSize]="columnItemSize()" [maxBufferPx]="columnItemSize() * 40" [minBufferPx]="columnItemSize() * 10"> 
     <!-- ITEMS -->
     <ng-container *cdkVirtualFor="let item of source().dataSource().data(); trackBy: source().dataSource().trackBy();">
       <f24-container #itemContent class="f24-list-item-content">

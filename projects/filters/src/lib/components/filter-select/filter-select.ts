@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, input } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,6 +25,10 @@ import {
 })
 export class F24FilterSelect<Type, Item> {
   /**
+   * elementRef
+   */
+  protected readonly elementRef = inject(ElementRef);
+  /**
    * source 
    */
   readonly params = input(createFilterSelectSourceParams<Type, Item>());
@@ -49,6 +53,10 @@ export class F24FilterSelect<Type, Item> {
   readonly formatterValue = input<F24FilterSelectFormatterSourceParams<Item>>();
   readonly bindLabel = input<F24FilterSelectBindSourceParams>();
   readonly bindValue = input<F24FilterSelectBindSourceParams>();
+  /**
+   * appendTo
+   */
+  readonly unique = Date.now();
   /**
    * constructor
    */
@@ -81,10 +89,30 @@ export class F24FilterSelect<Type, Item> {
         }
       }, this.params());
     });
+    /**
+     * efecto para observar el elemento y en el momento que se haga visible asignar el class container
+     * para en caso de que el photoviewer este dento de un dialog se muestre correctamente 
+     * Nota: esto solo se ejecutara una vez porque dentro del mismo observer se deconecta
+     */
+    effect(() => {
+      const element = this.elementRef?.nativeElement;
+      if (!element) {
+        return;
+      }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          // Si al menos una parte del componente es visible
+          if (entry.isIntersecting && entry.intersectionRatio > 0) {
+            setTimeout(() => {
+              if (this.elementRef.nativeElement.closest('.cdk-overlay-popover')) {
+                this.source().update({ appendTo: '.cdk-overlay-popover' });
+              }
+            }, 60);
+            observer.disconnect();
+          }
+        });
+      });
+      observer.observe(element);
+    }); 
   }
-  /**
-   * unique
-   */
-  protected readonly unique = Date.now();
-
 }

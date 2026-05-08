@@ -60,11 +60,11 @@ f24-table-standard {
     max-width: 50%;
     min-width: 40%;
     font-size: 14px;
-    padding: calc(var(--margin-global) / 4);
+    padding: calc(var(--global-margin) / 4);
 }
 
 .f24-table-header-content {
-    padding: calc(var(--margin-global) / 4);
+    padding: calc(var(--global-margin) / 4);
 }
 
 .f24-table-x2 {

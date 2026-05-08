@@ -15,6 +15,7 @@ import { F24Divider } from './components/divider/divider';
 
 import { F24ColDirective } from './directives/col-directive';
 import { F24RowDirective } from './directives/row-directive';
+import { F24ResponsiveClassDirective } from './directives/responsive-class-directive';
 
 
 /**
@@ -35,7 +36,8 @@ import { F24RowDirective } from './directives/row-directive';
     F24Copy,
     F24Divider,
     F24ColDirective,
-    F24RowDirective
+    F24RowDirective,
+    F24ResponsiveClassDirective
   ],
   exports: [
     F24Lazy,
@@ -51,7 +53,8 @@ import { F24RowDirective } from './directives/row-directive';
     F24Copy,
     F24Divider,
     F24ColDirective,
-    F24RowDirective
+    F24RowDirective,
+    F24ResponsiveClassDirective
   ]
 })
 export class F24LayoutModule { }

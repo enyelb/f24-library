@@ -7,16 +7,15 @@ f24-list, .f24-list-content{
 }
 
 .f24-list-content {
-  padding: calc(var(--margin-global, 20px) / 2) 0px;
+  padding: var(--global-margin, 20px) 0px;
 }
 
 .f24-list-item-content {
-  padding: calc(var(--margin-global, 20px) / 2);
-  margin: calc(var(--margin-global, 20px) / 2);
+  padding: var(--global-margin, 20px);
   background: light-dark(#ffffff, #121316);
   display: flex;
   flex-direction: column;
-  gap: calc(var(--margin-global, 20px) / 2);
+  gap: var(--global-margin, 20px);
 }
 
 .f24-list-item-content:first-child {
@@ -27,11 +26,20 @@ f24-list, .f24-list-content{
   margin-bottom: 0px !important
 }
 
-
 f24-list {
   
   cdk-virtual-scroll-viewport {
     height: 100% !important;
+    contain: none !important;
+  }
+
+  .cdk-virtual-scroll-content-wrapper {
+    width: calc(100% - (var(--global-margin, 20px) *  2));
+    padding: 0px var(--global-margin);
+    min-width: calc(100% - (var(--global-margin, 20px) * 2)) !important;
+    display: grid;
+    gap: var(--global-margin);
+    grid-template-columns: repeat(1, 1fr);
   }
 
   .f24-list-content-no-result {
@@ -50,11 +58,35 @@ f24-list {
       overflow: auto;
       width: 100%;
     }
-
-    tbody {
-      height: 100% !important;
-    }
   }
+}
+
+.f24-list-column-2 .cdk-virtual-scroll-content-wrapper {
+  grid-template-columns: repeat(2, 1fr);
+}
+.f24-list-column-3 .cdk-virtual-scroll-content-wrapper {
+  grid-template-columns: repeat(3, 1fr);
+}
+.f24-list-column-4 .cdk-virtual-scroll-content-wrapper {
+  grid-template-columns: repeat(4, 1fr);
+}
+.f24-list-column-5 .cdk-virtual-scroll-content-wrapper {
+  grid-template-columns: repeat(5, 1fr);
+}
+.f24-list-column-6 .cdk-virtual-scroll-content-wrapper {
+  grid-template-columns: repeat(6, 1fr);
+}
+.f24-list-column-7 .cdk-virtual-scroll-content-wrapper {
+  grid-template-columns: repeat(7, 1fr);
+}
+.f24-list-column-8 .cdk-virtual-scroll-content-wrapper {
+  grid-template-columns: repeat(8, 1fr);
+}
+.f24-list-column-9 .cdk-virtual-scroll-content-wrapper {
+  grid-template-columns: repeat(9, 1fr);
+}
+.f24-list-column-10 .cdk-virtual-scroll-content-wrapper {
+  grid-template-columns: repeat(10, 1fr);
 }
 
 .f24-list-progress-bar {
@@ -135,9 +167,9 @@ f24-list {
 
 // HEADER FILTERS
 .f24-list-header-content {
-  padding: calc(var(--margin-global, 20px) / 2);
+  padding: var(--global-margin, 20px);
   padding-bottom: 0px;
-  margin-left: 35px;
+  margin-left: 36px;
   --mat-icon-button-state-layer-size: 36px;
 }
 .f24-list-header-filter {
@@ -146,8 +178,12 @@ f24-list {
 .f24-list-header-filter-search {
   position: absolute;
   z-index: 10;
-  left: calc(-40px - (var(--margin-global, 20px) / 3));
+  left: calc(-36px - var(--global-margin, 20px));
   top: 0;
+  height: 36px;
+  width: 100%;
+  display: flex;
+  
 }
 .f24-list-header-filter-search-button {
   width: 35px;
@@ -157,17 +193,17 @@ f24-list {
   font-weight: bold;
   outline: none;
   cursor: pointer;
-  position: absolute;
   right: 0px;
   color: #ffffff;
   background-color: transparent;
   pointer-events: painted;
+  margin-left: -36px;
 }
 .f24-list-header-filter-search-input {
-  height: 16px;
+  height: 36px;
   width: 0px;
   border-style: none;
-  padding: 10px 20px 10px 15px;
+  padding: 0px 20px;
   font-size: 18px;
   outline: none;
   border-radius: 0px 25px 25px 0px;
@@ -182,7 +218,7 @@ f24-list {
   font-weight: 100;
 }
 .f24-list-header-filter-search-input:focus {
-  width: calc(100vw - 76px - (var(--margin-global, 20px) / 3));
+  width: 100%;
   border-bottom:1px solid rgba(255,255,255,.5);
   transition: all 500ms cubic-bezier(0.215, 0.61, 0.355, 1);
 }
@@ -190,7 +226,7 @@ f24-list {
 .f24-list-header-options-content {
   display: flex;
   justify-content: flex-end;
-  gap: calc(var(--margin-global, 20px) / 2);
+  gap: var(--global-margin, 20px);
   flex-wrap: nowrap;
 }
 .f24-list-header-options-label {
@@ -213,7 +249,7 @@ f24-list {
 .f24-list-pagination {
   --mat-paginator-container-size: 40px;
   .mat-mdc-paginator-container {
-    padding: calc(var(--margin-global, 20px) / 2);
+    padding: var(--global-margin, 20px);
     padding-top: 0px;
   }
   .mat-mdc-paginator-page-size-label {

@@ -59,7 +59,7 @@ f24-list {
 }
 
 .f24-list-item-content {
-  padding: calc(var(--margin-global, 20px) / 3) calc(var(--margin-global, 20px) / 2);
+  padding: calc(var(--global-margin, 20px) / 3) calc(var(--global-margin, 20px) / 2);
 }
 
 .f24-list-x2 {

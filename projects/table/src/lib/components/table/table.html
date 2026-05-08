@@ -34,7 +34,7 @@
   
 </div>
 <!-- PAGINATION -->
-@if (isPagination()) {
+@if (source().total() > source().data().length) {
   <mat-paginator  #paginator showFirstLastButtons
     [class]="{
       'f24-teble-pagination': true,

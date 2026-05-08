@@ -1,9 +1,10 @@
 
 
-import { untracked } from '@angular/core';
+import { computed, untracked } from '@angular/core';
 
 import { createDataSource, F24DataSource } from '@f24/data';
 import { signalSource } from "@f24/core";
+import { F24LayoutSizes } from '@f24/layout';
 
 /**
  * F24ListSourceParams
@@ -14,6 +15,7 @@ export interface F24ListSourceParams<T> {
   label?: string;
   dataSource?: F24DataSource<T>;
   showHeader?: boolean;
+  columns?: F24LayoutSizes<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10>
  }
 /**
  * F24ListSource
@@ -46,6 +48,20 @@ export class F24ListSource<T> {
   protected readonly _showHeader = signalSource(true);
   readonly showHeader = this._showHeader.asReadonly();
   /**
+   * columns son la cantidad de columnas que mostrara segun el tamanio de la pantalla
+   */
+  protected readonly _columns = signalSource<F24LayoutSizes<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10>>({
+    xs: 1, s: 1, m: 2, l: 3, xl: 4, xxl: 5
+  });
+  readonly columns = this._columns.asReadonly();
+  readonly columnsClass = computed(() => {
+    const newSizes: { [key: string]: string } = {};
+    for (const [key, value] of Object.entries(this.columns())) {
+      newSizes[key] = `f24-list-column-${value}`;
+    }
+    return newSizes;
+  })
+  /**
    * constructor
    */
   constructor(params?: F24ListSourceParams<T>) {
@@ -62,6 +78,7 @@ export class F24ListSource<T> {
       this._label.setExectUndefined(params?.label ?? params2?.label);
       this._dataSource.setExectUndefined(params?.dataSource ?? params2?.dataSource);
       this._showHeader.setExectUndefined(params?.showHeader ?? params2?.showHeader);
+      this._columns.setExectUndefined(params?.columns ?? params2?.columns);
     });
   }
 }

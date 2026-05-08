@@ -19,5 +19,6 @@ export * from './lib/components/divider/divider';
 
 export * from './lib/directives/col-directive';
 export * from './lib/directives/row-directive';
+export * from './lib/directives/responsive-class-directive';
 
 export * from './lib/services/layout-service';

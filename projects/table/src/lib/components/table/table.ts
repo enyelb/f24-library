@@ -39,10 +39,6 @@ export class F24Table<T> {
   readonly params = input(createDataSourceParams<T>());
   readonly source = input(createDataSource(this.params()));
   /**
-   * inputs
-   */
-  readonly isPagination = input(true);
-  /**
    * view childs
    */
   protected readonly paginator = viewChild(MatPaginator);
@@ -144,7 +140,7 @@ export class F24Table<T> {
     if (!paginator) {
       return;
     }
-    if (this.isPagination() && this.source().pageOptions().includes(size)) {
+    if (this.source().total() > this.source().data().length && this.source().pageOptions().includes(size)) {
       paginator.pageSize = size;
       paginator.page.emit();
     }

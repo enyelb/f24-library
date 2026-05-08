@@ -1,8 +1,8 @@
 .f24-form-file-container {
   display: flex;
   align-items: center;
-  padding: calc(var(--margin-global, 20px) / 4);
-  gap: calc(var(--margin-global, 20px) / 2);
+  padding: calc(var(--global-margin, 20px) / 4);
+  gap: calc(var(--global-margin, 20px) / 2);
   margin-bottom: 10px;
 
   .f24-form-file {

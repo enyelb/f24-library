@@ -1,8 +1,8 @@
 :host ::ng-deep .f24-filter-wrapper-container {
   display: flex; align-items: center;
-  padding: calc(var(--margin-global) / 4);
+  padding: calc(var(--global-margin) / 4);
 
-  gap: calc(var(--margin-global) / 2);
+  gap: calc(var(--global-margin) / 2);
 
   mat-form-field {
     width: 100%;

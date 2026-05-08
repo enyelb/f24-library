@@ -2,10 +2,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: calc(var(--margin-global, 20px) / 4);
+  padding: calc(var(--global-margin, 20px) / 4);
   border-radius: var(--mat-sys-corner-extra-small, 8px);
   border: 1px solid var(--border-primary);
-  margin: calc(var(--margin-global, 20px) / 2) calc(var(--margin-global, 20px) / 4);
+  margin: calc(var(--global-margin, 20px) / 2) calc(var(--global-margin, 20px) / 4);
 }
 
 .f24-preview-checked-header {
@@ -24,7 +24,7 @@
 
 .f24-preview-unchecked {
   display: flex;
-  gap: calc((var(--margin-global, 20px) / 4) + 2px);
+  gap: calc((var(--global-margin, 20px) / 4) + 2px);
   flex-direction: column;
 }
 

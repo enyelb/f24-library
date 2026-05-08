@@ -1,9 +1,9 @@
 .f24-filter-input-container {
   display: flex;
   align-items: center;
-  padding: calc(var(--margin-global, 20px) / 4);
+  padding: calc(var(--global-margin, 20px) / 4);
 
-  gap: calc(var(--margin-global, 20px) / 2);
+  gap: calc(var(--global-margin, 20px) / 2);
 
   .f24-filter-input {
     width: 100%;

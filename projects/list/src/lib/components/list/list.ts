@@ -1,7 +1,7 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, contentChild, contentChildren, effect, ElementRef, inject, input, signal, TemplateRef, untracked, viewChild, viewChildren, ViewEncapsulation } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, contentChildren, effect, ElementRef, inject, input, signal, TemplateRef, untracked, viewChild, viewChildren, ViewEncapsulation } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -11,8 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { distinctUntilChanged, of, switchMap } from 'rxjs';
 
-import { DialogService } from '@f24/notification';
-import { F24Container } from '@f24/layout'
+import { F24Dialog } from '@f24/notification';
+import { F24Container, F24LayoutService, F24ResponsiveClassDirective } from '@f24/layout'
 
 import { createListSource, createListSourceParams, F24ListSourceParams } from '../list/list-source';
 
@@ -26,7 +26,7 @@ import { F24ListItem } from '../../directives/list-item';
   imports: [
     NgTemplateOutlet, ScrollingModule, 
     MatPaginatorModule, MatProgressBarModule, MatIconModule, MatButtonModule,
-    F24Container
+    F24Container, F24Dialog, F24ResponsiveClassDirective,
   ],
   templateUrl: './list.html',
   styleUrl: './list.scss',
@@ -35,11 +35,9 @@ import { F24ListItem } from '../../directives/list-item';
 })
 export class F24List<T> {
   /**
-   * 
+   * services
    */
-  readonly notifcation = {
-    dialog: inject(DialogService),
-  }
+  protected readonly layout = inject(F24LayoutService);
   /**
    * params
    */
@@ -53,14 +51,17 @@ export class F24List<T> {
   readonly label = input<F24ListSourceParams<T>['label']>();
   readonly dataSource = input<F24ListSourceParams<T>['dataSource']>();
   readonly showHeader = input<F24ListSourceParams<T>['showHeader']>();
+  readonly columns = input<F24ListSourceParams<T>['columns']>();
   /**
    * view childs
    */
   protected readonly sorter = viewChild(MatSort);
   protected readonly paginator = viewChild(MatPaginator);
+  protected readonly reponsiveClass = viewChild(F24ResponsiveClassDirective);
+  protected readonly viewport = viewChild(CdkVirtualScrollViewport);
+  protected readonly elementList = viewChild('listContent', { read: ElementRef });
   protected readonly elementItems = viewChildren('itemContent', { read: ElementRef });
   protected readonly elementInput = viewChild('input', { read: ElementRef });
-  protected readonly templateFilters = viewChild('filters', { read: TemplateRef });
   /**
    * itemTemplate este template *f24-item="let item"
    */
@@ -87,9 +88,17 @@ export class F24List<T> {
     ),
     { initialValue: null }
   );
-
+  /**
+   * signals
+   */
   protected readonly itemSize = signal(0);
-
+  protected readonly columnItemSize = computed(() => {
+    const itemSize = this.itemSize();
+    const size = this.reponsiveClass()?.currentSize() ?? 'XS';
+    const defaultSizes = this.layout.defaultSizes(this.source().columns(), 1);
+    return itemSize / this.layout.values(defaultSizes, size);
+  });
+  protected readonly forceChangeItemSize = signal(false);
   /**
    * constructor
    */
@@ -100,7 +109,6 @@ export class F24List<T> {
     afterNextRender(() => {
       this.source().dataSource().connect();
     });
-
     /**
      * efecto para asignar params
      */
@@ -110,10 +118,12 @@ export class F24List<T> {
         filterLabel: this.filterLabel(),
         label: this.label(),
         dataSource: this.dataSource(),
+        showHeader: this.showHeader(),
+        columns: this.columns()
       }, this.params());
     });
     /**
-     * efecto para sincronizar page con el data source
+     * efecto para sincronizar la paginacion y el ordenamiento con el data source
      */
     effect(() => {
       const dataSource = this.source().dataSource();
@@ -128,21 +138,54 @@ export class F24List<T> {
       });
     });
     /**
-     * controlar la velocidad del scroll
+     * efecto para conseguir el mejor tamanio de item para el virtual scroll
      */
     effect(() => {
-      const elements = this.elementItems().map(elementRef => elementRef.nativeElement);
+      /**
+       * buscar el tamanio minimo pero mayor a cero
+       */
+      const newItemSize = this.elementItems().map(elementRef => elementRef.nativeElement).reduce((minHeight, elementRef) => {
+        const height = elementRef.getBoundingClientRect().height;
+        return height > 0 && height < minHeight ? height : minHeight;
+      }, 500);
+      /**
+       * ejecuta el efecto si este signal cambia
+       */
+      this.forceChangeItemSize();
       
       untracked(() => {
-        const newItemSize = elements.reduce((height, elementRef) => {
-          return height > elementRef.getBoundingClientRect().height ? height : elementRef.getBoundingClientRect().height;
-        }, this.itemSize());
+        /**
+         * validar si en ralidad hay un nuevo tamanio de item
+         */
         if (this.itemSize() == newItemSize) {
-          console.log(this.itemSize());
           return;
         }
         this.itemSize.set(newItemSize);
       });
+    });
+    /**
+     * efecto para observar el elemento list y en el momento que se haga visible ejecutar el metodo checkViewportSize
+     * para en caso de que el vistual scroll se creo cuando el elemento no era visible, forzar que el viewport asigne 
+     * nuevamente su tamanio, Nota: esto solo se ejecutara una vez porque dentro del mismo observer se deconecta
+     */
+    effect(() => {
+      const list = this.elementList()?.nativeElement;
+      if (!list) {
+        return;
+      }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          // Si al menos una parte del componente es visible
+          if (entry.isIntersecting && entry.intersectionRatio > 0) {
+            setTimeout(() => {
+              this.viewport()?.checkViewportSize();
+              this.forceChangeItemSize.set(true);
+            }, 60);
+            observer.disconnect();
+          }
+        });
+      });
+      observer.observe(list);
     });
   }
   /**
@@ -158,16 +201,6 @@ export class F24List<T> {
     } else {
       input.focus();
     }
-  }
-  /**
-   * showFilters
-   */
-  protected showFilters() {
-    const filters = this.templateFilters();
-    if (!filters) {
-      return;
-    }
-    this.notifcation.dialog.open(filters, {});
   }
   /**
    * changeInput
