@@ -15,9 +15,8 @@ f24-list, .f24-list-content{
   background: light-dark(#ffffff, #121316);
   display: flex;
   flex-direction: column;
-  //gap: var(--global-margin, 20px);
-  margin-top: 20px;
-  margin-right: 20px;
+  margin-top: var(--global-margin, 20px);;
+  margin-right: var(--global-margin, 20px);;
 }
 
 f24-list {
@@ -28,11 +27,9 @@ f24-list {
   }
 
   .cdk-virtual-scroll-content-wrapper {
-    //width: calc(100% - (var(--global-margin, 20px) *  2));
     padding: 0px var(--global-margin);
     min-width: calc(100% - (var(--global-margin, 20px) * 2)) !important;
     display: grid;
-    //gap: var(--global-margin);
     grid-template-columns: repeat(1, 1fr);
   }
 

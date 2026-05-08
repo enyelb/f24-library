@@ -87,8 +87,6 @@ export class F24ResponsiveClassDirective implements OnDestroy {
 
     this.currentSize.set(newSize);
     this.currentWidth.set(width);
-
-    console.log(width, newSize);
     
     const sises = this.layout.defaultSizes(this.responsiveClass(), '');
     const newClass = this.layout.values(sises, newSize);
