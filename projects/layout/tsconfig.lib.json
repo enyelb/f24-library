@@ -4,14 +4,12 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/lib",
+    "rootDir": "src",
     "declaration": true,
     "declarationMap": true,
-    "inlineSourceMap": true,
     "types": [],
     "paths": {
-      "@f24/functions": [
-        "./../../dist/functions"
-      ],
+      "@f24/*": ["../../dist/*"]
     }
   },
   "include": [

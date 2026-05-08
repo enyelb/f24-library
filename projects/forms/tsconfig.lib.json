@@ -4,23 +4,12 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/lib",
+    "rootDir": "src",
     "declaration": true,
     "declarationMap": true,
-    "inlineSourceMap": true,
     "types": [],
     "paths": {
-      "@f24/notification": [
-        "../../dist/notification"
-      ],
-      "@f24/filters": [
-        "../../dist/filters"
-      ],
-      "@f24/layout": [
-        "../../dist/layout"
-      ],
-      "@f24/core": [
-        "../../dist/core"
-      ],
+      "@f24/*": ["../../dist/*"]
     }
   },
   "include": [

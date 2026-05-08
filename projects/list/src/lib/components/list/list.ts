@@ -15,7 +15,6 @@ import { F24Dialog } from '@f24/notification';
 import { F24Container, F24LayoutService, F24ResponsiveClassDirective } from '@f24/layout'
 
 import { createListSource, createListSourceParams, F24ListSourceParams } from '../list/list-source';
-
 import { F24ListItem } from '../../directives/list-item';
 
 /**
@@ -60,8 +59,8 @@ export class F24List<T> {
   protected readonly reponsiveClass = viewChild(F24ResponsiveClassDirective);
   protected readonly viewport = viewChild(CdkVirtualScrollViewport);
   protected readonly elementList = viewChild('listContent', { read: ElementRef });
-  protected readonly elementItems = viewChildren('itemContent', { read: ElementRef });
   protected readonly elementInput = viewChild('input', { read: ElementRef });
+  protected readonly elementItems = viewChildren('itemContent', { read: ElementRef });
   /**
    * itemTemplate este template *f24-item="let item"
    */
@@ -91,14 +90,26 @@ export class F24List<T> {
   /**
    * signals
    */
-  protected readonly itemSize = signal(0);
+  protected readonly forceChangeItemSize = signal(false);
+  protected readonly itemSize = computed(() => {
+      /**
+       * forzar a crear nuevamente el itemSize
+       */
+      this.forceChangeItemSize();
+      /**
+       * buscar el tamanio minimo pero mayor a cero
+       */
+      return this.elementItems().map(elementRef => elementRef.nativeElement).reduce((minHeight, elementRef) => {
+        const height = elementRef.getBoundingClientRect().height;
+        return height > 0 && height < minHeight ? height : minHeight;
+      }, 500);
+  });
   protected readonly columnItemSize = computed(() => {
     const itemSize = this.itemSize();
     const size = this.reponsiveClass()?.currentSize() ?? 'XS';
     const defaultSizes = this.layout.defaultSizes(this.source().columns(), 1);
     return itemSize / this.layout.values(defaultSizes, size);
   });
-  protected readonly forceChangeItemSize = signal(false);
   /**
    * constructor
    */
@@ -135,32 +146,6 @@ export class F24List<T> {
           page: page ? { index: page.pageIndex, size: page.pageSize } : undefined,
           sorts: sort ? { [sort.active]: sort.direction } : undefined
         });
-      });
-    });
-    /**
-     * efecto para conseguir el mejor tamanio de item para el virtual scroll
-     */
-    effect(() => {
-      /**
-       * buscar el tamanio minimo pero mayor a cero
-       */
-      const newItemSize = this.elementItems().map(elementRef => elementRef.nativeElement).reduce((minHeight, elementRef) => {
-        const height = elementRef.getBoundingClientRect().height;
-        return height > 0 && height < minHeight ? height : minHeight;
-      }, 500);
-      /**
-       * ejecuta el efecto si este signal cambia
-       */
-      this.forceChangeItemSize();
-      
-      untracked(() => {
-        /**
-         * validar si en ralidad hay un nuevo tamanio de item
-         */
-        if (this.itemSize() == newItemSize) {
-          return;
-        }
-        this.itemSize.set(newItemSize);
       });
     });
     /**
