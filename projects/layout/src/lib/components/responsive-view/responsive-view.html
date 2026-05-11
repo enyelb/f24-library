@@ -1,10 +1,35 @@
-@for (c of components(); track c.id) {
+@if (isShowOptions()) {
+  @let component = currentView()?.component;
+
+  <section class="f24-responsive-view-options"> 
+    <div class="f24-responsive-view-options-icon">
+      <mat-icon>south_west</mat-icon>
+    </div>
+    <div class="f24-responsive-view-options-list">
+      @for (c of components(); track `f24-responsive-view-options-${c.id}`) {
+        @if (c.icon; as icon) {
+          @let filled = c === component;
+          @let primary = c !== component;
+
+          <button matIconButton 
+            [class]="{ 'f24-responsive-view-options-button': true, 'filled': filled, 'primary': primary}" 
+            (click)="changeComponent(c, true)"
+          >
+            <mat-icon>{{icon}}</mat-icon>
+          </button>
+        }
+      }
+    </div>
+  </section>
+}
+
+@for (c of components(); track `f24-responsive-view-${c.id}`) {
   <f24-lazy 
     [disableLoading]="true"
-    [style]="{ display: c === current()?.component ? 'block' : 'none' }"
+    [style]="{ display: c === currentView()?.component ? 'block' : 'none' }"
   />
 }
 
-@if (!current()) {
+@if (!currentView()) {
   <f24-loader/>
 }

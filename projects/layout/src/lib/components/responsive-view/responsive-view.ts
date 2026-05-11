@@ -1,7 +1,11 @@
-import { Component, OnDestroy, ElementRef, input, ViewEncapsulation, ChangeDetectionStrategy, viewChildren, computed, signal, OnInit } from '@angular/core';
+import { Component, OnDestroy, ElementRef, input, ViewEncapsulation, ChangeDetectionStrategy, viewChildren, computed, signal, inject } from '@angular/core';
 
-import { debounceTime, Subject, takeUntil, throttleTime } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
+import { Subject, takeUntil, throttleTime } from 'rxjs';
+
+import { F24LayoutService } from '../../services/layout-service';
 import { F24Lazy, F24LazyId, F24LazyInputs, F24LazyModule, F24LazyPost } from "../lazy/lazy";
 import { F24Loader } from '../loader/loader';
 
@@ -17,6 +21,9 @@ export interface F24ResponsiveViewComponent<C> {
   sizes: F24ResponsiveViewSize[]
   id: F24LazyId<C>
   module: F24LazyModule<C>
+  icon?: string,
+  title?: string,
+  only?: boolean,
   post?: F24LazyPost<C>
   inputs?: F24LazyInputs
 }
@@ -25,14 +32,22 @@ export interface F24ResponsiveViewComponent<C> {
  */
 @Component({
   selector: 'f24-responsive-view',
-  imports: [F24Lazy, F24Loader],
+  imports: [
+    MatButtonModule, MatIconModule,
+    F24Lazy, F24Loader
+  ],
   templateUrl: './responsive-view.html',
   styleUrl: './responsive-view.scss',
   standalone: true,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class F24ResponsiveView implements OnInit, OnDestroy {
+export class F24ResponsiveView implements OnDestroy {
+  /**
+   * services
+   */
+  protected readonly layout = inject(F24LayoutService);
+  protected readonly element = inject(ElementRef);
   /**
    * inputs
    */
@@ -54,64 +69,52 @@ export class F24ResponsiveView implements OnInit, OnDestroy {
     }).filter(component => !!component);
   });
   /**
-   *component
+   * currentComponent
    */
-  protected readonly current = signal<{
+  protected readonly isShowOptions = computed(() => {
+    const isOnlyCurrentView = this.currentView()?.component?.only;
+    const isManual = this.isManual();
+    const someComponentNoOnly = this.components().some(component => !component.only && component.icon);
+    return (!isOnlyCurrentView || isManual) && someComponentNoOnly;
+  }) 
+
+  /**
+   *currentView
+   */
+  protected readonly currentView = signal<{
     component: F24ResponsiveViewComponent<any>,
     loader: F24Lazy<any>,
   } | undefined>(undefined);
   /**
-   * breakpoints
-   * Breakpoints for different screen sizes
+   * size
    */
-  private breakpoints = {
-    xs: 0,
-    sm: 576,
-    md: 768,
-    lg: 992,
-    xl: 1200,
-    xxl: 1400
-  };
+  protected readonly currentSize = signal<F24ResponsiveViewSize | undefined>(undefined);
+  /**
+   *isManual
+   */
+  protected readonly isManual = signal(false);
   /**
    * resizeObserver
    */
   private resizeObserver: ResizeObserver | null = null;
   private destroy$ = new Subject<void>();
   private resizeSubject = new Subject<number>();
-  private rafId: number | null = null;
   /**
    * constructor
    */
-  constructor(protected elementRef: ElementRef) {
+  constructor() {
     this.resizeObserver = new ResizeObserver(entries => {
-      // Cancelar frame anterior
-      if (this.rafId) {
-        cancelAnimationFrame(this.rafId);
-      }
-      
-      // Procesar en nuevo frame
-      this.rafId = requestAnimationFrame(() => {
-        const width = entries[0].contentRect.width;
-        this.resizeSubject.next(width);
-      });
+      const width = entries[0].borderBoxSize[0].inlineSize;
+      this.resizeSubject.next(width);
     });
+    this.resizeObserver.observe(this.element.nativeElement);
 
     this.resizeSubject.pipe(
-      throttleTime(50, undefined, { leading: true, trailing: true }),
+      throttleTime(50, undefined, { leading: false, trailing: true }),
       takeUntil(this.destroy$)
     ).subscribe(width => {
-      this.checkSize(width);
+      this.changeWidth(width);
     });
-  }
-  /**
-   * ngOnInit
-   */
-  ngOnInit(): void {
-    const initialWidth = this.elementRef.nativeElement.clientWidth;
-    this.checkSize(initialWidth);
-    if (this.resizeObserver) {
-      this.resizeObserver.observe(this.elementRef.nativeElement);
-    }
   }
   /**
    * ngOnDestroy
@@ -120,41 +123,59 @@ export class F24ResponsiveView implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     
-    if (this.rafId) {
-      cancelAnimationFrame(this.rafId);
-    }
-    
     if (this.resizeObserver) {
-      this.resizeObserver.unobserve(this.elementRef.nativeElement);
+      this.resizeObserver.unobserve(this.element.nativeElement);
       this.resizeObserver.disconnect();
     }
   }
   /**
-   * checkSize
-   * @param width Width of the element
+   * change
    */
-  private checkSize(width: number) {
-    let newSize: F24ResponsiveViewSize = 'xxl';
-
-    if (width >= this.breakpoints.xxl) newSize = 'xxl';
-    else if (width >= this.breakpoints.xl) newSize = 'xl';
-    else if (width >= this.breakpoints.lg) newSize = 'l';
-    else if (width >= this.breakpoints.md) newSize = 'm';
-    else if (width >= this.breakpoints.sm) newSize = 's';
-    else if (width >= this.breakpoints.xs) newSize = 'xs';
+  changeWidth(width: number, manual: boolean = false): void {
+    const size = this.layout.widthToSize(width).toLowerCase() as F24ResponsiveViewSize;
+    this.changeSize(size, manual);
+  }
+  /**
+   * changeComponent
+   */
+  changeComponent(component?: F24ResponsiveViewComponent<any>, manual: boolean = false): void {
+    if(!component || component.sizes.length === 0) {
+      return;
+    }
+    const size = component.sizes[0];
+    this.changeSize(size, manual);
+  }
+  /**
+   * changeComponent
+   */
+  changeSize(size: F24ResponsiveViewSize, manual: boolean = false): void {
+    if (this.currentSize() === size && !manual) {
+      return;
+    }
+    if (!manual) {
+      this.currentSize.set(size);
     
-
-    const view = this.views().find(view => view.component.sizes.includes(newSize));
+    }
+    const view = this.views().find(view => view.component.sizes.includes(size));
+    this.changeView(view, manual);
+  }
+  /**
+   * changeView
+   */
+  changeView(view?: { component: F24ResponsiveViewComponent<any>, loader: F24Lazy<any> }, manual: boolean = false): void {
     if (!view) {
       return;
     }
     const component = view.component;
-    const current = this.current();
-    if(current && current.component.id === component.id) {
+    const currentView = this.currentView();
+
+    this.isManual.set(manual);
+
+    if(currentView && currentView.component.id === component.id) {
       return;
     }
 
-    this.current.set(view);
+    this.currentView.set(view);
 
     const loader = view.loader;
     if (loader.isLodaing() || loader.isLoad()) {
