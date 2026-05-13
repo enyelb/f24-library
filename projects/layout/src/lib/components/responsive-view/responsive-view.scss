@@ -37,17 +37,24 @@ f24-responsive-view {
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: calc(var(--global-margin) / 2);
+  gap: calc(var(--global-margin) / 1);
 }
 
 .f24-responsive-view-options-icon {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    color: var(--mat-sys-surface);
-    .mat-icon {
-      width: 15px !important;
-      height: 15px !important;
-      font-size: 15px !important;
-    }
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  color: var(--mat-sys-surface);
+  .mat-icon {
+    width: 15px !important;
+    height: 15px !important;
+    font-size: 15px !important;
+  }
+}
+
+.f24-responsive-view-options-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--global-margin) / 4);
 }

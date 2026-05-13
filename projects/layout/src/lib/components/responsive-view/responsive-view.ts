@@ -22,7 +22,7 @@ export interface F24ResponsiveViewComponent<C> {
   id: F24LazyId<C>
   module: F24LazyModule<C>
   icon?: string,
-  title?: string,
+  label?: string,
   only?: boolean,
   post?: F24LazyPost<C>
   inputs?: F24LazyInputs

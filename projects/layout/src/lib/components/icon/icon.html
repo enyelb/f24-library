@@ -1,6 +1,7 @@
+@let styles = (size() ?? 0) > 0 ? { width: `${size()}px`, height: `${size()}px`, fontSize: `${size()}px` } : {}; 
 
 @if (isMaterialIcon()) {
-  <mat-icon (error)="isMaterialIcon.set(false)">{{ icon() }}</mat-icon>
+  <mat-icon (error)="isMaterialIcon.set(false)" [style]="styles">{{ icon() }}</mat-icon>
 } @else if (isSVGIcon()) {
-  <mat-icon (error)="isSVGIcon.set(false)" [svgIcon]="icon()"></mat-icon>
+  <mat-icon (error)="isSVGIcon.set(false)" [svgIcon]="icon()" [style]="styles"></mat-icon>
 }

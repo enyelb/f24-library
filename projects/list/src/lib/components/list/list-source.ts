@@ -51,7 +51,7 @@ export class F24ListSource<T> {
    * columns son la cantidad de columnas que mostrara segun el tamanio de la pantalla
    */
   protected readonly _columns = signalSource<F24LayoutSizes<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10>>({
-    xs: 1, s: 1, m: 2, l: 3, xl: 4, xxl: 5
+    xs: 1, s: 1, m: 2, l: 3, xl: 4, xxl: 4
   });
   readonly columns = this._columns.asReadonly();
   readonly columnsClass = computed(() => {

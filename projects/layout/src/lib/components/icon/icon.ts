@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, signal, ViewEncapsulation } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 
 /**
@@ -9,12 +9,15 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
   imports: [MatIconModule],
   templateUrl: './icon.html',
   styleUrl: './icon.scss',
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class F24Icon {
   /**
    * inputs
    */
   readonly icon = input.required<string>();
+  readonly size = input<number>();
   /**
    * signals
    */

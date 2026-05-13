@@ -10,13 +10,17 @@
         @if (c.icon; as icon) {
           @let filled = c === component;
           @let primary = c !== component;
-
-          <button matIconButton 
-            [class]="{ 'f24-responsive-view-options-button': true, 'filled': filled, 'primary': primary}" 
-            (click)="changeComponent(c, true)"
-          >
-            <mat-icon>{{icon}}</mat-icon>
-          </button>
+          <div class="f24-responsive-view-options-item">
+            <button matIconButton 
+              [class]="{ 'f24-responsive-view-options-button': true, 'filled': filled, 'primary': primary }" 
+              (click)="changeComponent(c, true)"
+            >
+              <mat-icon>{{icon}}</mat-icon>
+            </button>
+            @if (c.label; as label) {
+              <span>{{label}}</span>
+            }
+          </div>
         }
       }
     </div>
