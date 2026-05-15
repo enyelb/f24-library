@@ -75,7 +75,9 @@ export class F24ResponsiveView implements OnDestroy {
     const isOnlyCurrentView = this.currentView()?.component?.only;
     const isManual = this.isManual();
     const someComponentNoOnly = this.components().some(component => !component.only && component.icon);
-    return (!isOnlyCurrentView || isManual) && someComponentNoOnly;
+    const someCurrentView = this.currentView(); 
+    const someLoadersLoadings = this.loaders().some(loader => loader.isLodaing());
+    return (!isOnlyCurrentView || isManual) && someComponentNoOnly && someCurrentView && !someLoadersLoadings;
   }) 
 
   /**

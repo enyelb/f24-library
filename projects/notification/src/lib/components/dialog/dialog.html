@@ -1,7 +1,14 @@
 <ng-template #template>
-  @if(title(); as title) {
-    <h2 mat-dialog-title>{{ title }}</h2>
-  }
+  <div class="f24-dialog-header">
+    @if(title(); as title) {
+      <h2 mat-dialog-title>{{ title }}</h2>
+    }
+    <div class="f24-dialog-buttons">
+      <button matIconButton>
+        <mat-icon (click)="close()">close</mat-icon>
+      </button>
+    </div>
+  </div>
   <mat-dialog-content>
     <ng-content></ng-content>
   </mat-dialog-content>

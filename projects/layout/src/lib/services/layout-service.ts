@@ -99,6 +99,15 @@ export class F24LayoutService {
     return this.XSMALL;
   }
   /**
+   * sizeToWidth devuelve el tamanio
+   * @param width 
+   * @returns number
+   */
+  sizeToWidth(size: string): number {
+    const index = this.breakpointsNames.indexOf(size.toUpperCase());
+    return this.breakpointsWidth[index];
+  }
+  /**
    * defaultSizes
    * @param values F24LayoutSizes<T>
    * @param defaultSize T 

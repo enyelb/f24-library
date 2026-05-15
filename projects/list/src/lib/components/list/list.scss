@@ -34,6 +34,8 @@ f24-list {
   }
 
   .f24-list-content-no-result {
+    justify-content: center;
+    
     cdk-virtual-scroll-viewport {
       contain: none !important;
       height: 100% !important;
@@ -220,11 +222,6 @@ f24-list {
     letter-spacing: 2px;
   }
 }
-
-.f24-list-no-result {
-  height: 100%;
-}
-
 
 .f24-row:hover {
   background-color: #8484842f;

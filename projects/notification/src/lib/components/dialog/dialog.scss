@@ -1,0 +1,18 @@
+.f24-dialog-buttons {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.cdk-overlay-pane.mat-mdc-dialog-panel {
+  padding: var(--global-margin);
+}
+
+.mat-mdc-dialog-container-with-actions .mat-mdc-dialog-content {
+  padding: var(--mat-dialog-with-actions-content-padding, 0px 20px 0) !important;
+  
+}
+
+.mat-mdc-dialog-content {
+  max-height: 100% !important;
+}

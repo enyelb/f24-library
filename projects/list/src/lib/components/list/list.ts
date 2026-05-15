@@ -12,7 +12,7 @@ import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-i
 import { distinctUntilChanged, of, switchMap } from 'rxjs';
 
 import { F24Dialog } from '@f24/notification';
-import { F24Container, F24LayoutService, F24ResponsiveClassDirective } from '@f24/layout'
+import { F24Container, F24LayoutService, F24ResponsiveClassDirective, F24Loader } from '@f24/layout'
 
 import { createListSource, createListSourceParams, F24ListSourceParams } from '../list/list-source';
 import { F24ListItem } from '../../directives/list-item';
@@ -23,10 +23,11 @@ import { F24ListItem } from '../../directives/list-item';
 @Component({
   selector: 'f24-list',
   imports: [
-    NgTemplateOutlet, ScrollingModule, 
+    NgTemplateOutlet, ScrollingModule,
     MatPaginatorModule, MatProgressBarModule, MatIconModule, MatButtonModule,
     F24Container, F24Dialog, F24ResponsiveClassDirective,
-  ],
+    F24Loader
+],
   templateUrl: './list.html',
   styleUrl: './list.scss',
   encapsulation: ViewEncapsulation.None,

@@ -1,23 +1,17 @@
-@if (!notfound) {
-  <img mtxPhotoviewer class="f24-image"
-    [mtxPhotoviewerOptions]="{
-      draggable:false,
-      resizable:false,
-      headerToolbar: ['close'],
-      footerToolbar: [],
-      multiInstances: false,
-      title: false,
-      appendTo: classContainer()
-    }"
-    [srcset]="src()"
-    [src]="src()"
+@if (safeUrl()) {
+  <img [class]="{ 'f24-image': true, 'f24-image-zoom-click': zoomClick() }" loading="lazy"
+    [srcset]="safeUrl()"
+    [src]="safeUrl()"
     [alt]="alt()"
-    (error)="error($event)" loading="lazy">
+    (error)="reportError()" 
+    (click)="open()">
 }
 
-@if (notfound && !notfoundDefault) {
-  <img class="f24-image"
-    [srcset]="default()"
-    [alt]="alt()"
-    (error)="errorDefault($event)" loading="lazy">
+@if (zoomClick()) {
+  <f24-dialog [size]="zoomSize()">
+    <img class="f24-image-zoom" loading="lazy"
+      [srcset]="safeUrl()"
+      [src]="safeUrl()"
+      [alt]="alt()">
+  </f24-dialog>
 }

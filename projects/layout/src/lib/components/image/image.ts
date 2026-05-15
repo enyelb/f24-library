@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, input, signal, viewChild } from '@angular/core';
 
-import { MtxPhotoviewerModule } from '@ng-matero/extensions/photoviewer';
+import { F24Dialog } from '@f24/notification'
 
 /**
  * F24ImageComponent
@@ -8,76 +8,74 @@ import { MtxPhotoviewerModule } from '@ng-matero/extensions/photoviewer';
 @Component({
   selector: 'f24-image',
   standalone: true,
-  imports: [MtxPhotoviewerModule],
+  imports: [F24Dialog],
   templateUrl: './image.html',
   styleUrls: ['./image.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class F24Image {
   /**
-   * elementRef
-   */
-  protected readonly elementRef = inject(ElementRef);
-  /**
    * inputs
    */
   readonly src = input('');
   readonly alt = input('');
   readonly default = input('');
+  readonly zoomClick = input(true);
+  readonly zoomSize = input<'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl'>('s');
+  /**
+   * services
+   */
+  readonly dialog = viewChild(F24Dialog);
 
   /**
-   * notfound
+   * safeUrl
    */
-  protected notfound: boolean = false;
-  /**
-   * notfound
-   */
-  protected notfoundDefault: boolean = false;
-  /**
-   * classContainer
-   */
-  protected readonly classContainer = signal('body');
+  protected readonly safeUrl = signal<string | undefined>(undefined);
+  protected readonly notFound = signal(false);
+  protected readonly notFoundDefault = signal(false)
+
   /**
    * constructor
    */
   constructor() {
-   /**
-     * efecto para observar el elemento y en el momento que se haga visible asignar el class container
-     * para en caso de que el photoviewer este dento de un dialog se muestre correctamente 
-     * Nota: esto solo se ejecutara una vez porque dentro del mismo observer se deconecta
+    /**
+     * efecto para asignar la url valida
      */
     effect(() => {
-      const element = this.elementRef?.nativeElement;
-      if (!element) {
-        return;
-      }
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          // Si al menos una parte del componente es visible
-          if (entry.isIntersecting && entry.intersectionRatio > 0) {
-            setTimeout(() => {
-              if (this.elementRef.nativeElement.closest('.mat-mdc-dialog-container')) {
-                this.classContainer.set('.mat-mdc-dialog-container');
-              }
-            }, 60);
-            observer.disconnect();
-          }
-        });
-      });
-      observer.observe(element);
-    }); 
+      const src = this.src();
+      const default2 = this.default();
+      this.safeUrl.set(src || default2);
+      this.notFound.set(src === '');
+      this.notFoundDefault.set(default2 === '');
+    });
   }
-   /**
-   * error
-   */
-  error(e: ErrorEvent) {
-    this.notfound = true;
-  }
-
   /**
-   * error
+   * zoomClick
    */
-  errorDefault(e: ErrorEvent) {
-    this.notfoundDefault = true;
+  public reportError() {
+    if (!this.notFound()) {
+      this.notFound.set(true);
+      this.safeUrl.set(this.default());
+      return;
+    }
+    if (!this.notFoundDefault()) {
+      this.notFoundDefault.set(true);
+      this.safeUrl.set('');
+      return;
+    }
+
+  }
+  /**
+   * open
+   */
+  public open(): void {
+    const dialog = this.dialog();
+    const zoomClick = this.zoomClick();
+    
+    if (!dialog || !zoomClick) {
+      return;
+    }
+
+    dialog.open();
   }
 }

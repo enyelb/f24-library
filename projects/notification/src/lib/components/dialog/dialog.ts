@@ -1,6 +1,10 @@
-import { Component, inject, input, TemplateRef, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+
+import { F24LayoutService } from '@f24/layout';
 
 import { DialogService } from '../../services/dialog-service';
 
@@ -9,15 +13,18 @@ import { DialogService } from '../../services/dialog-service';
  */
 @Component({
   selector: 'f24-dialog',
-  imports: [MatDialogModule, MatButtonModule],
+  imports: [MatDialogModule, MatButtonModule, MatIconModule],
   templateUrl: './dialog.html',
   styleUrl: './dialog.scss',
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class F24Dialog<Data> {
   /**
    * services
    */
-  readonly dialog = inject(DialogService);
+  protected readonly layout = inject(F24LayoutService);
+  protected readonly dialog = inject(DialogService);
   protected dialogRef: MatDialogRef<any> | undefined;
   protected data: Data | undefined;
   /**
@@ -28,6 +35,7 @@ export class F24Dialog<Data> {
   readonly cancel = input<string>();
   readonly onAccept = input<() => void>();
   readonly onCancel = input<() => void>();
+  readonly size = input<'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl'>('xxl');
   /**
    * views
    */
@@ -37,7 +45,11 @@ export class F24Dialog<Data> {
    */
   public open(data?: Data) {
     this.data = data;
-    this.dialogRef = this.dialog.openRef(this.template(), data ?? {}, { width: '100%', maxWidth: '90vw' });
+    const maxWidth = this.layout.sizeToWidth(this.size());
+    this.dialogRef = this.dialog.openRef(this.template(), data ?? {}, { 
+      width: '100%',
+      maxWidth: maxWidth, 
+    });
     return this.dialogRef;
   }
   /**
