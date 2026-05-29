@@ -134,11 +134,11 @@ export function timeAgo(value: string | Date | undefined): string {
       })
       .replaceAll("menos de un ", "")
       .replaceAll("alrededor de ", "")
-      .replaceAll("minutos", "mins")
+      .replaceAll("minutos", "min")
       .replaceAll("minuto", "min")
       //.replaceAll("horas", "hrs")
       //.replaceAll("hora", "hr")
-      .replaceAll("segundos", "segs")
+      .replaceAll("segundos", "seg")
       .replaceAll("segundo", "seg");
     }
     return '';
