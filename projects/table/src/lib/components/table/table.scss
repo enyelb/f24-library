@@ -6,6 +6,25 @@ f24-table, .f24-table-content {
   flex: 1;
 }
 
+f24-table {
+    tbody>.f24-row:nth-of-type(odd) {
+        background-color: #0000000f;
+    }
+
+    .f24-header-row.x1 {
+        background: var(--seped-main-color);
+        color: white;
+    }
+
+    .mat-sort-header .mat-sort-header-arrow {
+        opacity: 0.3;
+        background: var(--seped-main-color);
+        color: white;
+        border-radius: 6px;
+        padding: 3px;
+    }
+}
+
 f24-table-standard {
   height: 100% !important;
   overflow: overlay;
@@ -60,10 +79,6 @@ f24-table-standard {
     max-width: 50%;
     min-width: 40%;
     font-size: 14px;
-    padding: calc(var(--global-margin) / 4);
-}
-
-.f24-table-header-content {
     padding: calc(var(--global-margin) / 4);
 }
 

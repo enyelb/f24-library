@@ -13,18 +13,21 @@
   width: 100%;
 }
 
-:host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
-  padding-top: 8px;
-  padding-bottom: 8px;
+:host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix,
+:host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--filled .mat-mdc-form-field-infix {
+  padding-top: 6px;
+  padding-bottom: 6px;
   min-height: 35px;
 }
 
 
-:host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-flex .mat-mdc-floating-label {
+:host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-flex .mat-mdc-floating-label,
+:host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--filled .mat-mdc-form-field-flex .mat-mdc-floating-label {
   top: 18px;
 }
 
-:host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+:host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above,
+:host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--filled .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
     --mat-mdc-form-field-label-transform: translateY(-24.75px) scale(var(--mat-mdc-form-field-floating-label-scale, 0.75));
     transform: var(--mat-mdc-form-field-label-transform);
 }

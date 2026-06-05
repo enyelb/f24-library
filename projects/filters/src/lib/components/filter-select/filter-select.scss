@@ -7,7 +7,7 @@
   .f24-filter-select {
     width: 100%;
   }
-  --mat-sys-corner-extra-small: 20px;
+  --mat-sys-corner-extra-small: 12px;
 
   .mdc-notched-outline__trailing, .mdc-notched-outline__leading, .mdc-notched-outline__notch {
     background: var(--filter-background, red);
@@ -16,8 +16,8 @@
 
 
 :host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   min-height: 35px;
 }
 

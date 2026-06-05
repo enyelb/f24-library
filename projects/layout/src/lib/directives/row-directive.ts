@@ -76,7 +76,7 @@ export class F24RowDirective implements OnDestroy, OnInit {
         display: flex;
         flex-wrap: wrap;
         align-items: stretch;
-        padding: calc(var(--global-margin, 20px) / 2);
+        padding: calc(var(--global-margin, 20px) / 4);
       `;
     });
     

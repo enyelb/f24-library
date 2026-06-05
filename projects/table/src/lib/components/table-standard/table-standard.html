@@ -8,7 +8,7 @@
   <thead #f24TableHead role="rowgroup" class="f24-table-head">
     <!-- HEADER ROW TITLE -->
     @if (displayed().headers.length > 0) {
-      <tr role="row" class="f24-header-row">
+      <tr role="row" class="f24-header-row x2">
         @for(column of displayed().headers; track column.column()) {
           <!-- TH ROW TITLE -->
           <th role="columnheader" [class]="['f24-header-cell', 'f24-header-cell-' + column.column(), ...column.class()]" [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()"> 
@@ -22,7 +22,7 @@
       </tr>
     }
     <!-- HEADER ROW -->
-    <tr role="row" class="f24-header-row">
+    <tr role="row" class="f24-header-row x1">
       <!-- TH ROW SELECT-->
       @for (column of columnSelects(); track column.column()) {
         <th role="columnheader" [class]="['f24-header-cell', 'f24-header-cell-' + column.column()]"> 
