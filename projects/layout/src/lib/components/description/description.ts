@@ -1,5 +1,5 @@
 
-import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -60,5 +60,22 @@ export class F24Description {
   readonly status = input<F24StatusOpts[]>([]);
   readonly subtitle = input<string>();
   readonly icon = input<F24IconOpts>();
-  readonly items = input<F24ItemsOpts[]>([]);
+  readonly items = input<F24ItemsOpts[] | F24ItemsOpts[][]>([]);
+  /**
+   * itemsMap
+   */
+  readonly itemsMap = computed(() => {
+    const items = this.items();
+
+    if (items.length === 0) {
+      return [];
+    }
+
+    if (Array.isArray(items[0])) {
+      return items as F24ItemsOpts[][];
+    } else {
+      return [items as F24ItemsOpts[]];
+    }
+    
+  });
 }

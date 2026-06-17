@@ -9,6 +9,7 @@
   }
   .usd {
     font-weight: 500;
+    font-weight: 500;
     color: var(--red-color, var(--seped-red-color, #ff0f27));;
     margin: 0 !important;
     text-overflow: ellipsis;
@@ -17,6 +18,7 @@
 
     span {
       font-weight: 700;
+      font-size: 14px;
     }
   }
   .label {

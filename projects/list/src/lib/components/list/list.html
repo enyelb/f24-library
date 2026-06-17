@@ -6,37 +6,47 @@
 }
 
 <!-- HEADER CONTENT -->
+<ng-template #headerTemplate>
+  <ng-content select="[header]"></ng-content>  
+</ng-template>
+
 @if (source().showHeader()) {
-  <div class="f24-list-header-content">
-    @if (source().filterKey(); as key) {
-      <div class="f24-list-header-filter">
-        <div class="f24-list-header-filter-search">
-          <input #input class="f24-list-header-filter-search-input"
-            [type]="'text'" 
-            [placeholder]="source().filterLabel()"
-            (input)="changeInput($event)"
-          />
-          <button class="f24-list-header-filter-search-button" (click)="showInput()">
-            <mat-icon>search</mat-icon>
-          </button>
+  <div [class]="{ 'f24-list-header-content': true, 'f24-list-header-content-xs': layout.xs(), 'f24-list-header-content-s': layout.s() }" >
+    @if (layout.xs() || layout.s()) {
+      @if (source().filterKey(); as key) {
+        <div class="f24-list-header-filter">
+          <div class="f24-list-header-filter-search">
+            <input #input class="f24-list-header-filter-search-input"
+              [type]="'text'" 
+              [placeholder]="source().filterLabel()"
+              (input)="changeInput($event)"
+            />
+            <button class="f24-list-header-filter-search-button" (click)="showInput()">
+              <mat-icon>search</mat-icon>
+            </button>
+          </div>
         </div>
-      </div>
-    }
-    <div class="f24-list-header-options-content">
-      @if (source().label(); as label) {
-        <span class="f24-list-header-options-label">
-          {{ label }}
-        </span>
       }
-      <ng-content select="[options]"></ng-content>
-      <button matIconButton class="f24-list-header-options-button" (click)="dialog.open()">
-        <mat-icon>tune</mat-icon>
-      </button>
-    </div>
-    <f24-dialog #dialog [title]="'Filtros'" [accept]="'Aceptar'" [cancel]="'Cancelar'">
-      <ng-content select="[header]" filters></ng-content>
-    </f24-dialog>
+      <div class="f24-list-header-options-content">
+        @if (source().label(); as label) {
+          <span class="f24-list-header-options-label">
+            {{ label }}
+          </span>
+        }
+        <ng-content select="[options]"></ng-content>
+        <button matIconButton class="f24-list-header-options-button" (click)="dialog.open()">
+          <mat-icon>tune</mat-icon>
+        </button>
+      </div>
+      <f24-dialog #dialog [title]="'Filtros'" [accept]="'Aceptar'" [cancel]="'Cancelar'">
+        <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
+      </f24-dialog>
+    } @else {
+      <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
+    }
   </div>
+  
+  
 }
 
 <!-- LIST CONTENT -->

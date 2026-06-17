@@ -4,6 +4,16 @@ import { NgTemplateOutlet } from '@angular/common';
 import { F24Image, F24Description, F24Currency, F24Icon, F24ItemsOpts } from '@f24/layout';
 
 /**
+ * F24ItemsOptsTemplateOne
+ */
+interface F24ItemsOptsTemplateOne { 
+  icon?: string, 
+  label?: string, 
+  text: string | number, 
+  color?: 'primary' | 'accent' | 'warn'
+}
+
+/**
  * F24ItemTemplateOne
  */
 @Component({
@@ -34,17 +44,18 @@ export class F24ItemTemplateOne {
   /**
    * items
    */
-  readonly items = input<{ icon?: string, label?: string, text: string | number }[]>([]);
-  protected readonly itemsMap = computed<F24ItemsOpts[]>(() => {
-    return this.items().map((item) => {
+  readonly items = input<F24ItemsOptsTemplateOne[] | F24ItemsOptsTemplateOne[][]>([]);
+  protected readonly itemsMap = computed<F24ItemsOpts[] | F24ItemsOpts[][]>(() => {
+
+    const fn = (item: F24ItemsOptsTemplateOne): F24ItemsOpts => {
       return {
-        icon: item.icon,
-        label: item.label,
+        ... item, 
         text: typeof item.text === 'number' ? `${item.text}%` : item.text,
         hide: typeof item.text === 'number' ? item.text === 0 : item.text === '' || item.text === null || item.text === undefined,
-        color: 'primary'
       }
-    })
+    }
+
+    return this.items().map((item) => Array.isArray(item) ? item.map(fn) : fn(item)) as F24ItemsOpts[] | F24ItemsOpts[][];
   })
   /**
    * price
@@ -54,6 +65,7 @@ export class F24ItemTemplateOne {
   /**
    * quantity
    */
+  readonly quantityLabel = input<string>();
   readonly quantityIcon = input<string>('inventory');
   readonly quantity = input<number | string>();
   /**

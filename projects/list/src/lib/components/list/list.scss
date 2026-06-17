@@ -267,12 +267,17 @@ f24-list {
 }
 
 // HEADER FILTERS
-.f24-list-header-content {
-  padding: var(--global-margin, 20px);
-  padding-bottom: 0px;
+.f24-list-header-content-xs, .f24-list-header-content-s {
+  padding: var(--global-margin, 20px) !important;
   margin-left: 36px;
   --mat-icon-button-state-layer-size: 36px;
 }
+
+.f24-list-header-content {
+  padding: calc(var(--global-margin, 20px) / 4);
+  margin-bottom: calc(var(--global-margin, 20px) * -1);
+}
+
 .f24-list-header-filter {
   position: relative;
 }

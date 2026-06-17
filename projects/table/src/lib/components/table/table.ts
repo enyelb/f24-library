@@ -38,6 +38,7 @@ export class F24Table<T> {
    */
   readonly params = input(createDataSourceParams<T>());
   readonly source = input(createDataSource(this.params()));
+  readonly color = input('primary');
   /**
    * view childs
    */

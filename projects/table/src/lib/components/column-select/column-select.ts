@@ -19,6 +19,10 @@ export class F24ColumnSelect<T> {
    */
   readonly column = input('select');
   /**
+   * color esta es la columna que usa para cambiar el color
+   */
+  readonly color = input<string>('none');
+  /**
    * cell este valor se usa para obtener el id de los seleccionados
    */
   readonly cell = input<keyof T | ((item: T) => any)>();

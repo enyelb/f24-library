@@ -9,12 +9,16 @@
   font-weight: var(--mat-table-header-headline-weight, var(--mat-sys-title-small-weight, 500));
 
   &:first-child {
-    height: var(--mat-table-header-container-height, 40px);
+    height: var(--mat-table-header-container-height, 31px);
   }
 
   &:not(:first-child) {
     height: var(--mat-table-header-container-height, 20px);
   }
+}
+
+.f24-header-row.x2 .f24-header-cell {
+  border: none;
 }
 
 .f24-row {

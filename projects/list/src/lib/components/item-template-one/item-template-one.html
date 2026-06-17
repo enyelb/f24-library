@@ -24,6 +24,9 @@
     <div class="f24-item-template-one-details">
       <div class="f24-item-template-one-quantity">
         @if (quantity(); as quantity) {
+          @if (quantityLabel(); as quantityLabel) {
+            <p>{{ quantityLabel }}</p>
+          }
           <f24-icon [icon]="quantityIcon()"/>
           <span>{{ quantity }}</span>
         }

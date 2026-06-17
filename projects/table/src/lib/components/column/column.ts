@@ -23,6 +23,10 @@ export class F24Column {
    */
   readonly column = input.required<string>();
   /**
+   * color esta es la columna que usa para cambiar el color
+   */
+  readonly color = input<string>('none');
+  /**
    * header esta es el header que usa el matHeaderRowDef 
    */
   readonly header = input<any>();

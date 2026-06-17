@@ -11,7 +11,7 @@
       <tr role="row" class="f24-header-row x2">
         @for(column of displayed().headers; track column.column()) {
           <!-- TH ROW TITLE -->
-          <th role="columnheader" [class]="['f24-header-cell', 'f24-header-cell-' + column.column(), ...column.class()]" [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()"> 
+          <th role="columnheader" [class]="[`f24-header-cell`, `${column.color()}`, `filled`, `f24-header-cell-${column.column()}`, ...column.class()]" [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()"> 
             @if (column.headerTemplate(); as header) {
               <ng-container *ngTemplateOutlet="header.template;"/>
             } @else {
@@ -22,10 +22,10 @@
       </tr>
     }
     <!-- HEADER ROW -->
-    <tr role="row" class="f24-header-row x1">
+    <tr role="row" [class]="`f24-header-row x1 ${color()} filled`">
       <!-- TH ROW SELECT-->
       @for (column of columnSelects(); track column.column()) {
-        <th role="columnheader" [class]="['f24-header-cell', 'f24-header-cell-' + column.column()]"> 
+        <th role="columnheader" [class]="[`f24-header-cell`, `${column.color()}`, `filled`, `f24-header-cell-${column.column()}`]"> 
           <mat-checkbox [checked]="column.isAllSelected()" [indeterminate]="column.isIndeterminate()"
             (change)="column.selectAll($event.checked)">
           </mat-checkbox>
@@ -34,7 +34,7 @@
       @for(column of displayed().columns; track column.column()) {
         @if (column.sort(); as sort) {
           <!-- TH ROW SORT -->
-          <th role="columnheader" [mat-sort-header]="sort" [class]="['f24-header-cell', 'f24-header-cell-' + column.column(), ...column.class()]" [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()"> 
+          <th role="columnheader" [mat-sort-header]="sort" [class]="[`f24-header-cell`, `${column.color()}`, `filled`, `f24-header-cell-${column.column()}`, ...column.class()]" [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()"> 
             @if (column.headerTemplate(); as header) {
               <ng-container *ngTemplateOutlet="header.template;"/>
             } @else {
@@ -43,7 +43,7 @@
           </th>
         } @else {
           <!-- TH ROW -->
-          <th role="columnheader" [class]="['f24-header-cell', 'f24-header-cell-' + column.column(), ...column.class()]" [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()"> 
+          <th role="columnheader" [class]="[`f24-header-cell`, `${column.color()}`, `filled`, `f24-header-cell-${column.column()}`, ...column.class()]" [attr.colspan]="column.colspan()" [matTooltip]="column.tooltip()"> 
             @if (column.headerTemplate(); as header) {
               <!--ng-container *ngTemplateOutlet="header.template;"/-->
             } @else {

@@ -38,6 +38,10 @@ export class F24TableStandard<T> {
    */
   readonly isVitualScroll = input(false);
   /**
+   * color
+   */
+  readonly color = input('primary');
+  /**
    * columns
    */
   readonly columns = input.required<readonly F24Column[]>();

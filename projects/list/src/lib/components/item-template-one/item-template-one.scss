@@ -1,7 +1,12 @@
+f24-item-template-one {
+  height: 100%;
+}
+
 .f24-item-template-one {
   display: flex;
   justify-content: space-between;
   gap: 10px;
+  height: 100%;
 }
 
 .f24-item-template-one {
@@ -50,6 +55,7 @@
   flex-direction: column;
   gap: calc(var(--global-margin, 20px) / 2);
   width: 100px !important;
+  justify-content: space-between;
 }
 
 .f24-item-template-one-description {

@@ -16,26 +16,28 @@
         {{ subtitle }}
       </p>
     }
-    <div class="f24-description-list">
-      @for (item of items(); track $index) {
-        @if (!item.hide) {
-          <div class="f24-description-list-item" [matTooltip]="item.tooltip">
-            @if (item.label) {
-              <span>{{ item.label }}</span>
-            }
-            @if (item.icon) {
-              <f24-icon [icon]="item.icon" />
-            }
-            <p [class]="[
-              'f24-description-list-item-text',
-              'f24-description-list-item-text-' + (item.color ?? 'none')
-            ]">
-              {{ item.text }}
-            </p>
-          </div>
+    @for (items of itemsMap(); track $index) {
+      <div class="f24-description-list">
+        @for (item of items; track $index) {
+          @if (!item.hide) {
+            <div class="f24-description-list-item" [matTooltip]="item.tooltip">
+              @if (item.label) {
+                <span>{{ item.label }}</span>
+              }
+              @if (item.icon) {
+                <f24-icon [icon]="item.icon" />
+              }
+              <p [class]="[
+                'f24-description-list-item-text',
+                'f24-description-list-item-text-' + (item.color ?? 'none')
+              ]">
+                {{ item.text }}
+              </p>
+            </div>
+          }
         }
-      }
-    </div>
+      </div>
+    }
   </div>
   <ng-content [right]></ng-content>
 </div>
