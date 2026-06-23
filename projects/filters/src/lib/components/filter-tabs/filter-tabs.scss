@@ -1,0 +1,38 @@
+f24-filter-tabs {
+  overflow: hidden;
+  border-radius: 18px 18px 0px 0px;
+  display: grid;
+
+  .f24-filter-tabs {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;     
+  }
+
+  .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    padding: 0 7px;
+    --mat-button-toggle-height: 30px;
+  }
+
+  .mat-button-toggle-standalone.mat-button-toggle-appearance-standard, 
+  .mat-button-toggle-group-appearance-standard {
+    border-radius: 20px 20px 0px 0px !important;
+    border: none;
+  }
+
+  .mat-button-toggle {
+    border-radius: 20px 20px 0px 0px;
+    padding: 0px 28px;
+    margin: 0px -15px;
+    filter: brightness(.8);
+    border: solid 1px #b4b4b4 !important;
+    font-weight: 700;
+  }
+
+  .mat-button-toggle-checked {
+    z-index: 2;
+    filter: brightness(1) !important;
+    border-bottom: none !important;
+  }
+}

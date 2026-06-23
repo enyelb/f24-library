@@ -42,6 +42,8 @@ export class F24ColumnSelect<T> {
    */
   readonly dataByValues = computed(() => {
     const cell = this.cell();
+    console.log(this.dataSource()?.data());
+    console.log(this.dataSource()?.data().map(item => this.fnSelectedById(item, cell)) ?? []);
     return this.dataSource()?.data().map(item => this.fnSelectedById(item, cell)) ?? [];
   })
   /**

@@ -12,4 +12,8 @@ export * from './lib/components/filter-input/filter-input';
 export * from './lib/components/filter-select/filter-select-source';
 export * from './lib/components/filter-select/filter-select';
 
+export * from './lib/components/filter-tabs/filter-tabs-source';
+export * from './lib/components/filter-tabs/filter-tabs';
+
 export * from './lib/components/filter-wrapper/filter-wrapper';
+

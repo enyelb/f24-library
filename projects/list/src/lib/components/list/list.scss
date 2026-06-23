@@ -271,6 +271,12 @@ f24-list {
   padding: var(--global-margin, 20px) !important;
   margin-left: 36px;
   --mat-icon-button-state-layer-size: 36px;
+
+  .f24-list-options {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    margin-left: -36px;
+  }
 }
 
 .f24-list-header-content {
@@ -329,13 +335,13 @@ f24-list {
   transition: all 500ms cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 // HEADER OPTIONS
-.f24-list-header-options-content {
+.f24-list-header {
   display: flex;
   justify-content: flex-end;
   gap: var(--global-margin, 20px);
   flex-wrap: nowrap;
 }
-.f24-list-header-options-label {
+.f24-list-header-label {
   color: var(--seped-main-color);
   font-weight: 400;
   font-size: .6rem;
@@ -346,9 +352,18 @@ f24-list {
   overflow: hidden;
   white-space: nowrap;
 }
-.f24-list-header-options-button {
+.f24-list-header-button {
   background: var(--seped-main-color);
   color: white;
+}
+
+.f24-list-options {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: calc(var(--global-margin, 20px) / 2);
+  padding: calc(var(--global-margin, 20px) / 4) calc(var(--global-margin, 20px) / 2) !important;
 }
 
 // PAGINATION

@@ -27,14 +27,13 @@
           </div>
         </div>
       }
-      <div class="f24-list-header-options-content">
+      <div class="f24-list-header">
         @if (source().label(); as label) {
-          <span class="f24-list-header-options-label">
+          <span class="f24-list-header-label">
             {{ label }}
           </span>
         }
-        <ng-content select="[options]"></ng-content>
-        <button matIconButton class="f24-list-header-options-button" (click)="dialog.open()">
+        <button matIconButton class="f24-list-header-button" (click)="dialog.open()">
           <mat-icon>tune</mat-icon>
         </button>
       </div>
@@ -44,6 +43,9 @@
     } @else {
       <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
     }
+    <div class="f24-list-options">
+      <ng-content select="[options]"></ng-content>
+    </div>
   </div>
   
   

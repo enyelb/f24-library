@@ -1,0 +1,12 @@
+<div class="f24-filter-tabs" f24TouchScroll>
+  <mat-button-toggle-group [hideSingleSelectionIndicator]="true" (change)="changeValue($event)">
+    @for (item of source().items(); track $index) {
+      <mat-button-toggle [class]="[item.color, 'filled']" [checked]="item.isDefault" [value]="item.name" [matTooltip]="item.tooltip">
+        {{item.label}}
+        @if (item.icon; as icon) {
+          <f24-icon [icon]="icon" style="height: 24px;"/>
+        }
+      </mat-button-toggle>
+    }
+  </mat-button-toggle-group>
+</div>

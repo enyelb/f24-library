@@ -130,7 +130,12 @@ export class F24Table<T> {
 
     effect(() => {
       const dataSource = this.source();
-      this.isVirtualScroll.set(dataSource.pageSize() > 100);
+      untracked(() => {
+        this.isVirtualScroll.set(dataSource.pageSize() > 100);
+        this.columnSelects().forEach(columnSelect => {
+          columnSelect.setDataSource = dataSource;
+        });
+      });
     });
   }
   /**

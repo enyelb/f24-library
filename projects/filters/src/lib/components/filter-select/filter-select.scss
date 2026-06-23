@@ -23,11 +23,11 @@
 
 
 :host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-flex .mat-mdc-floating-label {
-  top: 18px;
+  top: 16px;
 }
 
 :host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
-    --mat-mdc-form-field-label-transform: translateY(-24.75px) scale(var(--mat-mdc-form-field-floating-label-scale, 0.75));
+    --mat-mdc-form-field-label-transform: translateY(-21.75px) scale(var(--mat-mdc-form-field-floating-label-scale, 0.75));
     transform: var(--mat-mdc-form-field-label-transform);
 }
 
