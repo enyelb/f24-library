@@ -1,6 +1,7 @@
 .f24-filter-input-container {
   display: flex;
   align-items: center;
+  position: relative;
   padding: calc(var(--global-margin, 20px) / 4);
 
   gap: calc(var(--global-margin, 20px) / 2);
@@ -38,4 +39,27 @@
 
 :host ::ng-deep .mat-mdc-form-field-subscript-wrapper {
   display: none;
+}
+
+
+.f24-filter-input-dropdown {
+  position: absolute;
+  top: calc(100% + (var(--global-margin, 20px) / 4));
+  left: calc(var(--global-margin, 20px) / 4);
+  right: calc(var(--global-margin, 20px) / 4);
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  max-height: 600px;
+  min-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  padding: calc(var(--global-margin, 20px) / 2);
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

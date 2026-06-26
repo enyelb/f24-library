@@ -1,4 +1,4 @@
-<div class="f24-filter-input-container">
+<div #f24FilterInputContainer class="f24-filter-input-container">
   <!-- FILTER -->
   <mat-form-field class="f24-filter-input" [appearance]="source().appearance()">
     <mat-label>{{ source().label() }}</mat-label>
@@ -6,6 +6,7 @@
       [placeholder]="source().placeholder()" 
       [formControl]="source().form()"
       [type]="source().type()"
+      autocomplete="off"
     >
 
     @if (source().form().value) {
@@ -19,4 +20,11 @@
     }
   </mat-form-field>
   <ng-content></ng-content>
+  @if (dropdawnTemplate(); as dropdawnTemplate) {
+    @if (isOpen()) {
+      <div class="f24-filter-input-dropdown">
+        <ng-container *ngTemplateOutlet=" dropdawnTemplate.template; context: { $implicit: source().formValue() }"/>
+      </div>
+    }
+  }
 </div>

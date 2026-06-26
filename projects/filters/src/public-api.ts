@@ -17,3 +17,5 @@ export * from './lib/components/filter-tabs/filter-tabs';
 
 export * from './lib/components/filter-wrapper/filter-wrapper';
 
+export * from './lib/directives/filter-dropdawn';
+

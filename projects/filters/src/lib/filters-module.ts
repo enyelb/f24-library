@@ -4,6 +4,7 @@ import { F24FilterDateRange } from './components/filter-date-range/filter-date-r
 import { F24FilterInput } from './components/filter-input/filter-input';
 import { F24FilterSelect } from './components/filter-select/filter-select';
 import { F24FilterWrapper } from './components/filter-wrapper/filter-wrapper';
+import { F24FilterDropdawn } from './directives/filter-dropdawn';
 
 /**
  * F24FiltersModule
@@ -14,13 +15,15 @@ import { F24FilterWrapper } from './components/filter-wrapper/filter-wrapper';
     F24FilterInput,
     F24FilterSelect,
     F24FilterDateRange,
-    F24FilterWrapper
+    F24FilterWrapper,
+    F24FilterDropdawn
   ],
   exports: [
     F24FilterInput,
     F24FilterSelect,
     F24FilterDateRange,
-    F24FilterWrapper
+    F24FilterWrapper,
+    F24FilterDropdawn
   ]
 })
 export class F24FiltersModule { }

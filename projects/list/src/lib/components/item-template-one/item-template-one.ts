@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
-import { F24Image, F24Description, F24Currency, F24Icon, F24ItemsOpts } from '@f24/layout';
+import { F24Image, F24Description, F24Currency, F24Icon, F24ItemsOpts, F24IconOpts } from '@f24/layout';
 
 /**
  * F24ItemsOptsTemplateOne
@@ -42,6 +42,10 @@ export class F24ItemTemplateOne {
    */
   readonly subtitle = input<string>();
   /**
+   * icon
+   */
+  readonly icon = input<F24IconOpts>(); 
+  /**
    * items
    */
   readonly items = input<F24ItemsOptsTemplateOne[] | F24ItemsOptsTemplateOne[][]>([]);
@@ -66,7 +70,7 @@ export class F24ItemTemplateOne {
    * quantity
    */
   readonly quantityLabel = input<string>();
-  readonly quantityIcon = input<string>('inventory');
+  readonly quantityIcon = input<string>();
   readonly quantity = input<number | string>();
   /**
    * templates
