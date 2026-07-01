@@ -244,8 +244,8 @@ export class F24FilterDateRangeSource {
       const toDefault = this.toDefault() ?? transformDateEnd(default2 ?? 'MONTHLY');
 
       untracked(() => {
-        fromForm.setValue(fromDefault, { emitEvent: false });
-        toForm.setValue(toDefault, { emitEvent: false });
+        fromForm.setValue(fromDefault, { emitEvent: true });
+        toForm.setValue(toDefault, { emitEvent: true });
       });
     });
   }

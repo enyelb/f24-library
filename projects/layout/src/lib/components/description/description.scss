@@ -50,7 +50,7 @@
 .f24-description-list-item {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 
   span {
     font-size: 10px;
@@ -75,13 +75,11 @@
   }
 }
 
-.f24-description-list-item-text {
-  padding: 2px 5px;
-  border-radius: 20px;
-}
-
 .f24-description-list-item-text-primary {
   background-color: var(--mat-sys-primary, blue);
   color: white;
   font-weight: 500;
+
+  padding: 2px 5px;
+  border-radius: 20px;
 }

@@ -1,16 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
 
-import { F24Description, F24Currency, F24StatusOpts, F24Status, F24Quantity, F24ItemsOpts } from '@f24/layout';
+import { F24Description, F24Currency, F24StatusOpts, F24Quantity, F24ItemsOpts } from '@f24/layout';
 
 /**
- * F24ItemTemplateOne
+ * F24ItemTemplateTwo
  */
 @Component({
   selector: 'f24-item-template-two',
   imports: [
-    NgTemplateOutlet,
-    F24Status, F24Description, F24Currency, F24Quantity,
+    F24Description, F24Currency, F24Quantity,
   ],
   templateUrl: './item-template-two.html',
   styleUrl: './item-template-two.scss',

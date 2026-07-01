@@ -64,7 +64,7 @@
         <!-- CELL VIRTUAL SCROLL -->
         <ng-container *cdkVirtualFor="let row of source().data(); trackBy: source().trackBy();">
           @defer (on immediate) {
-            <tr role="row" class="f24-row">
+            <tr role="row" [class]="{ ...rowClass()(row), 'f24-row': true }">
               <!-- TD CELL SELECT VIRTUAL SCROLL -->
               @for (column of columnSelects(); track column.column()) {
                 <td [class]="['f24-cell', 'f24-cell-' + column.column()]"> 
@@ -94,7 +94,7 @@
         <!-- CELL FOR -->
         @for (row of source().data(); track source().trackBy()($index, row)) {
           @defer (on immediate) {
-            <tr role="row" class="f24-row">
+            <tr role="row" [class]="{ ...rowClass()(row), 'f24-row': true }">
               <!-- TD CELL SELECT FOR -->
               @for (column of columnSelects(); track column.column()) {
                 <td [class]="['f24-cell', 'f24-cell-' + column.column()]"> 

@@ -13,6 +13,7 @@ export interface F24IconOpts {
   name: string;
   tooltip?: string;
   hide?: boolean;
+  color?: string;
 }
 
 /**

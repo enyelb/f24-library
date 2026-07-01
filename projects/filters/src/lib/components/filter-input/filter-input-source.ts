@@ -15,6 +15,7 @@ export interface F24FilterInputSourceParams<Type> {
   id?: string;
   dataSource?: F24DataSource<any>;
   label?: string;
+  tooltip?: string;
   appearance?: 'fill' | 'outline';
   name?: string;
   icon?: string;
@@ -45,6 +46,11 @@ export class F24FilterInputSource<T> {
    */
   protected readonly _label = signalSource('');
   readonly label = this._label.asReadonly();
+  /**
+   * tooltip
+   */
+  protected readonly _tooltip = signalSource(null);
+  readonly tooltip = this._tooltip.asReadonly();
   /**
    * appearance
    * esta es la apariencia del mat input
@@ -165,6 +171,7 @@ export class F24FilterInputSource<T> {
       this._id.setExectUndefined(params?.id ?? params2?.id);
       this._dataSource.setExectUndefined(params?.dataSource ?? params2?.dataSource);
       this._label.setExectUndefined(params?.label ?? params2?.label);
+      this._tooltip.setExectUndefined(params?.tooltip ?? params2?.tooltip)
       this._appearance.setExectUndefined(params?.appearance ?? params2?.appearance);
       this._name.setExectUndefined(params?.name ?? params2?.name);
       this._icon.setExectUndefined(params?.icon ?? params2?.icon);

@@ -42,6 +42,10 @@ export class F24TableStandard<T> {
    */
   readonly color = input('primary');
   /**
+   * rowClass
+   */
+  readonly rowClass = input.required<(row: T) => { [key:string]: boolean }>();
+  /**
    * columns
    */
   readonly columns = input.required<readonly F24Column[]>();

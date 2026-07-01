@@ -94,7 +94,7 @@ export class F24FilterDateRange {
        * efecto para asignar params
        */
       effect(() => {
-        this.source()?.update({
+        this.source().update({
           id: this.id(),
           dataSource: this.dataSource(),
           label: this.label(),

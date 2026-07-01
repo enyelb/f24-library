@@ -23,6 +23,7 @@
         [columnSelects]="columnSelects()" 
         [isVitualScroll]="isVirtualScroll()"
         [color]="color()"
+        [rowClass]="_rowClass()"
       />
     </cdk-virtual-scroll-viewport>
   } @else {
@@ -31,6 +32,7 @@
       [columns]="columns()"
       [columnSelects]="columnSelects()"
       [color]="color()"
+      [rowClass]="_rowClass()"
     />
   }
   

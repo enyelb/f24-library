@@ -1,4 +1,4 @@
-<div #f24FilterInputContainer class="f24-filter-input-container">
+<div #f24FilterInputContainer class="f24-filter-input-container" [matTooltip]="source().tooltip()">
   <!-- FILTER -->
   <mat-form-field class="f24-filter-input" [appearance]="source().appearance()">
     <mat-label>{{ source().label() }}</mat-label>

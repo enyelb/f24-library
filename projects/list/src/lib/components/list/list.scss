@@ -7,7 +7,7 @@ f24-list, .f24-list-content{
 }
 
 .f24-list-content {
-  padding: calc(var(--global-margin, 20px) / 2) 0px;
+  padding: var(--global-margin, 20px) 0px;
 }
 
 .f24-list-item-content {
@@ -268,19 +268,18 @@ f24-list {
 // HEADER FILTERS
 .f24-list-header-content-xs, .f24-list-header-content-s {
   padding: var(--global-margin, 20px) !important;
+  padding-bottom: 0px !important;
   margin-left: 36px;
   --mat-icon-button-state-layer-size: 36px;
 
   .f24-list-options {
-    padding-left: 0px !important;
-    padding-right: 0px !important;
     margin-left: -36px;
   }
 }
 
 .f24-list-header-content {
-  padding: calc(var(--global-margin, 20px) / 4);
-  margin-bottom: calc( (var(--global-margin, 20px) / 2) * -1);
+  padding: var(--global-margin, 20px);
+  padding-bottom: 0px;
 }
 
 .f24-list-header-filter {
@@ -362,7 +361,7 @@ f24-list {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: calc(var(--global-margin, 20px) / 2);
-  padding: calc(var(--global-margin, 20px) / 4) calc(var(--global-margin, 20px) / 2) !important;
+  padding-top: calc(var(--global-margin, 20px) / 2);
 }
 
 // PAGINATION

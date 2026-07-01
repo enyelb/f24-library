@@ -3,7 +3,7 @@
     <p class="f24-description-title">
       {{ title() }}
       @if (icon() && !icon()?.hide) {
-        <f24-icon class="f24-description-title-icon" [icon]="icon()?.name ?? ''" [matTooltip]="icon()?.tooltip ?? ''"/>
+        <f24-icon class="f24-description-title-icon" [icon]="icon()?.name ?? ''" [matTooltip]="icon()?.tooltip ?? ''" [style]="{ color: icon()?.color }"/>
       }
       @for (item of status(); track $index) {
         @if (item.label && !item.hide) {

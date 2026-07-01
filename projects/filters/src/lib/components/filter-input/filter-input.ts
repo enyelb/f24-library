@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 import { F24Icon } from '@f24/layout';
 
@@ -25,8 +26,8 @@ import { F24FilterDropdawn } from '../../directives/filter-dropdawn';
   standalone: true,
   imports: [
     ReactiveFormsModule, NgTemplateOutlet,
-    MatFormFieldModule, MatInputModule, MatButtonModule, MatAutocompleteModule, 
-    F24Icon,
+    MatFormFieldModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatTooltipModule,
+    F24Icon
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -45,6 +46,7 @@ export class F24FilterInput<Type> {
   readonly id = input<F24FilterInputSourceParams<Type>['id']>();
   readonly dataSource = input<F24FilterInputSourceParams<Type>['dataSource']>();
   readonly label = input<F24FilterInputSourceParams<Type>['label']>();
+  readonly tooltip = input<F24FilterInputSourceParams<Type>['tooltip']>();
   readonly appearance = input<F24FilterInputSourceParams<Type>['appearance']>();
   readonly name = input<F24FilterInputSourceParams<Type>['name']>();
   readonly icon = input<F24FilterInputSourceParams<Type>['icon']>();
@@ -77,6 +79,7 @@ export class F24FilterInput<Type> {
         id: this.id(),
         dataSource: this.dataSource(),
         label: this.label(),
+        tooltip: this.tooltip(),
         appearance: this.appearance(),
         name: this.name(),
         icon: this.icon(),

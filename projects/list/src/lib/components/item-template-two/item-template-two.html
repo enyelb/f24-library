@@ -9,11 +9,13 @@
       [items]="items()"
     />
     <div class="f24-item-template-two-details">
-      <div class="f24-item-template-two-quantity">
-        @for (item of quantities(); track `f24-item-template-two-quantity-${$index}`) {
-          <f24-quantity [label]="item.label" [quantity]="item.quantity" [icon]="item.icon ?? 'inventory'"/>
-        }
-      </div>
+      @if(quantities().length > 0) {
+        <div class="f24-item-template-two-quantity">
+          @for (item of quantities(); track `f24-item-template-two-quantity-${$index}`) {
+            <f24-quantity [label]="item.label" [quantity]="item.quantity" [icon]="item.icon ?? 'inventory'"/>
+          }
+        </div>
+      }
       <div class="f24-item-template-two-price">
         @for (item of amounts(); track `f24-item-template-two-price-${$index}`) {
           <f24-currency [ves]="item.ves" [usd]="item.usd" [label]="item.label"/>

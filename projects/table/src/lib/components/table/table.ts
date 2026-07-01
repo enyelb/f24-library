@@ -1,4 +1,4 @@
-import { Component, input, effect, untracked, contentChildren, afterNextRender, ChangeDetectionStrategy, signal, viewChild, ViewEncapsulation, viewChildren, afterRenderEffect } from '@angular/core';
+import { Component, input, effect, untracked, contentChildren, afterNextRender, ChangeDetectionStrategy, signal, viewChild, ViewEncapsulation, viewChildren, afterRenderEffect, computed } from '@angular/core';
 
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 
@@ -39,6 +39,26 @@ export class F24Table<T> {
   readonly params = input(createDataSourceParams<T>());
   readonly source = input(createDataSource(this.params()));
   readonly color = input('primary');
+  readonly rowClass = input<(row: T) => string | string[] | { [key:string]: boolean }>();
+  protected _rowClass = computed(() => {
+    const rowClass = this.rowClass();
+    return (row: T) => {
+      if (!rowClass) {
+        return {};
+      }
+      const rowClassFormat = rowClass(row);
+      if (typeof rowClassFormat === 'object' && !(rowClassFormat instanceof Array)) {
+        return rowClassFormat;
+      }
+      const newRowClass: { [key:string]: boolean } = {};
+      if (rowClassFormat instanceof Array) {
+        rowClassFormat.forEach(r => newRowClass[r] = true);
+      } else if (typeof rowClassFormat === 'string') {
+        newRowClass[rowClassFormat] = true;
+      }
+      return newRowClass;
+    }
+  })
   /**
    * view childs
    */

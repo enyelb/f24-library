@@ -44,8 +44,9 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 10px;
+  width: 100%;
 }
 
 .f24-item-template-two-quantity {
@@ -55,6 +56,7 @@
   justify-content: center;
   gap: 10px;
   font-size: 15px;
+  width: 100%;
 
   f24-icon {
     height: 24px;
