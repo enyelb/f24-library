@@ -1,0 +1,2 @@
+patchedDependencies:
+  '@ng-doc/builder': patches/@ng-doc__builder.patch

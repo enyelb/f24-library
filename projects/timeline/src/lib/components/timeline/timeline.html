@@ -1,0 +1,72 @@
+@let hasLeft = source().hasLeft();
+@let hasRight = source().hasRight();
+@let isLeft = hasLeft && !hasRight;
+@let isRight = hasRight && !hasLeft;
+@let isAlternate = hasRight && hasLeft;
+
+<ng-template #templateTimelineElement let-item="item" let-index="index">
+  <div class="f24-timeline-element">
+    <div class="f24-timeline-triangle"></div>
+
+    <div class="f24-timeline-content">
+      <div class="f24-timeline-date">
+         @for (format of item.format; track $index) {
+            <div [class]="[`f24-timeline-date-format`, `f24-timeline-date-${$index}`]">
+              {{item.date | f24date: format}}
+            </div>
+          }
+      </div>
+       
+      <div class="f24-timeline-divider"></div>
+      <div class="f24-timeline-title">{{ item.title }}</div>
+      @if (item.subtitle; as subtitle) {
+        <div class="f24-timeline-subtitle">{{ subtitle }}</div>
+      }
+    </div>
+
+    <div class="f24-timeline-point"></div>
+
+    <div class="f24-timeline-icon-content">
+      <div class="f24-timeline-icon">
+        <div class="f24-timeline-internal-icon">
+          @if(item.icon; as icon) {
+            <f24-icon [icon]="icon"/>
+          } @else {
+            {{ index + 1 }}
+          }
+        </div>
+      </div>  
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #templateTimelineCenter>
+  <div class="f24-timeline-center">
+    <div class="f24-timeline-line">
+      <div class="f24-timeline-circle">
+        <div class="f24-timeline-internal-circle"> 
+        </div>  
+      </div>  
+    </div>  
+  </div>
+</ng-template>
+
+<section [class]="{'f24-timeline-container': true, 'vertical': true, 'left': isLeft, 'right': isRight, 'alternate': isAlternate } " [style]="{'--timeline-width': `${source().lineSize()}px` }">
+  @for (item of source().items(); track item.id) {
+    <div [class]="['f24-timeline-item', item.direction]" [style]="{ zIndex: 1000 - $index, '--timeline-color': item.color}">
+      @if (item.direction == 'left') {
+        <ng-container [ngTemplateOutlet]="templateTimelineElement" [ngTemplateOutletContext]="{ item: item, index: $index }" />
+        <ng-container [ngTemplateOutlet]="templateTimelineCenter" />
+        @if (isAlternate) {
+          <div class="f24-timeline-empty"></div>
+        }
+      } @else {
+        @if (isAlternate) {
+          <div class="f24-timeline-empty"></div>
+        }
+        <ng-container [ngTemplateOutlet]="templateTimelineCenter" />
+        <ng-container [ngTemplateOutlet]="templateTimelineElement" [ngTemplateOutletContext]="{ item: item, index: $index }" />
+      }
+    </div>
+  }
+</section>

@@ -15,7 +15,7 @@
       "prefix": "f24",
       "architect": {
         "build": {
-          "builder": "@angular/build:ng-packagr",
+          "builder": "@ng-doc/builder:application",
           "configurations": {
             "production": {
               "tsConfig": "projects/alerts/tsconfig.lib.prod.json"
@@ -272,7 +272,7 @@
       "projectType": "library",
       "root": "projects/core",
       "sourceRoot": "projects/core/src",
-      "prefix": "lib",
+      "prefix": "f24",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
@@ -369,6 +369,136 @@
           "options": {
             "tsConfig": "projects/splide/tsconfig.spec.json"
           }
+        }
+      }
+    },
+    "timeline": {
+      "projectType": "library",
+      "root": "projects/timeline",
+      "sourceRoot": "projects/timeline/src",
+      "prefix": "f24",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/timeline/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/timeline/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/timeline/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "docs": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@ng-doc/builder:page": {
+          "path": "projects/docs/src/app"
+        },
+        "@ng-doc/builder:api": {
+          "path": "projects/docs/src/app"
+        }
+      },
+      "root": "projects/docs",
+      "sourceRoot": "projects/docs/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@ng-doc/builder:application",
+          "options": {
+            "browser": "projects/docs/src/main.ts",
+            "tsConfig": "projects/docs/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/docs/ng-doc/docs/assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/docs/public"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@ng-doc/app/assets",
+                "output": "assets/ng-doc/app"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@ng-doc/ui-kit/assets",
+                "output": "assets/ng-doc/ui-kit"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/docs/ng-doc/docs/assets",
+                "output": "assets/ng-doc"
+              },
+            ],
+            "styles": [
+              "projects/docs/src/styles.scss",
+              "node_modules/@ng-doc/app/styles/global.css",
+              "node_modules/@ng-doc/app/styles/themes/dark.css"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          /*"builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "docs:build:production"
+            },
+            "development": {
+              "buildTarget": "docs:build:development"
+            }
+          },*/
+          "builder": "@ng-doc/builder:dev-server",
+          "configurations": {
+            "development": {
+              "buildTarget": "docs:build:development",
+              "ngDoc": {
+                "config": "projects/docs/src/ng-doc.config.ts"
+              }
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test"
         }
       }
     }

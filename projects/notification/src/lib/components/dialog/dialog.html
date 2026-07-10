@@ -11,6 +11,9 @@
   </div>
   <mat-dialog-content>
     <ng-content></ng-content>
+    @if (templateRef(); as templateRef) {
+      <ng-container [ngTemplateOutlet]="templateRef"></ng-container>
+    }
   </mat-dialog-content>
   @if (accept() && cancel()) {
     <mat-dialog-actions>

@@ -3,7 +3,8 @@
   "version": "21.0.03",
   "peerDependencies": {
     "@angular/common": "^21.0.03",
-    "@angular/core": "^21.0.03"
+    "@angular/core": "^21.0.03",
+    "@angular/material": "^21.2.5"
   },
   "dependencies": {
     "tslib": "^2.3.0"

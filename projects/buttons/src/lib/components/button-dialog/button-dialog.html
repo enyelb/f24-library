@@ -1,0 +1,18 @@
+@let isIcon = source().icon() && !source().label();
+
+@if (isIcon) {
+  <button matIconButton (click)="open()">
+   <f24-icon [icon]="source().icon()"/>
+  </button>
+} @else {
+  <button matButton="elevated">
+    {{source().label()}}
+    @if (source().icon(); as icon) {
+      <f24-icon [icon]="icon"/>
+    }
+  </button>
+}
+
+<f24-dialog #dialog [size]="source().dialogSize()" [title]="source().dialogTitle()" [templateRef]="dialogTemplate()">
+  <ng-content></ng-content>
+</f24-dialog>

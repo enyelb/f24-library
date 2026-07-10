@@ -19,9 +19,11 @@ export class F24DatePipe implements PipeTransform {
    * @param format 
    * @returns 
    */
-  transform(value: string | undefined, format: string = 'dd/MM/yyyy'): string {
+  transform(value: string | Date | undefined, format: string = 'dd/MM/yyyy'): string {
     if (value) {
-      if (!['N/A', '0', 0, null, 'null'].includes(value)) {
+      if (value instanceof Date) {
+        return dateFormat(value, format, { locale: es });
+      } else if (!['N/A', '0', 0, null, 'null'].includes(value)) {
         return dateFormat(parseISO(value.replaceAll('/', '-')), format, { locale: es });
       } else {
         return 'N/A';

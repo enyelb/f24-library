@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,7 +14,7 @@ import { DialogService } from '../../services/dialog-service';
  */
 @Component({
   selector: 'f24-dialog',
-  imports: [MatDialogModule, MatButtonModule, MatIconModule],
+  imports: [NgTemplateOutlet, MatDialogModule, MatButtonModule, MatIconModule],
   templateUrl: './dialog.html',
   styleUrl: './dialog.scss',
   encapsulation: ViewEncapsulation.None,
@@ -36,6 +37,7 @@ export class F24Dialog<Data> {
   readonly onAccept = input<() => void>();
   readonly onCancel = input<() => void>();
   readonly size = input<'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl'>('xxl');
+  readonly templateRef = input<TemplateRef<any>>();
   /**
    * views
    */
