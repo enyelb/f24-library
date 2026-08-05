@@ -3,14 +3,14 @@ import { catchError, Observable, of, switchMap, tap, throwError } from 'rxjs';
 
 import { SnackService } from '@f24/notification';
 
-import { IdleService } from './idle-service';
-import { TokenRefreshService } from './token-refresh-service';
+import { F24IdleService } from './idle-service';
+import { F24TokenRefreshService } from './token-refresh-service';
 import { Router } from '@angular/router';
 
 /**
- * BaseAuthServiceRequest
+ * F24BaseAuthServiceRequest
  */
-export interface BaseAuthServiceRequest<Authentication, Authorized, Token> {
+export interface F24BaseAuthServiceRequest<Authentication, Authorized, Token> {
   login: (params: Authentication) => Observable<Token>;
   refresh: () => Observable<Token>;
   me: () => Observable<Authorized>;
@@ -24,12 +24,12 @@ export interface BaseAuthServiceRequest<Authentication, Authorized, Token> {
 /**
  * BaseAuthService
  */
-export abstract class BaseAuthService<Authentication, Authorized, Token> {
+export abstract class F24BaseAuthService<Authentication, Authorized, Token> {
   /**
    * services
    */
-  private readonly idle = inject(IdleService);
-  private readonly tokenRefresh = inject(TokenRefreshService);
+  private readonly idle = inject(F24IdleService);
+  private readonly tokenRefresh = inject(F24TokenRefreshService);
   private readonly snack = inject(SnackService);
   private readonly router = inject(Router);
   /**
@@ -66,12 +66,12 @@ export abstract class BaseAuthService<Authentication, Authorized, Token> {
    * 
    */
   protected readonly _isRefreshing = signal<boolean>(false);
-  protected readonly _request: BaseAuthServiceRequest<Authentication, Authorized, Token>;
+  protected readonly _request: F24BaseAuthServiceRequest<Authentication, Authorized, Token>;
   /**
    * constructor
    * @param request
    */
-  constructor(request: BaseAuthServiceRequest<Authentication, Authorized, Token>) {
+  constructor(request: F24BaseAuthServiceRequest<Authentication, Authorized, Token>) {
     this._request = request;
     /**
      * obtenemos el token del localStorage si existe y lo seteamos en la señal _token

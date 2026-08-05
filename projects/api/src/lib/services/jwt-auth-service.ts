@@ -1,5 +1,5 @@
 
-import { BaseAuthService, BaseAuthServiceRequest } from './base-auth-service';
+import { F24BaseAuthService, F24BaseAuthServiceRequest } from './base-auth-service';
 
 /**
  * Authentication
@@ -20,13 +20,13 @@ interface Token {
 /**
  * JWTAuthServiceRequest
  */
-interface JWTAuthServiceRequest<Authorized> extends 
-  Omit<BaseAuthServiceRequest<Authentication, Authorized, Token>, 'expiresAt' | 'headers'> {}
+interface F24JWTAuthServiceRequest<Authorized> extends 
+  Omit<F24BaseAuthServiceRequest<Authentication, Authorized, Token>, 'expiresAt' | 'headers'> {}
 
 /**
  * JWTAuthService
  */
-export abstract class JWTAuthService<Authorized> extends BaseAuthService<Authentication, Authorized, Token> {
+export abstract class F24JWTAuthService<Authorized> extends F24BaseAuthService<Authentication, Authorized, Token> {
   /**
    * type
    */
@@ -35,7 +35,7 @@ export abstract class JWTAuthService<Authorized> extends BaseAuthService<Authent
    * constructor
    * @param request
    */
-  constructor(request: JWTAuthServiceRequest<Authorized>) {
+  constructor(request: F24JWTAuthServiceRequest<Authorized>) {
     super({
       ...request, 
       expiresAt: (token: Token) => {

@@ -1,12 +1,12 @@
 import { Injectable, signal } from '@angular/core';
 
 /**
- * TokenRefreshService
+ * F24TokenRefreshService
  */
 @Injectable({ 
   providedIn: 'root' 
 })
-export class TokenRefreshService {
+export class F24TokenRefreshService {
   /**
    * Temporizador para el chequeo de expiración del token.
    */

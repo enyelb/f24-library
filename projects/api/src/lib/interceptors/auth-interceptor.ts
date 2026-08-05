@@ -3,13 +3,13 @@ import { inject } from '@angular/core';
 
 import { catchError, throwError } from 'rxjs';
 
-import { ManagerAuthService } from '../services/manager-auth-service';
+import { F24ManagerAuthService } from '../services/manager-auth-service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   /**
    * services
    */
-  const manager = inject(ManagerAuthService);
+  const manager = inject(F24ManagerAuthService);
   const service = manager.service();
   /**
    * salir si no existe el auth service

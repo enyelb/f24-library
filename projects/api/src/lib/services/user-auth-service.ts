@@ -1,17 +1,17 @@
 import { effect, inject, signal, untracked } from '@angular/core';
 
-import { ManagerAuthService } from './manager-auth-service';
-import { BaseAuthService } from './base-auth-service';
+import { F24ManagerAuthService } from './manager-auth-service';
+import { F24BaseAuthService } from './base-auth-service';
 import { of } from 'rxjs';
 
 /**
- * UserAuthService
+ * F24UserAuthService
  */
-export abstract class UserAuthService<Authorized> {
+export abstract class F24UserAuthService<Authorized> {
   /**
    * 
    */
-  protected readonly manager = inject(ManagerAuthService);  
+  protected readonly manager = inject(F24ManagerAuthService);  
   /**
    * authorized
    */
@@ -58,7 +58,7 @@ export abstract class UserAuthService<Authorized> {
    * @returns 
    */
   login<Authentication, Token>(params: Authentication) {
-    const service: BaseAuthService<Authentication, Authorized, Token>  | undefined = this.manager.service();
+    const service: F24BaseAuthService<Authentication, Authorized, Token>  | undefined = this.manager.service();
     if (service) {
       return service.login(params);
     }
@@ -69,7 +69,7 @@ export abstract class UserAuthService<Authorized> {
    * @returns 
    */
   logout<Authentication, Token>() {
-    const service: BaseAuthService<Authentication, Authorized, Token>  | undefined = this.manager.service();
+    const service: F24BaseAuthService<Authentication, Authorized, Token>  | undefined = this.manager.service();
     if (service) {
       return service.logout();
     }

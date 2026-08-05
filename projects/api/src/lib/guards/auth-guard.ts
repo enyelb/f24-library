@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 
-import { ManagerAuthService } from '../services/manager-auth-service';
+import { F24ManagerAuthService } from '../services/manager-auth-service';
 
 /**
  * authGuard
@@ -10,7 +10,7 @@ import { ManagerAuthService } from '../services/manager-auth-service';
  * @returns 
  */
 export const authGuard: CanActivateFn = (route, state) => {
-  const manager = inject(ManagerAuthService);
+  const manager = inject(F24ManagerAuthService);
   const router = inject(Router);
 
   const service = manager.service();

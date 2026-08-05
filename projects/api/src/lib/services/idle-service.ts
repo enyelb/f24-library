@@ -8,7 +8,7 @@ import { Injectable, signal } from '@angular/core';
 @Injectable({ 
   providedIn: 'root' 
 })
-export class IdleService {
+export class F24IdleService {
   /**
    * Temporizador para el chequeo actividad del usuario.
    */
