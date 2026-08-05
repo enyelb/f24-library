@@ -1,3 +1,15 @@
-<span class="status" [style]="{ color: color(), background: background() }" [matTooltip]="tooltip()">
-  {{ status() }}
-</span>
+@if (template(); as template) {
+  <span class="f24-status" [style]="{ color: color(), background: background() }" [matTooltip]="tooltip()" #popoverTrigger="mtxPopoverTrigger" mtxPopoverTriggerOn="hover" [mtxPopoverTriggerFor]="popover">
+    {{ status() }}
+  </span>
+  
+  <mtx-popover #popover="mtxPopover" [enterDelay]="500" [leaveDelay]="500" [position]="['above', 'below']">
+    <ng-container *ngTemplateOutlet="template"></ng-container> 
+  </mtx-popover>
+} @else {
+  <span class="f24-status" [style]="{ color: color(), background: background() }" [matTooltip]="tooltip()">
+    {{ status() }}
+  </span>
+}
+
+

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,7 +21,8 @@ import {
     ReactiveFormsModule, 
     MatFormFieldModule, MtxSelectModule
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 export class F24FilterSelect<Type, Item> {
   /**

@@ -1,17 +1,21 @@
 @let isIcon = source().icon() && !source().label();
+@let iconSize = source().iconSize();
+@let layerSize = source().iconSize() + (384 / source().iconSize()); 
 
-@if (isIcon) {
-  <button matIconButton (click)="open()">
-   <f24-icon [icon]="source().icon()"/>
-  </button>
-} @else {
-  <button matButton="elevated">
-    {{source().label()}}
-    @if (source().icon(); as icon) {
-      <f24-icon [icon]="icon"/>
-    }
-  </button>
-}
+<div [style]="{'--mat-icon-button-state-layer-size': `${layerSize}px`, '--mat-icon-button-icon-size': `${iconSize}px`}">
+  @if (isIcon) {
+    <button matIconButton (click)="open()">
+    <f24-icon [icon]="source().icon()" [size]="source().iconSize()"/>
+    </button>
+  } @else {
+    <button matButton="elevated" (click)="open()">
+      {{source().label()}}
+      @if (source().icon(); as icon) {
+        <f24-icon [icon]="icon" [size]="source().iconSize()"/>
+      }
+    </button>
+  }
+</div>
 
 <f24-dialog #dialog [size]="source().dialogSize()" [title]="source().dialogTitle()" [templateRef]="dialogTemplate()">
   <ng-content></ng-content>

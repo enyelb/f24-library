@@ -2,10 +2,21 @@ f24-item-template-one {
   height: 100%;
 }
 
+.f24-item-template-one-header, .f24-item-template-one-footer {
+  display: flex;
+  gap: calc(var(--global-margin, 20px) / 2);
+  width: 100%;
+}
+
+.f24-item-template-one-footer {
+  align-items: center;
+}
+    
 .f24-item-template-one {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  gap: 10px;
+  gap: calc(var(--global-margin, 20px) / 2);
   height: 100%;
 }
 
@@ -71,6 +82,7 @@ f24-item-template-one {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
+  width: 100%;
 }
 
 .f24-item-template-one-quantity {
@@ -96,7 +108,7 @@ f24-item-template-one {
 
 .f24-item-template-one-post-description {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   max-height: 60px;
   align-items: flex-end;
 }

@@ -6,6 +6,7 @@ import { F24SplideSource, F24SplideSourceParams } from "../splide/splide-source"
 export interface F24SplideTextItem {
   id: string | number;
   text: string;
+  click?: () => void
 }
 
 /**

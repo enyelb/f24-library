@@ -15,10 +15,14 @@
       <ng-container [ngTemplateOutlet]="templateRef"></ng-container>
     }
   </mat-dialog-content>
-  @if (accept() && cancel()) {
+  @if (accept() || cancel()) {
     <mat-dialog-actions>
-      <button matButton (click)="onCancel(); close()">{{ cancel() }}</button>
-      <button matButton (click)="onAccept(); close()" cdkFocusInitial>{{ accept() }}</button>
+      @if (cancel()) {
+        <button matButton (click)="onCancel(); close()">{{ cancel() }}</button>
+      }
+      @if (accept()) {
+        <button matButton (click)="onAccept(); close()" cdkFocusInitial>{{ accept() }}</button>
+      }
     </mat-dialog-actions>
   }
 </ng-template>

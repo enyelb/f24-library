@@ -183,17 +183,22 @@ export class F24FilterDateRangeSource {
       const toId = this.id() + '_to';
       const toForm = this.toForm();
 
-      untracked(() => {
-        const dataSource = this.dataSource();
-        const filtersOLd = dataSource?.filters();
+      const dataSource = this.dataSource();
+      const filtersOLd = dataSource?.filters();
 
+      untracked(() => {
         const fromFilterOld = filtersOLd && fromName in filtersOLd ? filtersOLd[fromName] : null;
         const fromLocal = FilterStorage.get(fromId);
-        fromForm.setValue(fromFilterOld ?? fromLocal, { emitEvent: !fromFilterOld });
+        const fromCurrentValue = toForm.value;
+        const fromEmitEvent = (fromFilterOld != fromCurrentValue) || (!fromFilterOld && fromLocal);
+        fromForm.setValue(fromFilterOld ?? fromLocal, { emitEvent: fromEmitEvent });
 
         const toFilterOld = filtersOLd && toName in filtersOLd ? filtersOLd[toName] : null;
         const toLocal = FilterStorage.get(toId);
-        toForm.setValue(toFilterOld ?? toLocal, { emitEvent: !toFilterOld });
+        const toCurrentValue = toForm.value;
+        const toEmitEvent = (toFilterOld != toCurrentValue) || (!toFilterOld && toLocal);
+
+        toForm.setValue(toFilterOld ?? toLocal, { emitEvent: toEmitEvent });
       });
     });
     /**
@@ -204,6 +209,22 @@ export class F24FilterDateRangeSource {
       const fromValue = this.fromFormValue();
 
       untracked(() => {
+
+        /**
+         * vaidar si realmente cambio el valor
+         */
+        const fromName = this.fromName();
+        const toName = this.toName();
+        const dataSource = this.dataSource();
+        const filtersOLd = dataSource?.filters();
+
+        const fromFilterOld = filtersOLd && fromName in filtersOLd ? filtersOLd[fromName] : null;
+        const toFilterOld = filtersOLd && toName in filtersOLd ? filtersOLd[toName] : null;
+
+        if (fromFilterOld == fromValue && toFilterOld == toValue) {
+          return;
+        }
+
         const toChange = this.toChange();
         const fromChange = this.fromChange();
         if (toChange) {
@@ -220,9 +241,6 @@ export class F24FilterDateRangeSource {
         /**
          * si la variable name y datasource existen, setear el valor del filtro
          */
-        const fromName = this.fromName();
-        const toName = this.toName();
-        const dataSource = this.dataSource();
         if (dataSource && fromName && toName) {
           dataSource.update({
             filters: { 

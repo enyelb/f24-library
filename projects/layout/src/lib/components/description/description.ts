@@ -1,5 +1,5 @@
 
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -24,6 +24,8 @@ export interface F24StatusOpts {
   color?: string;
   background?: string;
   hide?: boolean;
+  tooltip?: string;
+  template?: TemplateRef<any>
 }
 
 /**

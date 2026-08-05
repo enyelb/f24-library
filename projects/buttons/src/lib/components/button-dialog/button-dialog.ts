@@ -28,6 +28,7 @@ export class F24ButtonDialog {
   readonly label = input<F24ButtonDialogSourceParams['label']>();
   readonly tooltip = input<F24ButtonDialogSourceParams['tooltip']>();
   readonly icon = input<F24ButtonDialogSourceParams['icon']>();
+  readonly iconSize = input<F24ButtonDialogSourceParams['iconSize']>();
   readonly color = input<F24ButtonDialogSourceParams['color']>();
   readonly dialogSize = input<F24ButtonDialogSourceParams['dialogSize']>();
   readonly dialogTitle = input<F24ButtonDialogSourceParams['dialogTitle']>();
@@ -57,6 +58,7 @@ export class F24ButtonDialog {
         label: this.label(),
         tooltip: this.tooltip(),
         icon: this.icon(),
+        iconSize: this.iconSize(),
         color: this.color(),
         dialogSize: this.dialogSize(),
         dialogTitle: this.dialogTitle()

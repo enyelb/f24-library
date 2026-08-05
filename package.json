@@ -3,8 +3,12 @@
   "version": "21.2.5",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4600",
+    "start": "ng serve",
+    "start:ct": "ng serve ct --port 4300",
+    "start:docs": "ng serve docs --port 4600",
     "build": "ng build",
+    "build:ct": "ng build ct",
+    "build:docs": "ng build docs",
     "build:all": "ng build alerts && ng build api && ng build data  && ng build filters && ng build forms && ng build functions && ng build layout && ng build notification",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

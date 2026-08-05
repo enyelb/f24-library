@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
 
+import { MatTooltip } from "@angular/material/tooltip";
+
 import { F24FunctionsModule  } from '@f24/functions';
 
 import { F24Icon } from '../icon/icon';
@@ -12,18 +14,20 @@ import { F24Icon } from '../icon/icon';
   templateUrl: './quantity.html',
   styleUrl: './quantity.scss',
   standalone: true,
-  imports: [F24FunctionsModule, F24Icon],
+  imports: [
+    MatTooltip,
+    F24FunctionsModule, F24Icon
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class F24Quantity {
   /**
-   * label
+   * inputs
    */
   readonly label = input<string>();
-  /**
-   * quantity
-   */
   readonly quantity = input.required<number | string | undefined>();
   readonly icon = input<string>();
+  readonly class = input<string>();
+  readonly tooltip = input<string>();
 }

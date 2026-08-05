@@ -22,3 +22,4 @@ export * from './lib/directives/row-directive';
 export * from './lib/directives/responsive-class-directive';
 
 export * from './lib/services/layout-service';
+export * from './lib/services/icon-service';

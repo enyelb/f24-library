@@ -65,7 +65,7 @@
   }
   .f24-timeline-content {    
     width: stretch;
-    padding: 0px 10px;
+    padding: 0px min(calc(var(--timeline-width) * 2), 10px);
   }
   .f24-timeline-line {
     background-color: var(--timeline-color);
@@ -119,7 +119,7 @@
     font-weight: 500;
   }
   .f24-timeline-divider {
-    border: 2px dashed var(--timeline-secundary-color);
+    border: min(calc(var(--timeline-width) / 2), 2px) dashed var(--timeline-secundary-color);
     opacity: 0.4;
   }
   .f24-timeline-title {

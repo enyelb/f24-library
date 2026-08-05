@@ -4,3 +4,6 @@
 
 export * from './lib/components/timeline/timeline';
 export * from './lib/components/timeline/timeline-source';
+
+export * from './lib/components/timeline-basic/timeline-basic';
+export * from './lib/components/timeline-basic/timeline-basic-source';

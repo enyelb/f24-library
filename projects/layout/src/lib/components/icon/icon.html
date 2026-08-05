@@ -1,7 +1,11 @@
-@let styles = (size() ?? 0) > 0 ? { width: `${size()}px`, height: `${size()}px`, fontSize: `${size()}px` } : {}; 
+@let styles = { width: `${size()}px`, height: `${size()}px`, fontSize: `${size()}px`, '--mat-icon-button-icon-size': `${size()}px` }; 
 
-@if (isMaterialIcon()) {
-  <mat-icon (error)="isMaterialIcon.set(false)" [style]="styles">{{ icon() }}</mat-icon>
-} @else if (isSVGIcon()) {
-  <mat-icon (error)="isSVGIcon.set(false)" [svgIcon]="icon()" [style]="styles"></mat-icon>
+@if (config(); as config) {
+  @if (config.type === 'svg') {
+    <mat-icon [svgIcon]="icon()" [style]="styles"></mat-icon>
+  } @else if (config.type === 'gif') {
+    <img [style]="{...styles, 'border-radius': `${size() / 6 }px`, overflow: 'hidden'}" [src]="config.url" alt="">
+  }
+} @else {
+  <mat-icon [style]="styles">{{ icon() }}</mat-icon>
 }

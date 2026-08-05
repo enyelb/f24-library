@@ -1,0 +1,39 @@
+<section [class]="{'f24-timeline-basic-container': true, 'vertical': true } " [style]="{'--timeline-width': `${source().lineSize()}px` }">
+  @for (item of source().items(); track item.id) {
+    <div class="f24-timeline-basic-item" [style]="{ zIndex: 1000 - $index, '--timeline-color': item.color}">
+      <div class="f24-timeline-basic-element">
+        <div class="f24-timeline-basic-content">
+          <div class="f24-timeline-basic-date">
+            @if (item.date) {
+              <div class="f24-timeline-basic-date-format f24-timeline-basic-date-0">
+                @if (item.isPrimaryDay) {
+                  {{ item.date | f24date: 'iiii, dd/MM/yyyy' }}
+                }
+              </div>  
+              <div class="f24-timeline-basic-date-format f24-timeline-basic-date-1">
+                {{ item.date | f24date: 'hh:mm a' }}
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="f24-timeline-basic-center">
+        <div class="f24-timeline-basic-line">
+          <div class="f24-timeline-basic-circle">
+            <div class="f24-timeline-basic-internal-circle"> 
+              <f24-icon [icon]="item.date ? 'done': 'access_time'" [size]="20"/>
+            </div>  
+          </div>  
+        </div>  
+      </div>
+      <div class="f24-timeline-basic-element">
+        <div class="f24-timeline-basic-content">
+          <div class="f24-timeline-basic-title">{{ item.title }}</div>
+          @if (item.subtitle; as subtitle) {
+            <div class="f24-timeline-basic-subtitle">{{ subtitle }}</div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</section>

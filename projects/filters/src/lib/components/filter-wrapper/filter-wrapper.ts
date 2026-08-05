@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 
 /**
  * F24FilterWrapper
@@ -9,7 +9,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   templateUrl: 'filter-wrapper.html',
   standalone: true,
   imports: [],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 export class F24FilterWrapper {
 

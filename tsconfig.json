@@ -130,6 +130,12 @@
     },
     {
       "path": "./projects/docs/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/ct/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/ct/tsconfig.spec.json"
     }
   ]
 }

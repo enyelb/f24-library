@@ -9,7 +9,7 @@ export interface F24TimelineItemSourceParams {
   id: string;
   title: string;
   subtitle?: string;
-  date: string | Date;
+  date?: string | Date;
   tooltip?: string;
   icon?: string;
   direction?: 'left' | 'right';
@@ -40,9 +40,9 @@ export class F24TimelineSource {
     const items = this._items.value();
     const globalDirection = this.direction();
     return items
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      //.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       .map((item, index) => {
-        const date = new Date(item?.date);
+        const date = item?.date ? new Date(item?.date) : undefined;
         const color = item?.color ?? this.color();
         const format = item?.format instanceof Array ? item.format : item.format ? [item.format] : this.format();
         const direction = item?.direction ?? (globalDirection === 'alternate' ? (index % 2 === 0 ? 'left' : 'right') : globalDirection);

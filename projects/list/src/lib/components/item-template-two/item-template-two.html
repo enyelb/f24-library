@@ -1,6 +1,4 @@
 <article class="f24-item-template-two">
-  
-  
   <div class="f24-item-template-two-description">
     <f24-description 
       [title]="title()"
@@ -8,19 +6,24 @@
       [status]="status()"
       [items]="items()"
     />
-    <div class="f24-item-template-two-details">
-      @if(quantities().length > 0) {
-        <div class="f24-item-template-two-quantity">
-          @for (item of quantities(); track `f24-item-template-two-quantity-${$index}`) {
-            <f24-quantity [label]="item.label" [quantity]="item.quantity" [icon]="item.icon ?? 'inventory'"/>
-          }
-        </div>
-      }
-      <div class="f24-item-template-two-price">
-        @for (item of amounts(); track `f24-item-template-two-price-${$index}`) {
-          <f24-currency [ves]="item.ves" [usd]="item.usd" [label]="item.label"/>
+    @if (templatePostDecription(); as templatePostDecription) {
+      <div class="f24-item-template-one-post-description">
+        <ng-container *ngTemplateOutlet="templatePostDecription"></ng-container>    
+      </div>
+    }
+  </div>
+  <div class="f24-item-template-two-details">
+    @if(quantities().length > 0) {
+      <div class="f24-item-template-two-quantity">
+        @for (item of quantities(); track `f24-item-template-two-quantity-${$index}`) {
+          <f24-quantity [label]="item.label" [quantity]="item.quantity" [icon]="item.icon ?? 'inventory'"/>
         }
       </div>
+    }
+    <div class="f24-item-template-two-price">
+      @for (item of amounts(); track `f24-item-template-two-price-${$index}`) {
+        <f24-currency [ves]="item.ves" [usd]="item.usd" [label]="item.label"/>
+      }
     </div>
   </div>
 </article>

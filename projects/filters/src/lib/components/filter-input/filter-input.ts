@@ -1,5 +1,5 @@
 
-import { ChangeDetectionStrategy, Component, contentChild, effect, ElementRef, input, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, contentChild, effect, ElementRef, input, signal, viewChild, ViewEncapsulation } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -30,6 +30,7 @@ import { F24FilterDropdawn } from '../../directives/filter-dropdawn';
     F24Icon
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '(document:click)': 'clickOutside($event)'
   }

@@ -7,7 +7,7 @@
       }
       @for (item of status(); track $index) {
         @if (item.label && !item.hide) {
-          <f24-status class="f24-description-title-item" [status]="item.label", [color]="item.color ?? 'black'" [background]="item.background ?? 'white'"/>
+          <f24-status class="f24-description-title-item" [status]="item.label" [template]="item.template" [tooltip]="item.tooltip" [color]="item.color ?? 'black'" [background]="item.background ?? 'white'"/>
         }
       }
     </p>
@@ -25,7 +25,7 @@
                 <span>{{ item.label }}</span>
               }
               @if (item.icon) {
-                <f24-icon [icon]="item.icon" />
+                <f24-icon [icon]="item.icon" [size]="13"/>
               }
               <p [class]="[
                 'f24-description-list-item-text',

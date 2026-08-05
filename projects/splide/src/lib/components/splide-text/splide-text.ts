@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, input, ViewEncaps
 import { F24Splide } from '../splide/splide';
 import { F24SplideItemDirective } from '../../directives/splide-item';
 
-import { createSplideTextSource, createSplideTextSourceParams, F24SplideTextSourceParams } from './splide-text-source';
+import { createSplideTextSource, createSplideTextSourceParams, F24SplideTextItem, F24SplideTextSourceParams } from './splide-text-source';
 
 /**
  * F24SplideText
@@ -79,5 +79,14 @@ export class F24SplideText {
         autoScroll: this.autoScroll()
       }, this.params());
     });
+  }
+
+  /**
+   * click
+   */
+  click(item: F24SplideTextItem): void {
+    if (item.click) {
+      item.click();
+    }
   }
 }

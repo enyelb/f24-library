@@ -1,4 +1,9 @@
-
+.f24-quantity {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+}
 
 .f24-quantity-label {
   font-weight: 500;
@@ -8,11 +13,6 @@
 }
 
 .f24-quantity-content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 5px;
-
   span {
     font-weight: 500;
   }

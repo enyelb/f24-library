@@ -9,6 +9,7 @@ export interface F24ButtonDialogSourceParams {
   label?: string;
   tooltip?: string;
   icon?: string;
+  iconSize?: number;
   color?: string;
   dialogSize?: "xs" | "s" | "m" | "l" | "xl" | "xxl";
   dialogTitle?: string;
@@ -35,6 +36,11 @@ export class F24ButtonDialogSource {
    */
   protected readonly _icon = signalSource<string>('');
   readonly icon = this._icon.asReadonly();
+  /**
+   * 
+   */
+  protected readonly _iconSize = signalSource<number>(24);
+  readonly iconSize = this._iconSize.asReadonly();
   /**
    * color
    * este es el label del mat input
@@ -66,6 +72,7 @@ export class F24ButtonDialogSource {
         this._label.setExectUndefined(params?.label ?? params2?.label);
         this._tooltip.setExectUndefined(params?.tooltip ?? params2?.tooltip);
         this._icon.setExectUndefined(params?.icon ?? params2?.icon);
+        this._iconSize.setExectUndefined(params?.iconSize ?? params2?.iconSize);
         this._color.setExectUndefined(params?.color ?? params2?.color);
         this._dialogSize.setExectUndefined(params?.dialogSize ?? params2?.dialogSize);
         this._dialogTitle.setExectUndefined(params?.dialogTitle ?? params2?.dialogTitle);

@@ -10,11 +10,13 @@
 
     <div class="f24-timeline-content">
       <div class="f24-timeline-date">
-         @for (format of item.format; track $index) {
+        @if (item.date) {
+          @for (format of item.format; track $index) {
             <div [class]="[`f24-timeline-date-format`, `f24-timeline-date-${$index}`]">
               {{item.date | f24date: format}}
             </div>
           }
+        }
       </div>
        
       <div class="f24-timeline-divider"></div>

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 import { F24Description, F24Currency, F24StatusOpts, F24Quantity, F24ItemsOpts } from '@f24/layout';
 
@@ -8,6 +9,7 @@ import { F24Description, F24Currency, F24StatusOpts, F24Quantity, F24ItemsOpts }
 @Component({
   selector: 'f24-item-template-two',
   imports: [
+    NgTemplateOutlet,
     F24Description, F24Currency, F24Quantity,
   ],
   templateUrl: './item-template-two.html',
@@ -40,4 +42,8 @@ export class F24ItemTemplateTwo {
    * quantities
    */
   readonly quantities = input<{ label?: string, icon?: string, quantity: string | number}[]>([]);
+  /**
+   * templates
+   */
+  readonly templatePostDecription = input<TemplateRef<any>>();
 }

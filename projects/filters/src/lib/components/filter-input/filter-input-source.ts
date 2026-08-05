@@ -126,13 +126,15 @@ export class F24FilterInputSource<T> {
       const name = this.name();
       const id = this.id();
       const form = this.form();
+      const dataSource = this.dataSource();
+      const filtersOLd = dataSource?.filters();
 
       untracked(() => {
-        const dataSource = this.dataSource();
-        const filtersOLd = dataSource?.filters();
         const filterOld = filtersOLd && name in filtersOLd ? filtersOLd[name] : null;
         const local = FilterStorage.get(id);
-        form.setValue(filterOld ?? local, { emitEvent: !filterOld });
+        const currentValue = form.value;
+        const emitEvent = (filterOld != currentValue) || (!filterOld && local)
+        form.setValue(filterOld ?? local, { emitEvent });
       });
     });
     /**
@@ -141,6 +143,18 @@ export class F24FilterInputSource<T> {
     effect(() => {
       const value = this.formValue();
       untracked(() => {
+        /**
+         * vaidar si realmente cambio el valor
+         */
+        const name = this.name();
+        const dataSource = this.dataSource();
+        const filtersOLd = dataSource?.filters();
+        const filterOld = filtersOLd && name in filtersOLd ? filtersOLd[name] : null;
+
+        if (filterOld == value) {
+          return;
+        }
+
         const change = this.change();
         if (change) {
           change(value);
@@ -152,8 +166,6 @@ export class F24FilterInputSource<T> {
         /**
          * si la variable name y datasource existen, setear el valor del filtro
          */
-        const name = this.name();
-        const dataSource = this.dataSource();
         if (dataSource && name) {
           dataSource.update({
             filters: { [name]: value }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, ViewEncapsulation } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule, DateAdapter } from '@angular/material/core';
@@ -58,7 +58,8 @@ class CustomMomentDateAdapter extends DateFnsAdapter {
       }
     }
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 export class F24FilterDateRange {
   /**

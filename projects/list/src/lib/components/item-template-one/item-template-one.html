@@ -1,44 +1,45 @@
 <article class="f24-item-template-one">
-  <div class="f24-item-template-one-image">
-    @if (image(); as image) {
-      <f24-image [src]="image" [alt]="''"/>
-    }
-    @if (templatePostImage(); as templatePostImage) {
-      <div class="f24-item-template-one-post-image">
-        <ng-container *ngTemplateOutlet="templatePostImage"></ng-container>
-      </div>
-    }
+  <div class="f24-item-template-one-header">
+    <div class="f24-item-template-one-image">
+      @if (image(); as image) {
+        <f24-image [src]="image" [alt]="''"/>
+      }
+    </div>
+    <div class="f24-item-template-one-description">
+      <f24-description 
+        [icon]="icon()"
+        [title]="title()"
+        [subtitle]="subtitle()" 
+        [items]="itemsMap()"
+      />
+      @if (templatePostDecription(); as templatePostDecription) {
+        <div class="f24-item-template-one-post-description">
+          <ng-container *ngTemplateOutlet="templatePostDecription"></ng-container>    
+        </div>
+      }
+    </div>
   </div>
-  
-  <div class="f24-item-template-one-description">
-    <f24-description 
-      [icon]="icon()"
-      [title]="title()"
-      [subtitle]="subtitle()" 
-      [items]="itemsMap()"
-    />
-    @if (templatePostDecription(); as templatePostDecription) {
-      <div class="f24-item-template-one-post-description">
-        <ng-container *ngTemplateOutlet="templatePostDecription"></ng-container>    
+  <div class="f24-item-template-one-footer">
+    @if (templatePreQuantity(); as templatePreQuantity) {
+      <div class="f24-item-template-one-pre-quantity">
+        <ng-container *ngTemplateOutlet="templatePreQuantity"></ng-container>
       </div>
     }
     <div class="f24-item-template-one-details">
-      <div class="f24-item-template-one-quantity">
-        @if (quantity(); as quantity) {
-          @if (quantityLabel(); as quantityLabel) {
-            <p>{{ quantityLabel }}</p>
+      @if(quantityArray().length > 0) {
+        <div class="f24-item-template-one-quantity">
+          @let values = quantityArray();
+          @for (item of values; track `f24-item-template-one-quantity-${$index}`) {
+            <f24-quantity [label]="item?.label" [quantity]="item?.quantity" [icon]="item?.icon" [tooltip]="item?.tooltip" [class]="item?.class"/>
           }
-          @if (quantityIcon(); as quantityIcon) {
-            <f24-icon [icon]="quantityIcon"/>
-          }
-          <span>{{ quantity }}</span>
-        }
-      </div>
-      @if (ves() || usd()) {
-        <div class="f24-item-template-one-price">
-          <f24-currency [ves]="ves()" [usd]="usd()"/>
         </div>
       }
+      <div class="f24-item-template-one-price">
+        @let values = [...amounts(), amount()];
+        @for (item of values; track `f24-item-template-one-price-${$index}`) {
+          <f24-currency [ves]="item?.ves" [usd]="item?.usd" [label]="item?.label"/>
+        }
+      </div>
     </div>
   </div>
 </article>

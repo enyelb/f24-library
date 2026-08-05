@@ -1,0 +1,84 @@
+.f24-timeline-basic-container.vertical {
+  --timeline-width: 7px;
+  --timeline-color: lavender;
+  --timeline-secundary-color: #0000007d;
+  --timeline-step-size: 80px;
+  display: flex;
+  flex-direction: column;
+  //min-width: max-content;
+
+  .f24-timeline-basic-item {
+    grid-template-columns: 1fr calc(20px + (var(--timeline-step-size) * .3) + (var(--timeline-width) * 2)) 1fr;
+    display: grid;
+  }
+  .f24-timeline-basic-element {
+    display: flex;
+    margin-top: calc((var(--timeline-step-size) * .15) - 7px);
+  }
+  .f24-timeline-basic-center {
+    display: flex;
+    justify-content: center;
+  }
+  .f24-timeline-basic-content {    
+    width: stretch;
+    padding: 0px min(calc(var(--timeline-width) * 2), 10px);
+  }
+  .f24-timeline-basic-line {
+    background-color: var(--timeline-color);
+    height: 100%;
+    width: var(--timeline-width);
+  }
+  .f24-timeline-basic-circle {
+    width: calc(var(--timeline-step-size) * .3);
+    height: calc(var(--timeline-step-size) * .3);
+    border-radius: 50%;
+    border: var(--timeline-width) solid var(--timeline-color);
+    margin-left: calc(((var(--timeline-width) * .5) + (var(--timeline-step-size) * .15)) * -1);
+  }
+  .f24-timeline-basic-internal-circle {
+    width: calc(var(--timeline-step-size) * .3);
+    height: calc(var(--timeline-step-size) * .3);
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: -2px 2px 3px 0px #00000073;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--timeline-color);
+  }
+  .f24-timeline-basic-item:first-child .f24-timeline-basic-line {
+    border-radius: calc(var(--timeline-width) * 2) calc(var(--timeline-width) * 2) 0px 0px;
+  }
+  .f24-timeline-basic-item:last-child .f24-timeline-basic-line {
+    border-radius: 0px 0px calc(var(--timeline-width) * 2) calc(var(--timeline-width) * 2);
+    background-color: transparent;
+  }
+  .f24-timeline-basic-date {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 5px 5px;
+    color: var(--timeline-color);
+    height: 43px;
+  }
+  .f24-timeline-basic-date-format {
+    font-size: 14px;
+    letter-spacing: 0px;
+    font-weight: 100;
+  }
+  .f24-timeline-basic-date-0 {
+    font-size: 18px;
+    letter-spacing: -2px;
+    font-weight: 400;
+  }
+  .f24-timeline-basic-title {
+    font-size: 15px;
+    text-transform: uppercase;
+    padding: 0px 5px 5px;
+    color: var(--timeline-color);
+  }
+  .f24-timeline-basic-subtitle {
+    text-align: right;
+    color: var(--timeline-secundary-color);
+  }
+}

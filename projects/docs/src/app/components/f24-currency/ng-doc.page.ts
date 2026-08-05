@@ -19,7 +19,7 @@ const F24CurrencyPage: NgDocPage = {
 			target: F24Currency,
 			template: `<ng-doc-selector></ng-doc-selector>`,
 			controls: {
-				label: { type: 'number' },
+				label: { type: 'string' },
 				ves: { type: 'number' },
 				usd: { type: 'number' },
 			},
