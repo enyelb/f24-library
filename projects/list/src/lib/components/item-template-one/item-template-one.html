@@ -34,12 +34,14 @@
           }
         </div>
       }
-      <div class="f24-item-template-one-price">
-        @let values = [...amounts(), amount()];
-        @for (item of values; track `f24-item-template-one-price-${$index}`) {
-          <f24-currency [ves]="item?.ves" [usd]="item?.usd" [label]="item?.label"/>
-        }
-      </div>
+      @if(amountArray().length > 0) {
+        <div class="f24-item-template-one-price">
+          @let values = amountArray();
+          @for (item of values; track `f24-item-template-one-price-${$index}`) {
+            <f24-currency [ves]="item?.ves" [usd]="item?.usd" [label]="item?.label"/>
+          }
+        </div>
+      }
     </div>
   </div>
 </article>

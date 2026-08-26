@@ -1,4 +1,5 @@
-import { computed, effect, inject, signal, untracked } from '@angular/core';
+import { computed, effect, inject, PLATFORM_ID, signal, untracked } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { catchError, Observable, of, switchMap, tap, throwError } from 'rxjs';
 
 import { SnackService } from '@f24/notification';
@@ -32,6 +33,7 @@ export abstract class F24BaseAuthService<Authentication, Authorized, Token> {
   private readonly tokenRefresh = inject(F24TokenRefreshService);
   private readonly snack = inject(SnackService);
   private readonly router = inject(Router);
+  private readonly platformId = inject(PLATFORM_ID);
   /**
    * variables abstractas
    */
@@ -77,14 +79,16 @@ export abstract class F24BaseAuthService<Authentication, Authorized, Token> {
      * obtenemos el token del localStorage si existe y lo seteamos en la señal _token
      * si el token no es valido, se elimina del localStorage
      */
-    const tokenString = localStorage.getItem('token');
-    if (tokenString) {
-      try {
-        const token = JSON.parse(tokenString) as Token;
-        this._token.set(token);
-      } catch (error) {
-        console.error('Error parsing token from localStorage:', error);
-        localStorage.removeItem('token');
+    if (isPlatformBrowser(this.platformId)) {
+      const tokenString = localStorage.getItem('token');
+      if (tokenString) {
+        try {
+          const token = JSON.parse(tokenString) as Token;
+          this._token.set(token);
+        } catch (error) {
+          console.error('Error parsing token from localStorage:', error);
+          localStorage.removeItem('token');
+        }
       }
     }
     /**
@@ -133,7 +137,9 @@ export abstract class F24BaseAuthService<Authentication, Authorized, Token> {
       const token = this.token();
       untracked(() => {
         if (token) {
-          localStorage.setItem('token', JSON.stringify(token));
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('token', JSON.stringify(token));
+          }
           /**
            * se valida si es primer inicio y el token lo saco del localstorage el usuario no etsa disponible
            */
@@ -149,7 +155,9 @@ export abstract class F24BaseAuthService<Authentication, Authorized, Token> {
           this.idle.start();
           this.tokenRefresh.start(this._request.expiresAt(token));
         } else {
-          localStorage.removeItem('token');
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.removeItem('token');
+          }
           this.idle.stop();
           this.tokenRefresh.stop();
         }

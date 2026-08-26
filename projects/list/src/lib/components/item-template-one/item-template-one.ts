@@ -85,6 +85,17 @@ export class F24ItemTemplateOne {
    */
   readonly amounts = input<F24AmountOptsTemplateOne[]>([]);
   readonly amount = input<F24AmountOptsTemplateOne>();
+  protected readonly amountArray = computed(() => {
+    const amount = this.amount();
+    const amounts = this.amounts();
+
+    const values = [...amounts];
+
+    if (amount) {
+      values.push(amount);
+    }
+    return values;
+  });
   /**
    * quantities
    */
@@ -93,7 +104,18 @@ export class F24ItemTemplateOne {
   protected readonly quantityArray = computed(() => {
     const quantity = this.quantity();
     const quantities = this.quantities();
-    return [...quantities,typeof quantity === 'string' || typeof quantity === 'number' ? { quantity } : quantity]
+
+    const values = [...quantities];
+
+    if (quantity) {
+      if (typeof quantity === 'string' || typeof quantity === 'number') {
+        values.push({ quantity });
+      } else {
+        values.push(quantity);
+      }
+    }
+
+    return values;
   }) 
   /**
    * templates
