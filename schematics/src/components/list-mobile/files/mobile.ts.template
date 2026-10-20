@@ -1,0 +1,27 @@
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { F24Container } from '@f24/layout';
+import { F24ListModule } from '@f24/list';
+import { F24FunctionsModule } from '@f24/functions';
+
+import { <%= classify(name) %>Source } from '../<%= dasherize(name) %>-source';
+import { <%= classify(name) %>Filters } from '../filters';
+import { <%= classify(name) %>Actions } from '../actions/actions';
+
+/**
+ * <%= classify(name) %>Mobile
+ */
+@Component({
+  selector: '<%= prefix %>-<%= dasherize(name) %>-mobile',
+  imports: [
+    CommonModule, 
+    F24Container, F24ListModule, F24FunctionsModule, 
+    <%= classify(name) %>Filters, <%= classify(name) %>Actions
+  ],
+  templateUrl: './mobile.html',
+  styleUrl: './mobile.<%= style %>'
+})
+export class <%= classify(name) %>Mobile {
+  readonly source = inject(<%= classify(name) %>Source);
+}

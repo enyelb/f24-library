@@ -1,0 +1,28 @@
+@if (formTreeTemplate().length > 0) {
+  @if (resolvedTree(); as tree) {
+    <f24-container class="f24-form-container">
+      <form class="f24-form" (submit)="onSubmit($event)">
+        @if (resolvedTitle()) {
+          <section class="f24-form-header">
+            <p class="f24-form-header-title">
+              {{ resolvedTitle() }}
+            </p>
+          </section>
+        }
+        <section class="f24-form-body">
+          @for (item of formTreeTemplate(); track $index) {
+            <ng-container *ngTemplateOutlet="item.template; context: { $implicit: tree.form }" ></ng-container>
+          }
+        </section>
+        <section class="f24-form-footer">
+          @if (resolvedLabelCancel(); as labelCancel) {
+            <button matButton="text" type="reset">{{ labelCancel }}</button>
+          }
+          @if (resolvedLabelSubmit(); as labelSubmit) {
+            <button matButton="filled" type="submit" [disabled]="tree.form().invalid()" [loading]="requestPending()">{{ labelSubmit }}</button>
+          }
+        </section>
+      </form>
+    </f24-container>
+  }
+}

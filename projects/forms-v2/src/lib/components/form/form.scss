@@ -1,0 +1,40 @@
+f24-form, .f24-form {
+  height: 100% !important;
+  overflow: hidden !important;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.f24-form {
+  --mat-form-field-subscript-text-line-height: 0rem;
+}
+
+.f24-form-header {
+  padding: calc(var(--f24-form-margin, var(--global-margin, 20px)) / 2);
+  z-index: 100;
+  background: var(--mat-sys-surface);
+}
+
+.f24-form-header-title {
+  font-size: 1.25rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+
+.f24-form-body {
+  overflow: overlay;
+  height: 100%;
+  margin-top: calc(var(--f24-form-margin, var(--global-margin, 20px)) / -2);
+  margin-bottom: calc(var(--f24-form-margin, var(--global-margin, 20px)) / -2);
+}
+
+.f24-form-footer {
+  display: flex;
+  gap: var(--f24-form-margin, var(--global-margin, 20px));
+  padding: calc(var(--f24-form-margin, var(--global-margin, 20px)) / 2);
+  justify-content: space-between;
+  z-index: 100;
+  background: var(--mat-sys-surface);
+}

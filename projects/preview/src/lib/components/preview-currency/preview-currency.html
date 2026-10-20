@@ -1,0 +1,15 @@
+<div [class]="['f24-preview-container', orientation()]">
+  @if (label(); as label) {
+    <p class="f24-preview-label">
+      {{ label }}
+    </p>
+  }
+  @if (ves() !== undefined || usd() !== undefined) {
+    <div class="f24-preview-content">
+      <f24-currency class="f24-preview-currency" [ves]="ves()" [usd]="usd()" />
+      @if(copyCurrency(); as copyCurrency) {
+        <f24-copy [copy]="copyCurrency"/>
+      }
+    </div>
+  }
+</div>

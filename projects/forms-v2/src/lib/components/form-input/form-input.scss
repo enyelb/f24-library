@@ -1,0 +1,21 @@
+.f24-form-input-container {
+
+  --mat-form-field-outlined-outline-color: var(--f24-form-input-border-color, var(--mat-sys-outline));
+  --mat-form-field-outlined-container-shape: var(--f24-form-input-border-radius, var(--mat-sys-corner-small));
+
+  display: flex;
+  align-items: center;
+  padding: calc(var(--global-margin, 20px) / 4);
+  gap: calc(var(--global-margin, 20px) / 2);
+
+  .f24-form-input {
+    width: 100%;
+  }
+}
+
+.f24-form-input-suffix {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+}

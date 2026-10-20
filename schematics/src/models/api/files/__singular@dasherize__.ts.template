@@ -1,0 +1,20 @@
+<% if (folder == 'backend') { %>
+import { 
+  <%= classify(singular) %><%= classify(module) %> as Local<%= classify(singular) %><%= classify(module) %>,
+} from '@models/api/local/<%= dasherize(singular) %>';
+<% } %>
+/**
+ * <%= classify(singular) %><%= classify(module) %>
+ */
+export interface <%= classify(singular) %><%= classify(module) %> {  
+}
+<% if (folder == 'backend') { %>
+/**
+ * Local<%= classify(singular) %><%= classify(module) %>
+ */
+export function <%= camelize(backend) %>To<%= classify(singular) %><%= classify(module) %>(<%= camelize(singular) %>: <%= classify(singular) %><%= classify(module) %>): Local<%= classify(singular) %><%= classify(module) %> {
+  return {
+    ...<%= camelize(singular) %>
+  }
+}
+<% } %>

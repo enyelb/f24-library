@@ -1,0 +1,27 @@
+import { Component, inject } from '@angular/core';
+
+import { F24ColDirective, F24RowDirective } from '@f24/layout';
+
+import { F24Form, F24FormInput, F24FormTree } from '@f24/forms-v2';
+
+import { <%= classify(singular) %>Forms } from './<%= dasherize(singular) %>-forms';
+import { CommonModule } from '@angular/common';
+
+/**
+ * Componente para crear <nombre del modulo>.
+ */
+@Component({
+  selector: 'app-<%= dasherize(singular) %>-create',
+  imports: [
+    CommonModule,
+    F24ColDirective, F24RowDirective, F24FormInput, F24Form, F24FormTree
+  ],
+  templateUrl: './<%= dasherize(singular) %>-create.html',
+  styleUrl: './<%= dasherize(singular) %>-create.scss',
+})
+export class <%= classify(singular) %>Create {
+  /**
+   * servicios
+   */
+  readonly forms = inject(<%= classify(singular) %>Forms);
+}

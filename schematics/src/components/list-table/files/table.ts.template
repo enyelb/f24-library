@@ -1,0 +1,29 @@
+import { Component, inject } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { F24TableModule } from '@f24/table';
+import { F24FiltersModule } from '@f24/filters';
+import { F24FunctionsModule } from '@f24/functions';
+import { F24LayoutModule } from '@f24/layout';
+import { F24ButtonDropdown } from '@f24/buttons';
+
+import { <%= classify(name) %>Source } from '../<%= dasherize(name) %>-source';
+import { <%= classify(name) %>Filters } from '../filters';
+import { <%= classify(name) %>Actions } from '../actions/actions';
+
+/**
+ * <%= classify(name) %>Table
+ */
+@Component({
+  selector: '<%= prefix %>-<%= dasherize(name) %>-table',
+  imports: [
+    RouterModule, 
+    F24TableModule, F24LayoutModule, F24FunctionsModule, F24FiltersModule, F24ButtonDropdown,
+    <%= classify(name) %>Filters, <%= classify(name) %>Actions],
+  templateUrl: './table.html',
+  styleUrl: './table.<%= style %>',
+})
+export class <%= classify(name) %>Table {
+
+  readonly source = inject(<%= classify(name) %>Source);
+}

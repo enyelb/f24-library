@@ -1,0 +1,26 @@
+import { inject, Injectable } from '@angular/core';
+
+import { createDataSource } from '@f24/data';
+
+import { API<%= classify(singular) %>Service } from '@services/api/local/<%= dasherize(singular) %>-service';
+
+/**
+ * <%= classify(name) %>Source
+ */
+@Injectable({
+  providedIn: 'root',
+})
+export class <%= classify(name) %>Source {
+  /**
+   * http
+   */
+  readonly http = {
+    <%= camelize(singular) %>: inject(API<%= classify(singular) %>Service),
+  } as const;
+  /**
+   * dataSource
+   */
+  readonly data = createDataSource({
+    request: (page, size, filters, sorts) => this.http.<%= camelize(singular) %>.<%= camelize(name) %>(page, size, filters, sorts)
+  });
+}

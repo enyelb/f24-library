@@ -4,10 +4,10 @@
       {{ label }}
     </p>
   }
-  @if (value(); as value) {
+  @if (value() !== undefined) {
     <div class="f24-preview-content">
       <p class="f24-preview-text">
-        {{ value }}
+        {{ value() }}
       </p>
       @if(copyText(); as copyText) {
         <f24-copy [copy]="copyText"/>

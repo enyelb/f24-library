@@ -1,0 +1,36 @@
+import { inject, Injectable } from '@angular/core';
+import { Observable, map } from 'rxjs';
+
+import { F24Page } from '@f24/api';
+
+import { IAPI<%= classify(singular) %>Service } from '@api/interface/<%= dasherize(singular) %>-service';
+
+import { APIService } from '@services/api/<%= dasherize(backend) %>/api.service';
+
+import { <%= classify(singular) %>, <%= dasherize(backend) %>To<%= classify(singular) %>, <%= dasherize(backend) %>To<%= classify(singular) %>Create } from '@models/api/<%= dasherize(backend) %>/<%= dasherize(singular) %>';
+import { <%= classify(singular) %> as Local<%= classify(singular) %>, <%= classify(singular) %>Create as Local<%= classify(singular) %>Create, } from '@models/api/local/<%= dasherize(singular) %>';
+
+/**
+ * <%= classify(singular) %>Service
+ */
+@Injectable({
+  providedIn: 'root'
+})
+export class <%= classify(singular) %>Service implements IAPI<%= classify(singular) %>Service {
+  /**
+   * api
+   */
+  readonly api = inject(APIService);
+  /**
+   * create <%= dasherize(singular) %>
+   *
+   * @param Local<%= classify(singular) %>Create <%= camelize(singular) %>
+   * @returns Observable<Local<%= classify(singular) %>>
+   */
+  public create(<%= camelize(singular) %>: Local<%= classify(singular) %>Create): Observable<Local<%= classify(singular) %>> {
+    return this.api.post<<%= classify(singular) %>>({
+      url: `/<%= dasherize(singular) %>`,
+      body: <%= camelize(backend) %>To<%= classify(singular) %>Create(<%= camelize(singular) %>)
+    }).pipe(map(<%= camelize(backend) %>To<%= classify(singular) %>));
+  }
+}

@@ -1,6 +1,6 @@
 f24-container, f24-container-two {
-  border-radius: 8px;
-  border: 1px solid var(--border-primary);
+  border-radius: var(--f24-container-border-radius, var(--mat-sys-corner-small, 8px));
+  border: 1px solid var(--f24-container-border-color, var(--border-primary, var(--mat-sys-outline)));
   background-color: var(--mat-sys-surface);
 
   overflow: hidden;

@@ -72,3 +72,36 @@ export function toNumber(value: number | string | undefined) : number {
 export function abs(value: number | string | undefined): number {
   return Math.abs(toNumber(value));
 }
+
+/**
+ * unitMeasure
+ * @param value 
+ * @param unit 
+ * @returns 
+ */
+export function unitMeasure(value: number | string | undefined, unit: 'GR' | 'UND' | 'ML') {
+  const number = toNumber(value);
+
+  const UNIT_CONFIG: Record<'GR' | 'UND' | 'ML', { unit: number; symbol: string }[]> = {
+    GR: [{unit: 1,  symbol: 'g'}, {unit: 1000, symbol: 'K'}],    
+    ML: [{unit: 1, symbol: 'ml'}, {unit: 1000, symbol: 'L'}],
+    UND: [{unit: 1, symbol: 'und'}]
+  };
+
+  const configs = UNIT_CONFIG[unit];
+  if (!configs || number == 0) { 
+    return `${number}`;
+  }
+  
+  let newNumber = `${number}`;
+  for (const config of configs) {
+    if (number >= config.unit) {
+      const formattedValue = config.unit > 1 ? (number / config.unit).toFixed(1).replace('.0', '') : number;
+      newNumber = `${formattedValue}${config.symbol}`;
+      if (unit == 'UND' && number > 1) {
+        newNumber = `${newNumber}s`;
+      }
+    }
+  }
+  return `${newNumber}`;
+}

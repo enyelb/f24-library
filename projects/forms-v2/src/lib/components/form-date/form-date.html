@@ -1,0 +1,29 @@
+
+<div class="f24-form-date-container">
+  <mat-form-field [appearance]="source().appearance()" class="f24-form-date">
+
+    <mat-label>{{ source().label() }}</mat-label>
+
+    <input
+      matInput
+      [matDatepicker]="picker"
+      [formControl]="source().form()"
+      [placeholder]="source().placeholder()"
+      [min]="source().minDate()" 
+      [max]="source().maxDate()"
+    />
+
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+
+    <!-- Icono principal -->
+    @if (source().icon(); as icon) {
+      <f24-icon class="f24-filter-prefix-icon" matPrefix [icon]="icon"/>
+    }
+    <!-- Mostrar errores -->
+    <mat-error>
+      <f24-form-errors [errors]="source().form().errors"/>
+    </mat-error>
+  </mat-form-field>
+</div>

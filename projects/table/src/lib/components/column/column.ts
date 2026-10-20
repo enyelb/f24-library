@@ -65,6 +65,13 @@ export class F24Column {
    */
   readonly date = input<string>();
   /**
+   * boolean recibe un boolean o %
+   * Nota si recibe % lo pega al final del numero
+   */
+  readonly boolean = input(false, { transform: (value: string | boolean) => {
+    return booleanAttribute(value);
+  }});
+  /**
    * number recibe un boolean o %
    * Nota si recibe % lo pega al final del numero
    */
@@ -143,6 +150,9 @@ export class F24Column {
     }
     if (this.round()) {
       current = round(current, this.round() as number);
+    }
+    if (this.boolean()) {
+      current = current == 1 ? 'SI' : 'NO';
     }
     if (this.number()) {
       if (this.number() === '%') {

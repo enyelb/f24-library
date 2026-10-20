@@ -1,0 +1,40 @@
+
+
+.f24-navbar {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--f24-navbar-background, var(--mat-sys-primary)) !important;
+  color: var(--f24-navbar-color, var(--mat-sys-surface)) !important;
+
+  * {
+    color: var(--f24-navbar-color, var(--mat-sys-surface)) !important;
+  }
+  
+  .f24-navbar-title {
+    margin-left: 16px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    flex: 1
+  }
+  
+  .f24-navbar-spacer {
+    flex: 1 1 auto;
+  }
+
+  .f24-navbar-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  --mat-badge-large-size-container-size: 20px;
+  --mat-badge-large-size-text-size: 13px;
+  --mat-badge-large-size-container-padding: 2px 4px;
+
+  .mat-badge-content {
+    color: white !important;
+  }
+}

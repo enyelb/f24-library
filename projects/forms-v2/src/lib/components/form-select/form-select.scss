@@ -1,0 +1,20 @@
+.f24-form-select-container {
+  --mat-form-field-outlined-outline-color: var(--f24-form-select-border-color, var(--mat-sys-outline));
+  --mat-form-field-outlined-container-shape: var(--f24-form-select-border-radius, var(--mat-sys-corner-small));
+
+  display: flex;
+  align-items: center;
+  padding: calc(var(--global-margin, 20px) / 4);
+  gap: calc(var(--global-margin, 20px) / 2);
+
+  .f24-form-select {
+    width: 100%;
+  }
+}
+
+.f24-form-select-suffix {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+}

@@ -1,0 +1,26 @@
+import { Routes } from '@angular/router';
+
+import { authGuard, permissionsGuard } from '@f24/api';
+
+/**
+ * Routes
+ */
+export const routes: Routes = [
+  {
+    path: '',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/<%= dasherize(scope) %>/<%= dasherize(scope) %>').then(m => m.<%= classify(scope) %>),
+    children: [
+      {
+        path: "<%= dasherize(name) %>/create",
+        loadComponent: () => import("./features/<%= dasherize(scope) %>/<%= dasherize(singular) %>-create/<%= dasherize(singular) %>-create").then(m => m.<%= classify(name) %>Create),
+        canActivate: [permissionsGuard],
+        data: {
+          permissions: [MODULE_<%= uppercase(singular) %>_CREATE]
+        }
+      },
+      { path: '', redirectTo: '', pathMatch: 'full' }
+    ]
+  },
+  { path: '**', redirectTo: '/', pathMatch: 'full' }
+];

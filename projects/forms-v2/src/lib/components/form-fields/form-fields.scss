@@ -1,0 +1,49 @@
+.f24-form-fields-container {
+  margin: calc(var(--global-margin, 20px) / 4);
+}
+
+.f24-form-fields {
+  --mat-form-fields-field-subscript-text-line-height: 0rem;
+}
+
+.f24-form-fields-header {
+  padding: calc(var(--f24-form-fields-margin, var(--global-margin, 20px)) / 2);
+  padding-bottom: 0;
+}
+
+.f24-form-fields-header-title {
+  font-size: 1.25rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+.f24-form-fields-body {
+  padding: calc(var(--global-margin, 20px) / 4);
+  min-height: calc(var(--f24-form-fields-margin, var(--global-margin, 20px)) / 2);
+}
+
+.f24-form-fields-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.f24-form-fields-item-template {
+  width: calc(100% - 48px - (var(--f24-form-fields-margin, var(--global-margin, 20px)) / 2));
+
+  & > div, & > section, & > span, & > p {
+    padding: 0px !important;
+  }
+}
+
+.f24-form-fields-item-delete {
+  padding: 0px calc(var(--f24-form-fields-margin, var(--global-margin, 20px)) / 2);
+}
+
+.f24-form-fields-footer {
+  display: flex;
+  gap: var(--f24-form-fields-margin, var(--global-margin, 20px));
+  padding: calc(var(--f24-form-fields-margin, var(--global-margin, 20px)) / 2);
+  padding-top: 0;
+  justify-content: space-between;
+}

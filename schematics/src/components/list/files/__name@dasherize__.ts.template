@@ -1,0 +1,33 @@
+import { Component, inject } from '@angular/core';
+
+import { createResponsiveViewComponent, F24LayoutModule } from '@f24/layout';
+
+import { <%= classify(name) %>Table } from './table';
+import { <%= classify(name) %>Mobile } from './mobile';
+
+/**
+ * <%= classify(name) %>
+ */
+@Component({
+  selector: '<%= prefix %>-<%= dasherize(name) %>',
+  imports: [F24LayoutModule],
+  templateUrl: './<%= dasherize(name) %>.html',
+  styleUrl: './<%= dasherize(name) %>.<%= style %>',
+})
+export class <%= classify(name) %> {
+  /**
+   * Componentes responsivos
+   */
+  readonly components = [
+    createResponsiveViewComponent({
+      sizes: ['m', 'l', 'xl', 'xxl'],
+      id: <%= classify(name) %>Table,
+      module: () => import('./table').then(m => m.<%= classify(name) %>Table),
+    }),
+    createResponsiveViewComponent({
+      sizes: ['xs', 's'],
+      id: <%= classify(name) %>Mobile,
+      module: () => import('./mobile').then(m => m.<%= classify(name) %>Mobile),
+    })
+  ];
+}

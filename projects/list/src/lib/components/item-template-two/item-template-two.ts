@@ -19,31 +19,14 @@ import { F24Description, F24Currency, F24StatusOpts, F24Quantity, F24ItemsOpts }
 })
 export class F24ItemTemplateTwo {
   /**
-   * title
+   * inputs
    */
   readonly title = input.required<string>();
-  /**
-   * status
-   */
+  readonly link = input<string>();
   readonly status = input<F24StatusOpts[]>([]);
-  /**
-   * items
-   */
   readonly items = input<F24ItemsOpts[]>([]);
-  /**
-   * subtitle
-   */
   readonly subtitle = input<string>();
-  /**
-   * amounts
-   */
   readonly amounts = input<{ label?: string, ves?: number, usd?: number }[]>([]);
-  /**
-   * quantities
-   */
   readonly quantities = input<{ label?: string, icon?: string, quantity: string | number}[]>([]);
-  /**
-   * templates
-   */
   readonly templatePostDecription = input<TemplateRef<any>>();
 }

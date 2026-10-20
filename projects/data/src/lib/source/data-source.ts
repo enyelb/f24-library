@@ -188,14 +188,26 @@ export class F24DataSource<T> {
      * efecto para recargar data
      */
     effect((onCleanup) => {
+      this.pageIndex();
+      const rafId = requestAnimationFrame(() => {
+        untracked(() => {
+          this.reload.next();
+        });
+      });
+      onCleanup(() => cancelAnimationFrame(rafId));
+    });
+    /**
+     * efecto para recargar data
+     */
+    effect((onCleanup) => {
       this.filters();
       this.sorts();
-      this.pageSize();
-      this.pageIndex();
       this.request();
       this.connected();
+      this.pageSize();
       const rafId = requestAnimationFrame(() => {
-        untracked(() => {    
+        untracked(() => {
+          this._pageIndex.set(0);
           this.reload.next();
         });
       });
@@ -291,7 +303,7 @@ export class F24DataSource<T> {
         continue;
       } 
       
-      safeProperties[key] = isDate(properties[key]) ? format(properties[key], 'yyyy-MM-dd') : properties[key];
+      safeProperties[key] = isDate(properties[key]) ? format(properties[key], 'yyyy-MM-dd') : encodeURIComponent(properties[key]);
     }
     return safeProperties;
   }

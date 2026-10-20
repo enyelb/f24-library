@@ -1,0 +1,13 @@
+.f24-form-slide-toggle-container {
+  display: flex;
+  margin: calc(var(--global-margin, 20px) / 4);
+  padding: calc(var(--global-margin, 20px) / 4);
+  gap: calc(var(--global-margin, 20px) / 2);
+  height: 38px;
+  display: flex;
+  justify-content: center;
+
+  .f24-form-slide-toggle {
+    width: 100%;
+  }
+}

@@ -1,0 +1,69 @@
+
+@if (route().children) {
+  @let classDivItem = {
+    'f24-sidenav-item-expanded': expanded() 
+  }; 
+  @let classLinkItem = {
+    'f24-sidenav-item': true, 
+    'f24-sidenav-item-active': !expanded() && hasChildrenItemActive(), 
+    'f24-sidenav-children-item-active': expanded() && hasChildrenItemActive() 
+  }; 
+  <div [class]="classDivItem">
+    <a mat-list-item [class]="classLinkItem" (click)="change(!expanded())">
+      <div class="f24-sidenav-item-link">
+        @if (route().icon; as icon) {
+          <f24-icon [icon]="icon"/>
+        }
+        <div class="f24-sidenav-item-title">
+          <p>{{ route().title }}</p>
+          @let classIcon = {
+            'f24-sidenav-item-icon': true,
+            'f24-sidenav-item-icon-rotated': expanded()
+          }; 
+          <f24-icon [class]="classIcon" [icon]="'arrow_drop_down'"/>
+        </div>
+      </div>
+    </a>
+    @let classNavList = {
+      'f24-sidenav-nav-list': true,
+      'f24-sidenav-nav-list-expanded': expanded(),
+      'f24-sidenav-nav-list-collapsed': !expanded()
+    }; 
+    <mat-nav-list [class]="classNavList">
+      @for (item of route().children; track $index) {
+        <f24-sidenav-item 
+          [route]="item"
+          [allowExpandedMultiple]="allowExpandedMultiple()"
+          (activateChildrenItem)="changeChildrenItemActive($event)"/>
+      }
+    </mat-nav-list>
+  </div>
+}
+
+@if (route().url) {
+  <a mat-list-item class="f24-sidenav-item" routerLinkActive="f24-sidenav-item-active" 
+    [routerLink]="route().url" 
+    [routerLinkActiveOptions]="{ exact: true }" 
+    (isActiveChange)="updateParentItem($event)">
+
+    <div class="f24-sidenav-item-link">
+        @if (route().icon; as icon) {
+          <f24-icon [icon]="icon"/>
+        }
+      <p>{{ route().title }}</p>
+    </div>
+  </a>
+}
+
+<!--@if (route().action) {
+  <a mat-list-item class="f24-sidenav-item"
+    [routerLink]="route().url" 
+    (click)="route().action()">
+    <div class="link">
+      @if (route().icon) {
+        <mat-icon>{{route().icon}}</mat-icon>
+      }
+      <p>{{ route().title }}</p>
+    </div>
+  </a>
+}-->

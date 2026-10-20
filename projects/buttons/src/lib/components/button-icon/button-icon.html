@@ -1,0 +1,20 @@
+@let isIcon = resolvedIcon() && !resolvedLabel();
+@let iconSize = resolvedIconSize();
+@let layerSize = resolvedIconSize() + (384 / resolvedIconSize()); 
+
+<div class="f24-button-icon" [style]="{'--mat-icon-button-state-layer-size': `${layerSize}px`, '--mat-icon-button-icon-size': `${iconSize}px`}">
+  @if (isIcon) {
+    <button matIconButton (click)="resolvedClick()">
+      <f24-icon [icon]="resolvedIcon()" [size]="resolvedIconSize()"/>
+    </button>
+  } @else {
+    <button [matButton]="resolvedAppearance()" (click)="resolvedClick()">
+      <div class="f24-button-icon-content">
+        @if (resolvedIcon(); as icon) {
+          <f24-icon [icon]="icon" [size]="resolvedIconSize()"/>
+        }
+        {{ resolvedLabel() }}
+      </div>
+    </button>
+  }
+</div>

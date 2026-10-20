@@ -1,4 +1,4 @@
-import { effect, OnDestroy, OnInit, Renderer2, signal, untracked } from '@angular/core';
+import { afterNextRender, effect, OnDestroy, Renderer2, signal, untracked } from '@angular/core';
 import { Directive, ElementRef, inject, input } from '@angular/core';
 
 import { Subject, takeUntil, throttleTime } from 'rxjs';
@@ -39,12 +39,14 @@ export class F24ResponsiveClassDirective implements OnDestroy {
    * constructor
    */
   constructor() {
-    this.resizeObserver = new ResizeObserver(entries => {
-      const width = entries[0].borderBoxSize[0].inlineSize;
-      this.resizeSubject.next(width);
+    afterNextRender(() => {
+      this.resizeObserver = new ResizeObserver(entries => {
+        const width = entries[0].borderBoxSize[0].inlineSize;
+        this.resizeSubject.next(width);
+      });
+      this.resizeObserver.observe(this.element.nativeElement);
     });
-    this.resizeObserver.observe(this.element.nativeElement);
-
+    
     this.resizeSubject.pipe(
       throttleTime(50, undefined, { leading: false, trailing: true }),
       takeUntil(this.destroy$)

@@ -17,6 +17,15 @@ export * from './lib/components/icon/icon';
 export * from './lib/components/copy/copy';
 export * from './lib/components/divider/divider';
 
+export * from './lib/components/private-layout/private-layout';
+export * from './lib/components/private-layout/private-layout-source';
+
+export * from './lib/components/sidenav/sidenav';
+export * from './lib/components/sidenav/sidenav-source';
+
+export * from './lib/components/navbar/navbar';
+export * from './lib/components/navbar/navbar-source'
+
 export * from './lib/directives/col-directive';
 export * from './lib/directives/row-directive';
 export * from './lib/directives/responsive-class-directive';

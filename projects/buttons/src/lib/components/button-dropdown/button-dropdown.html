@@ -1,0 +1,25 @@
+@let isIcon = source().icon() && !source().label();
+@let iconSize = source().iconSize();
+@let layerSize = source().iconSize() + (384 / source().iconSize()); 
+
+<div [style]="{'--mat-icon-button-state-layer-size': `${layerSize}px`, '--mat-icon-button-icon-size': `${iconSize}px`}">
+  @if (isIcon) {
+    <button matIconButton (click)="click.emit()" #popoverTrigger="mtxPopoverTrigger" [mtxPopoverTriggerFor]="actionsPopover" mtxPopoverTriggerOn="hover">
+      <f24-icon [icon]="source().icon()" [size]="source().iconSize()"/>
+    </button>
+  } @else {
+    <button matButton="elevated" (click)="click.emit()" #popoverTrigger="mtxPopoverTrigger" [mtxPopoverTriggerFor]="actionsPopover" mtxPopoverTriggerOn="hover">
+      {{source().label()}}
+      @if (source().icon(); as icon) {
+        <f24-icon [icon]="icon" [size]="source().iconSize()"/>
+      }
+    </button>
+  }
+</div>
+
+  <mtx-popover #actionsPopover="mtxPopover" [position]="source().dropdownPosition()" [enterDelay]="source().dropdownEnterDelay()" [leaveDelay]="source().dropdownLeaveDelay()">
+    <ng-content></ng-content>
+    @if (dropdownTemplate(); as dropdownTemplate) {
+      <ng-container [ngTemplateOutlet]="dropdownTemplate"></ng-container>
+    }
+  </mtx-popover>

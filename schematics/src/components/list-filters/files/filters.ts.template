@@ -1,0 +1,25 @@
+import { Component, computed, inject } from '@angular/core';
+
+import { F24FiltersModule } from '@f24/filters';
+import { F24LayoutModule, F24LayoutService } from '@f24/layout';
+
+import { <%= classify(name) %>Source } from '../<%= dasherize(name) %>-source';
+
+/**
+ * <%= classify(name) %>Filters
+ */
+@Component({
+  selector: '<%= prefix %>-<%= dasherize(name) %>-filters',
+  imports: [
+    F24FiltersModule, F24LayoutModule
+  ],
+  templateUrl: './filters.html',
+  styleUrl: './filters.<%= style %>'
+})
+export class <%= classify(name) %>Filters {
+  /**
+   * Services
+   */
+  readonly source = inject(<%= classify(name) %>Source);
+  readonly layout = inject(F24LayoutService);
+}

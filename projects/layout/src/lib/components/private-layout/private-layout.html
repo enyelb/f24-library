@@ -1,0 +1,46 @@
+<div class="f24-private-layout">
+  @if (resolvedTop()) {
+    <f24-navbar 
+      [icon]="resolvedIcon()" 
+      (toggleNavbar)="onToggleSidenav()" 
+      [logo]="resolvedLogo()"
+      [title]="resolvedTitle()">
+      <ng-content select="[navbar-right]" right></ng-content>
+    </f24-navbar>
+  }
+  <mat-sidenav-container class="f24-private-layout-sidenav-container">
+    @let classMatSidenav = {
+      'f24-private-layout-sidenav': true,
+      'f24-private-layout-sidenav-compact': resolvedCompact(),
+    };
+    <mat-sidenav [mode]="mode()" [class]="classMatSidenav" [position]="resolvedPosition()" [opened]="isSidenavOpen()" (openedChange)="isSidenavOpen.set($event)" fixedInViewport="false">
+      <f24-sidenav 
+        [isMobile]="isMobile()" 
+        [routes]="resolvedRoutes()" 
+        (toggleSidenav)="onToggleSidenav()"
+        [logo]="!resolvedTop() ? resolvedLogo() : ''"
+        [name]="resolvedCompact() ? resolvedName() : resolvedCompactName()"
+      />
+    </mat-sidenav>
+    @let classSidenavContent = {
+      'f24-private-layout-sidenav-content': true,
+      'f24-private-layout-sidenav-close': !isSidenavOpen(),
+      'f24-private-layout-sidenav-content-compact': resolvedCompact(),
+    };
+    <mat-sidenav-content [class]="classSidenavContent">
+      @if (!resolvedTop()) {
+        <f24-navbar 
+          [icon]="resolvedIcon()" 
+          (toggleNavbar)="onToggleSidenav()" 
+        />
+      }  
+      <main class="f24-private-layout-content" [responsiveClass]="{ 
+        xxl: 'f24-private-layout-content-desktop',
+        s: 'f24-private-layout-content-tablet',
+        xs: 'f24-private-layout-content-mobile'
+      }">
+        <router-outlet></router-outlet>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

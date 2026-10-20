@@ -1,0 +1,20 @@
+import { Observable } from "rxjs";
+
+import { F24Page } from '@f24/api';
+
+import { <%= classify(singular) %> } from "@models/api/local/<%= dasherize(singular) %>";
+
+/**
+ * IAPI<%= classify(singular) %>Service
+ */
+export interface IAPI<%= classify(singular) %>Service {
+  /**
+   * <%= camelize(name) %>
+   * @param page numero de pagina
+   * @param size items por pagina
+   * @param filters campos para filtrar 
+   * @param sorts campos para ordenar
+   * @returns Observable<F24Page<<%= classify(singular) %>>>
+   */
+  <%= camelize(name) %>(page: number, size: number, filters?:{}, sorts?: {}): Observable<F24Page<<%= classify(singular) %>>>;
+}

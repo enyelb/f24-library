@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nombre del módulo.",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "minLength": 3,
+      "x-prompt": "¿Qué nombre quieres usar?"
+    },
+    "path": {
+      "type": "string",
+      "description": "Ruta de salida del módulo.",
+      "default": "src/app"
+    },
+    "module": {
+      "type": "string",
+      "description": "Modulo al que pertenece el modelo.",
+      "default": "list",
+      "enum": [
+        "create",
+        "update",
+        "list"
+      ],
+      "x-prompt": "¿Qué modulo utilizará el modelo?"
+    },
+    "folder": {
+      "type": "string",
+      "description": "Carpeta a la que pertenece el modelo.",
+      "default": "local",
+      "enum": [
+        "local",
+        "backend"
+      ],
+      "x-prompt": "¿A qué carpeta pertenece modelo?"
+    },
+    "style": {
+      "type": "string",
+      "enum": [
+        "scss",
+        "css",
+        "none"
+      ],
+      "default": "scss"
+    },
+    "prefix": {
+      "type": "string",
+      "default": "app"
+    },
+    "backend": {
+      "type": "string",
+      "description": "Nombre del backend a utilizar.",
+      "enum": [
+        "laravel",
+        "nest"
+      ],
+      "default": "laravel",
+      "x-prompt": "¿Qué backend se utilizará?"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

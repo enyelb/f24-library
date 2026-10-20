@@ -11,6 +11,7 @@ export * from './lib/pipes/round-pipe';
 export * from './lib/pipes/to-usd-pipe';
 export * from './lib/pipes/to-ves-pipe';
 export * from './lib/pipes/abs-pipe';
+export * from './lib/pipes/unit-measure-pipe';
 
 export * from './lib/helpers';
 

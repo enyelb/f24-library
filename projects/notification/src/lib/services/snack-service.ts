@@ -58,6 +58,13 @@ export class SnackService {
     const configbase = this.createBaseConfig(config, "error-snackbar");
     this.messageBase(message, action, configbase);
   }
+  /**
+   * success
+   */
+  success(message: string, action: string, config?: MessageConfig) {
+    const configbase = this.createBaseConfig(config, "success-snackbar");
+    this.messageBase(message, action, configbase);
+  }
 }
 
 /**

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ElementRef, input, ViewEncapsulation, ChangeDetectionStrategy, viewChildren, computed, signal, inject } from '@angular/core';
+import { Component, OnDestroy, ElementRef, input, ViewEncapsulation, ChangeDetectionStrategy, viewChildren, computed, signal, inject, afterNextRender } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -105,17 +105,19 @@ export class F24ResponsiveView implements OnDestroy {
    * constructor
    */
   constructor() {
-    this.resizeObserver = new ResizeObserver(entries => {
-      const width = entries[0].borderBoxSize[0].inlineSize;
-      this.resizeSubject.next(width);
-    });
-    this.resizeObserver.observe(this.element.nativeElement);
+    afterNextRender(() => {
+      this.resizeObserver = new ResizeObserver(entries => {
+        const width = entries[0].borderBoxSize[0].inlineSize;
+        this.resizeSubject.next(width);
+      });
+      this.resizeObserver.observe(this.element.nativeElement);
 
-    this.resizeSubject.pipe(
-      throttleTime(50, undefined, { leading: false, trailing: true }),
-      takeUntil(this.destroy$)
-    ).subscribe(width => {
-      this.changeWidth(width);
+      this.resizeSubject.pipe(
+        throttleTime(50, undefined, { leading: false, trailing: true }),
+        takeUntil(this.destroy$)
+      ).subscribe(width => {
+        this.changeWidth(width);
+      });
     });
   }
   /**

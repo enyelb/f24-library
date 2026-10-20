@@ -1,0 +1,23 @@
+<f24-container>
+  <f24-table matSort class="table-<%= name %>" 
+    [params]="{ 
+      page: { size: 100, options: [25, 50, 100], isMaxLength: false },
+      noResultLabel: 'Sin resultados' 
+    }" 
+    [source]="source.data">
+
+    <<%= prefix %>-<%= name %>-filters header/>
+    
+    <f24-column column="id" header="Id">
+      <a [routerLink]="row.id" *f24-cell="let row">
+        #{{ row.id }}
+      </a>
+    </f24-column>
+    
+    <f24-column column="actions" header="Acciones">
+      <f24-button-dropdown *f24-cell="let row">
+        <<%= prefix %>-<%= name %>-actions />
+      </f24-button-dropdown>
+    </f24-column>
+  </f24-table>
+</f24-container>

@@ -6,10 +6,21 @@
 /out-tsc
 /bazel-out
 
+# Schematics Compiled output
+/schematics/dist
+/schematics/temp
+/schematics/out-tsc
+/schematics/bazel-out
+
 # Node
 /node_modules
 npm-debug.log
 yarn-error.log
+
+# Schematics Node
+/schematics/node_modules
+/schematics/npm-debug.log
+/schematics/yarn-error.log
 
 # IDEs and editors
 .idea/

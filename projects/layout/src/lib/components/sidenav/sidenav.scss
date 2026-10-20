@@ -1,0 +1,22 @@
+f24-sidenav {
+  background: var(--f24-sidenav-background, var(--mat-sys-primary));
+  display: block;
+  height: 100%;
+}
+
+.f24-sidenav-parent-nav-list {
+  &.mdc-list {
+    padding: var(--f24-sidenav-padding, calc(var(--mat-list-list-item-one-line-container-height, 48px) * .2));
+  }
+} 
+
+.f24-sidenav-header {
+  padding: 20px 0px;
+}
+
+.f24-sidenav-header-name {
+  background-color: var(--f24-sidenav-color, var(--mat-sys-surface));
+  color: var(--f24-sidenav-background, var(--mat-sys-primary));
+  padding: 5px 0px;
+  text-align: center;
+}

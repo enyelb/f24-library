@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json.schemastore.org/schematics",
+  "schematics": {
+    "list": {
+      "description": "Genera el componente responsive principal.",
+      "factory": "./src/components/list/index#default",
+      "schema": "./src/shared/list-schema.json"
+    },
+    "list-actions": {
+      "description": "Genera las acciones del módulo de lista.",
+      "factory": "./src/components/list-actions/index#default",
+      "schema": "./src/shared/list-schema.json"
+    },
+    "list-filters": {
+      "description": "Genera los filtros del módulo de lista.",
+      "factory": "./src/components/list-filters/index#default",
+      "schema": "./src/shared/list-schema.json"
+    },
+    "list-table": {
+      "description": "Genera la vista de tabla del módulo de lista.",
+      "factory": "./src/components/list-table/index#default",
+      "schema": "./src/shared/list-schema.json"
+    },
+    "list-mobile": {
+      "description": "Genera la vista móvil del módulo de lista.",
+      "factory": "./src/components/list-mobile/index#default",
+      "schema": "./src/shared/list-schema.json"
+    },
+    "list-source": {
+      "description": "Genera el source del módulo de lista.",
+      "factory": "./src/services/list-source/index#default",
+      "schema": "./src/shared/list-schema.json"
+    },
+    "list-api-backend": {
+      "description": "Genera el API backend del módulo de lista.",
+      "factory": "./src/services/list-api-backend/index#default",
+      "schema": "./src/shared/list-schema.json"
+    },
+    "list-api-frontend": {
+      "description": "Genera el API frontend del módulo de lista.",
+      "factory": "./src/services/list-api-frontend/index#default",
+      "schema": "./src/shared/list-schema.json"
+    },
+    "list-api-interface": {
+      "description": "Genera la interfaz del API del módulo de lista.",
+      "factory": "./src/services/list-api-interface/index#default",
+      "schema": "./src/shared/list-schema.json"
+    },
+    "list-routes": {
+      "description": "Genera las rutas del módulo de lista.",
+      "factory": "./src/configs/list-routes/index#default",
+      "schema": "./src/shared/list-schema.json"
+    },
+    "list-permissions": {
+      "description": "Genera los permisos del módulo de lista.",
+      "factory": "./src/configs/list-permissions/index#default",
+      "schema": "./src/shared/list-schema.json"
+    },
+    "create": {
+      "description": "Genera el componente con el formulario.",
+      "factory": "./src/components/create/index#default",
+      "schema": "./src/shared/create-schema.json"
+    },
+    "create-forms": {
+      "description": "Genera el formulario principal del módulo de creación.",
+      "factory": "./src/services/create-forms/index#default",
+      "schema": "./src/shared/create-schema.json"
+    },
+    "create-api-backend": {
+      "description": "Genera el API backend del módulo de creación.",
+      "factory": "./src/services/create-api-backend/index#default",
+      "schema": "./src/shared/create-schema.json"
+    },
+    "create-api-frontend": {
+      "description": "Genera el API frontend del módulo de creación.",
+      "factory": "./src/services/create-api-frontend/index#default",
+      "schema": "./src/shared/create-schema.json"
+    },
+    "create-api-interface": {
+      "description": "Genera la interfaz del API del módulo de creación.",
+      "factory": "./src/services/create-api-interface/index#default",
+      "schema": "./src/shared/create-schema.json"
+    },
+    "create-routes": {
+      "description": "Genera las rutas del módulo de creación.",
+      "factory": "./src/configs/create-routes/index#default",
+      "schema": "./src/shared/create-schema.json"
+    },
+    "create-permissions": {
+      "description": "Genera los permisos del módulo de creación.",
+      "factory": "./src/configs/create-permissions/index#default",
+      "schema": "./src/shared/create-schema.json"
+    },
+    
+    "model-api": {
+      "description": "Genera un modelo para la api rest.",
+      "factory": "./src/models/api/index#default",
+      "schema": "./src//models/api/schema.json"
+    }
+  }
+}

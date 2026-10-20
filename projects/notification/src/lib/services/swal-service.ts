@@ -21,7 +21,7 @@ export class SwalService {
    */
   async loadSweetalert2() {
     if (!this.swal) {
-      const swalModule = await import('sweetalert2/dist/sweetalert2.js');
+      const swalModule = await import('sweetalert2');
       this.swal = swalModule.default;
     }
 
@@ -119,6 +119,18 @@ export class SwalService {
     }
 
     return optionsbase;
+  }
+
+  /**
+   * fire
+   * este metodo muestra una alerta personalizada
+   * @param options opciones de la alerta
+   */
+  fire(options: CustomSweetAlertOptions) {
+    const icon = options.icon;
+    const title = typeof options.title === 'string' ? options.title : '';
+    const text = options.text ?? '';
+    this.swalBase(title, text, icon, options);
   }
 
   /**

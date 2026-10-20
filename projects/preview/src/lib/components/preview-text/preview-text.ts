@@ -20,7 +20,7 @@ export class F24PreviewText {
   /**
    * text
    */
-  readonly value = input.required<string | undefined | null>();
+  readonly value = input.required<string | number | boolean | undefined>();
   /**
    * copy
    */
@@ -33,7 +33,7 @@ export class F24PreviewText {
    * copyText
    */
   protected readonly copyText = computed(() => {
-    const value = this.value();
+    const value = `${this.value() ?? ''}`;
     const copy = this.copy();
     if (!value || !copy) {
       return undefined;

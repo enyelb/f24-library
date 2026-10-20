@@ -1,0 +1,21 @@
+<div class="f24-sidenav-logo">
+  @if (resolvedLogo(); as logo) {
+    <f24-image [src]="logo" [zoomClick]="false"></f24-image>
+  }
+</div>
+
+<div class="f24-sidenav-header">
+  @if (resolvedName(); as name) {
+    <p class="f24-sidenav-header-name">{{ name }}</p>
+  }
+</div>
+
+<mat-nav-list class="f24-sidenav-parent-nav-list">
+  @for (route of resolvedRoutes(); track $index) {
+    <f24-sidenav-item 
+      [route]="route"
+      [allowExpandedMultiple]="resolvedAllowExpandedMultiple()" 
+      (changeExpanded)="changeExpanded()"
+    />
+  }
+</mat-nav-list>

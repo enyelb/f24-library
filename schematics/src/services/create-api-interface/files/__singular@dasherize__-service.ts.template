@@ -1,0 +1,18 @@
+import { Observable } from "rxjs";
+
+import { F24Page } from '@f24/api';
+
+import { <%= classify(singular) %>, <%= classify(singular) %>Create } from "@models/api/local/<%= dasherize(singular) %>";
+
+/**
+ * IAPI<%= classify(singular) %>Service
+ */
+export interface IAPI<%= classify(singular) %>Service {
+  /**
+   * create <%= dasherize(singular) %>
+   *
+   * @param <%= classify(singular) %>Create <%= camelize(singular) %>
+   * @returns Observable<<%= classify(singular) %>>
+   */
+  create(<%= camelize(singular) %>: <%= classify(singular) %>Create): Observable<<%= classify(singular) %>>;
+}

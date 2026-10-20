@@ -1,0 +1,44 @@
+import { inject, Injectable } from '@angular/core';
+import { required, minLength } from '@angular/forms/signals';
+import { Router } from '@angular/router';
+
+import { createFormSource, createFormTreeSource } from '@f24/forms-v2';
+
+import { API<%= classify(singular) %>Service } from '@services/api/local/<%= dasherize(singular) %>-service';
+import { <%= classify(singular) %>Create } from '@models/api/local/<%= dasherize(singular) %>';
+
+/**
+ * Servicio para manejar el formulario de creación de categorías.
+ */
+@Injectable({
+  providedIn: 'root',
+})
+export class <%= classify(singular) %>Forms {
+  /**
+   * services
+   */
+  readonly router = inject(Router);
+  /**
+   * http
+   */
+  readonly http = {
+    <%= camelize(singular) %>: inject(API<%= classify(singular) %>Service)
+  } as const;
+  /**
+   * Fuente del formulario de creación <nombre del modulo>.
+   */
+  readonly source = createFormSource({
+    title: 'Crear <Nombre del modulo>',
+    labelSubmit: 'Crear',
+    labelCancel: 'Cancelar',
+    notification: 'swal',
+    defaultErrorMessage: 'Error interno del servidor',
+    defaultSuccessMessage: '<Nombre del modulo> creada con éxito',
+    tree: createFormTreeSource<<%= classify(singular) %>Create>({
+      model: {},
+      schema: (schema) => {}
+    }),
+    request: (model) => this.http.<%= camelize(singular) %>.create(model),
+    onSuccess: () => this.router.navigate(['/<%= dasherize(name) %>']),
+  });
+}

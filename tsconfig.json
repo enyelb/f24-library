@@ -42,6 +42,12 @@
       "path": "./projects/forms/tsconfig.spec.json"
     },
     {
+      "path": "./projects/forms-v2/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/forms-v2/tsconfig.spec.json"
+    },
+    {
       "path": "./projects/functions/tsconfig.lib.json"
     },
     {

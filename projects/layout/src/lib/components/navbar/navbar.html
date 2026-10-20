@@ -1,0 +1,20 @@
+<mat-toolbar class="f24-navbar">
+
+  <div class="f24-navbar-logo">
+    @if (resolvedLogo(); as logo) {
+      <f24-image [src]="logo" [zoomClick]="false"></f24-image>
+    }
+  </div>
+
+  <button type="button" mat-icon-button class="f24-navbar-toggle" (click)="onToggleNavbar()">
+    <f24-icon [icon]="resolvedIcon()"/>
+  </button>
+
+  @if (resolvedTitle(); as title) {
+    <span class="f24-navbar-title">{{ title | uppercase }}</span>
+  }
+  <span class="f24-navbar-spacer"></span>
+  <div class="f24-navbar-right">
+    <ng-content select="[right]"></ng-content>
+  </div>
+</mat-toolbar>

@@ -1,7 +1,13 @@
+
 .f24-dialog-buttons {
   position: absolute;
   right: 10px;
   top: 10px;
+}
+
+.f24-dialog-button-close {
+  z-index: 200;
+  background: var(--mat-sys-surface-variant);
 }
 
 .cdk-overlay-pane.mat-mdc-dialog-panel {

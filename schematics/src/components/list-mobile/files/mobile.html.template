@@ -1,0 +1,21 @@
+<f24-container>
+  <f24-list [params]="{ 
+    dataSource: source.data, 
+    filterKey: 'name', 
+    filterLabel: 'Buscar <%= dasherize(name) %>...', 
+    label: '<%= classify(name) %>' 
+  }">
+    <<%= prefix %>-<%= dasherize(name) %>-filters header/>
+    <ng-container *f24-list-item="let item" track="descripcion">
+      <<%= prefix %>-<%= dasherize(name) %>-actions />
+      <f24-item-template-two 
+        [title]="``" 
+        [link]="``" 
+        [subtitle]="``"
+        [items]="[]" 
+        [quantities]="[]" 
+        [amounts]="[]" 
+      />
+    </ng-container>
+  </f24-list>
+</f24-container>

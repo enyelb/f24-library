@@ -1,0 +1,28 @@
+@if (formTreeTemplate().length > 0) {
+  <f24-container class="f24-form-fields-container">
+    @if (resolvedTitle()) {
+      <section class="f24-form-fields-header">
+        <p class="f24-form-fields-header-title">
+          {{ resolvedTitle() }}
+        </p>
+      </section>
+    }
+
+    <section class="f24-form-fields-body">
+      @for (item of formTreeTemplate(); track $index) {
+        @for (fields of resolvedFields(); track $index) {
+          <div class="f24-form-fields-item">
+            <div class="f24-form-fields-item-template">
+              <ng-container *ngTemplateOutlet="item.template; context: { $implicit: fields }" ></ng-container>
+            </div>
+            <f24-button-icon class="f24-form-fields-item-delete" [icon]="'delete'" (click)="removeItem($index)"/>
+          </div>
+        }
+      }
+    </section>
+
+    <section class="f24-form-fields-footer">
+      <button matButton="filled" type="button" (click)="addItem()">add</button>
+    </section>
+  </f24-container>
+}

@@ -1,0 +1,18 @@
+{
+  "name": "@f24/schematics",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./dist/collection.json",
+  "schematics": "./dist/collection.json",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && cp collection.json dist/collection.json && cp -R src/* dist/src"
+  },
+  "dependencies": {
+    "@angular-devkit/core": "^21.2.5",
+    "@angular-devkit/schematics": "^21.2.5",
+    "typescript": "~5.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  }
+}

@@ -1,0 +1,34 @@
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { F24Page } from '@f24/api';
+
+import { IAPI<%= classify(singular) %>Service } from '@services/api/local/interface/<%= dasherize(singular) %>-service';
+import { <%= classify(singular) %>Service } from '@services/api/<%= dasherize(backend) %>/<%= dasherize(singular) %>-service';
+
+import { <%= classify(singular) %> } from '@models/api/local/<%= dasherize(singular) %>';
+
+/**
+ * API<%= classify(singular) %>Service
+ */
+@Injectable({
+  providedIn: 'root'
+})
+export class API<%= classify(singular) %>Service implements IAPI<%= classify(singular) %>Service {
+  /**
+   * API de pedido
+   */
+  private readonly api = inject(<%= classify(singular) %>Service);
+
+  /**
+   * <%= dasherize(name) %>
+   * @param page numero de pagina
+   * @param size items por pagina
+   * @param filters campos para filtrar 
+   * @param sorts campos para ordenar
+   * @returns Observable<F24Page<<%= classify(singular) %>>>
+   */
+  <%= camelize(name) %>(page: number, size: number, filters?:{}, sorts?: {}): Observable<F24Page<<%= classify(singular) %>>> {
+    return this.api.<%= camelize(name) %>(page, size, filters, sorts);
+  };
+}

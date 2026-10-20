@@ -11,6 +11,7 @@ interface F24ItemsOptsTemplateOne {
   label?: string, 
   text: string | number, 
   color?: 'primary' | 'accent' | 'warn'
+  hide?: boolean,
 }
 
 /**
@@ -49,25 +50,24 @@ interface F24AmountOptsTemplateOne {
 })
 export class F24ItemTemplateOne {
   /**
-   * image
+   * inputs
    */
   readonly image = input<string>();
-  /**
-   * title
-   */
   readonly title = input.required<string>();
-  /**
-   * subtitle
-   */
+  readonly link = input<string>();
   readonly subtitle = input<string>();
-  /**
-   * icon
-   */
   readonly icon = input<F24IconOpts>(); 
-  /**
-   * items
-   */
   readonly items = input<F24ItemsOptsTemplateOne[] | F24ItemsOptsTemplateOne[][]>([]);
+  readonly amounts = input<F24AmountOptsTemplateOne[]>([]);
+  readonly amount = input<F24AmountOptsTemplateOne>();
+  readonly quantities = input<F24QuantityOptsTemplateOne[]>([]);
+  readonly quantity = input<F24QuantityOptsTemplateOne | number | string>();
+  readonly templatePreQuantity = input<TemplateRef<any>>();
+  readonly templatePostDecription = input<TemplateRef<any>>();
+
+  /**
+   * signals
+   */
   protected readonly itemsMap = computed<F24ItemsOpts[] | F24ItemsOpts[][]>(() => {
 
     const fn = (item: F24ItemsOptsTemplateOne): F24ItemsOpts => {
@@ -78,13 +78,11 @@ export class F24ItemTemplateOne {
       }
     }
 
-    return this.items().map((item) => Array.isArray(item) ? item.map(fn) : fn(item)) as F24ItemsOpts[] | F24ItemsOpts[][];
-  })
-  /**
-   * amounts
-   */
-  readonly amounts = input<F24AmountOptsTemplateOne[]>([]);
-  readonly amount = input<F24AmountOptsTemplateOne>();
+    return this.items()
+      .filter(item => Array.isArray(item) ? item.some(subItem => !subItem.hide) : !item.hide)
+      .map((item) => Array.isArray(item) ? item.filter(subItem => !subItem.hide).map(fn) : fn(item)) as F24ItemsOpts[] | F24ItemsOpts[][];
+  });
+
   protected readonly amountArray = computed(() => {
     const amount = this.amount();
     const amounts = this.amounts();
@@ -96,11 +94,7 @@ export class F24ItemTemplateOne {
     }
     return values;
   });
-  /**
-   * quantities
-   */
-  readonly quantities = input<F24QuantityOptsTemplateOne[]>([]);
-  readonly quantity = input<F24QuantityOptsTemplateOne | number | string>();
+
   protected readonly quantityArray = computed(() => {
     const quantity = this.quantity();
     const quantities = this.quantities();
@@ -117,10 +111,5 @@ export class F24ItemTemplateOne {
 
     return values;
   }) 
-  /**
-   * templates
-   */
-  readonly templatePreQuantity = input<TemplateRef<any>>();
-  readonly templatePostDecription = input<TemplateRef<any>>();
 
 }

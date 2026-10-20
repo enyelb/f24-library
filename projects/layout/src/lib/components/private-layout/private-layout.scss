@@ -1,0 +1,62 @@
+.f24-private-layout {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.f24-private-layout-sidenav-container {
+  --mat-sidenav-container-width: 250px;
+  height: 100%;
+  width: 100%;
+  background: var(--f24-private-layout-background, var(--mat-sys-surface));  
+
+  .f24-private-layout-sidenav { 
+    border-radius: 0;
+    border: none;
+  }
+
+  .f24-private-layout-sidenav-compact {
+    width: var(--f24-private-layout-sidenav-collapsed-width, calc( 25px + (var(--f24-sidebar-item-padding, calc(var(--mat-list-list-item-one-line-container-height, 48px) * .25)) * 2) + (var(--f24-sidebar-padding, calc(var(--mat-list-list-item-one-line-container-height, 48px) * .2)) * 2)));
+    transition: all .3s ease-in-out;
+  }
+  
+  .f24-private-layout-sidenav-content-compact {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-left: var(--f24-private-layout-sidenav-width, calc( 25px + (var(--f24-sidebar-item-padding, calc(var(--mat-list-list-item-one-line-container-height, 48px) * .25)) * 2) + (var(--f24-sidebar-padding, calc(var(--mat-list-list-item-one-line-container-height, 48px) * .2)) * 2))) !important;
+    transition: margin .3s ease-in-out;
+    overflow-x: hidden;
+  }  
+  .f24-private-layout-sidenav-compact:hover {
+    width: var(--f24-private-layout-sidenav-width, 250px);
+  }  
+  .f24-private-layout-sidenav-compact:hover~.f24-private-layout-sidenav-content-compact {
+    margin-left: var(--f24-private-layout-sidenav-width,  250px) !important;
+  }  
+  .f24-private-layout-content {
+    flex: 1;
+    padding: calc(var(--global-margin) / 2);
+    overflow-y: auto;
+  }  
+  .f24-private-layout-sidenav-close.f24-private-layout-sidenav-content {
+    margin-left: 0 !important;
+  }  
+  @media (max-width: 768px) {
+    .f24-private-layout-sidenav-compact {
+      width: var(--f24-private-layout-sidenav-width,  250px) !important;
+    }  
+    .f24-private-layout-sidenav-content {
+      margin-left: 0 !important;
+    }  
+    .f24-private-layout-sidenav-close.f24-private-layout-sidenav-content {
+      margin-left: 0 !important;
+    }  
+    .f24-private-layout-sidenav:hover~.f24-private-layout-sidenav-content {
+      margin-left: 0 !important;
+    }
+  }
+}

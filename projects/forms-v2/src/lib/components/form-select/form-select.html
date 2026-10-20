@@ -1,0 +1,45 @@
+@if (resolvedForm(); as form) {
+  <div class="f24-form-select-container">
+    <mat-form-field [appearance]="resolvedAppearance()" class="f24-form-select">
+
+      <mat-label>{{ resolvedLabel() }}</mat-label>
+
+      <mtx-select
+        [formField]="form"
+        [placeholder]="resolvedPlaceholder()"
+        [items]="resolvedItems()"
+        [bindLabel]="resolvedBindLabel()"
+        [bindValue]="resolvedBindValue()"
+        [multiple]="resolvedMultiple()"
+      >
+        <ng-template ng-label-tmp let-item="item" let-clear="clear" class="m2">
+          {{ resolvedFormatterLabel()(item) }}
+          @if (resolvedMultiple()) {
+            <span class="ng-value-icon right" (click)="clear(item)">×</span>
+          }
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+          {{ resolvedFormatterOption()(item) }} 
+        </ng-template>
+      </mtx-select>
+
+      <!-- Mostrar errores -->
+      <mat-error>
+        <f24-form-errors [field]="form()"/>
+      </mat-error>
+      <!-- Icono de estado -->
+      <div class="f24-form-select-suffix" matSuffix>
+        @if (templateSuffix(); as template) {
+           <ng-container *ngTemplateOutlet="template"></ng-container>
+        }
+        @if (form().valid()) {
+          <f24-icon class="f24-form-input-suffix-icon"  [icon]="'check'"/>
+        }
+      </div>
+      <!-- Icono principal -->
+      @if (resolvedIcon(); as icon) {
+        <f24-icon class="f24-form-prefix-icon" matPrefix [icon]="icon"/>
+      }
+    </mat-form-field>
+  </div>
+}

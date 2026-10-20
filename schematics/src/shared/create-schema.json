@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nombre del módulo.",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "minLength": 3,
+      "x-prompt": "¿Qué nombre quieres usar?"
+    },
+    "path": {
+      "type": "string",
+      "description": "Ruta de salida del módulo.",
+      "default": "src/app"
+    },
+    "style": {
+      "type": "string",
+      "enum": [
+        "scss",
+        "css",
+        "none"
+      ],
+      "default": "scss"
+    },
+    "prefix": {
+      "type": "string",
+      "default": "app"
+    },
+    "scope": {
+      "type": "string",
+      "description": "El alcance del módulo.",
+      "enum": [
+        "private",
+        "public"
+      ],
+      "default": "private",
+      "x-prompt": "¿El módulo es privado o público?"
+    },
+    "backend": {
+      "type": "string",
+      "description": "Nombre del backend a utilizar.",
+      "enum": [
+        "laravel",
+        "nest"
+      ],
+      "default": "laravel",
+      "x-prompt": "¿Qué backend se utilizará?"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

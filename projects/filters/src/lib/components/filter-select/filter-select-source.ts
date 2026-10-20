@@ -43,6 +43,7 @@ export interface F24FilterSelectSourceParams<Type, Item> {
     value?: F24FilterSelectBindSourceParams
   },
   appendTo?: string;
+  search?: (term: string, item: Item) => boolean;
 }
 /**
  * F24FilterSelectSource
@@ -157,6 +158,15 @@ export class F24FilterSelectSource<T, I> {
   protected readonly _appendTo = signalSource('body');
   readonly appendTo = this._appendTo.asReadonly();
   /**
+   * search
+   * funcion para filtrar los items de la lista
+   */
+  protected readonly _search = signalSource<(term: string, item: I) => boolean>((term: string, item: I) => {
+    const label = this.formatterLabel()(item);
+    return label.toLowerCase().includes(term.toLowerCase());
+  });
+  readonly search = this._search.asReadonly();
+  /**
    * es un signalSource que tendra el valor del form
    */
   readonly formValue = toSignal(
@@ -268,6 +278,7 @@ export class F24FilterSelectSource<T, I> {
       this._bindLabel.setExectUndefined((typeof params?.bind === 'object' ? params.bind?.label : params?.bind) ?? (typeof params2?.bind === 'object' ? params2.bind?.label : params2?.bind));
       this._bindValue.setExectUndefined((typeof params?.bind === 'object' ? params.bind?.value : params?.bind) ?? (typeof params2?.bind === 'object' ? params2.bind?.value : params2?.bind));
       this._appendTo.setExectUndefined(params?.appendTo ?? params2?.appendTo);
+      this._search.setExectUndefined(params?.search ?? params2?.search);
     });
   }
 }

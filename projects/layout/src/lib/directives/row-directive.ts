@@ -1,4 +1,4 @@
-import { contentChildren, Directive, effect, ElementRef, inject, OnDestroy, OnInit, untracked } from '@angular/core';
+import { afterNextRender, contentChildren, Directive, effect, ElementRef, inject, OnDestroy, OnInit, untracked } from '@angular/core';
 
 import { Subject, takeUntil, throttleTime } from 'rxjs';
 
@@ -40,9 +40,12 @@ export class F24RowDirective implements OnDestroy, OnInit {
    * @param renderer Renderer2
    */
   constructor(protected el: ElementRef) {
-    this.resizeObserver = new ResizeObserver(entries => {
-      const width = entries[0].borderBoxSize[0].inlineSize;
-      this.resizeSubject.next(width);
+    afterNextRender(() => { 
+      this.resizeObserver = new ResizeObserver(entries => {
+        const width = entries[0].borderBoxSize[0].inlineSize;
+        this.resizeSubject.next(width);
+      });
+      this.resizeObserver.observe(this.el.nativeElement);
     });
 
     this.resizeSubject.pipe(

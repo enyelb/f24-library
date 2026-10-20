@@ -1,0 +1,1 @@
+export const MODULE_<%= uppercase(singular) %>_CREATE = '<%= uppercase(singular) %>_CREATE';

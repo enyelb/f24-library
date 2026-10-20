@@ -56,6 +56,22 @@ export interface F24RequestOptions {
 };
 
 /**
+ * F24PDFResponse
+ */
+type F24IPDFResponse = {
+  pdf_base64?: string;
+  base64?: string;
+  filename: string;
+} | string;
+/**
+ * F24PDFResponse
+ */
+export interface F24PDFResponse {
+  url: string;
+  base64: string;
+}
+
+/**
  * APIService
  */
 @Injectable({
@@ -74,6 +90,70 @@ export abstract class F24APIService {
    * _http
    */
   private _http: HttpClient = inject(HttpClient);
+  /**
+   * blob
+   * @param options
+   */
+  public blob(options: F24RequestOptions) : Observable<Blob> {
+    return this.request((options) => {
+      return this._http.post(options.url, options.body ?? {},  {
+        ...options.options, responseType: 'blob'
+      });
+    }, options);
+  }
+  /**
+   * pdf
+   * @param options
+   */
+  public pdf(options: F24RequestOptions) : Observable<F24PDFResponse> {
+    return this.request((options) => {
+      return this._http.post<F24IPDFResponse>(options.url, options.options).pipe(
+        map(response => {
+          const base64 = typeof response === 'string' ? response : response.pdf_base64 || response.base64;
+
+          if (!base64) {
+            throw new Error('No PDF data available');
+          }
+          // Convert base64 to Blob and create object URL
+          const blob = this.base64ToBlob(base64, 'application/pdf');
+          const url = URL.createObjectURL(blob);
+
+          // Return new object with blob URL instead of data URL
+          return { url, base64 };
+        })
+      );
+    }, options);
+  }
+  /**
+   * base64ToBlob
+   * @param base64
+   * @param contentType
+   */
+  private base64ToBlob(base64: string, contentType: string = 'application/pdf'): Blob {
+    try {
+      // Decode base64 string
+      const byteCharacters = atob(base64);
+      const byteArrays = [];
+
+      // Process in chunks to handle large PDFs
+      const sliceSize = 512;
+      for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        const slice = byteCharacters.slice(offset, offset + sliceSize);
+        const byteNumbers = new Array(slice.length);
+
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+      }
+
+      return new Blob(byteArrays, { type: contentType });
+    } catch (error) {
+      throw new Error('Failed to process PDF data');
+    }
+  }
   /**
    * get
    * @param options
@@ -103,6 +183,16 @@ export abstract class F24APIService {
      * create request
      */
     return this.request((options) => this._http.put<Generic>(options.url, options.body ?? {}, options.options), options);
+  }
+  /**
+   * patch
+   * @param options
+   */
+  public patch<Generic>(options: F24RequestOptions) : Observable<Generic> {
+    /**
+     * create request
+     */
+    return this.request((options) => this._http.patch<Generic>(options.url, options.body ?? {}, options.options), options);
   }
   /**
    * delete

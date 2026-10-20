@@ -1,7 +1,11 @@
 <div class="f24-description-container">
   <div class="f24-description">
     <p class="f24-description-title">
-      {{ title() }}
+      @if (link()) {
+        <a [routerLink]="link()">{{ title() }}</a>
+      } @else {
+        {{ title() }}
+      }
       @if (icon() && !icon()?.hide) {
         <f24-icon class="f24-description-title-icon" [icon]="icon()?.name ?? ''" [matTooltip]="icon()?.tooltip ?? ''" [style]="{ color: icon()?.color }"/>
       }

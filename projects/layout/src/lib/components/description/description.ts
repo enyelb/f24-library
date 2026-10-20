@@ -5,6 +5,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { F24Icon } from '../icon/icon';
 import { F24Status } from '../status/status';
+import { RouterLink } from "@angular/router";
 
 /**
  * F24IconOpts
@@ -49,9 +50,10 @@ export interface F24ItemsOpts {
   styleUrl: './description.scss',
   standalone: true,
   imports: [
-    MatTooltipModule, 
-    F24Icon, F24Status
-  ],
+    RouterLink,
+    MatTooltipModule,
+    F24Icon, F24Status,
+],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
@@ -60,6 +62,7 @@ export class F24Description {
    * inputs
    */
   readonly title = input.required<string>();
+  readonly link = input<string>();
   readonly status = input<F24StatusOpts[]>([]);
   readonly subtitle = input<string>();
   readonly icon = input<F24IconOpts>();

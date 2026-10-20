@@ -1,0 +1,11 @@
+@if (resolvedForm(); as form) {
+  <f24-container class="f24-form-slide-toggle-container">
+    <mat-slide-toggle class="f24-form-slide-toggle"
+      [checked]="form().controlValue()"
+      [labelPosition]="resolvedLabelPosition()"
+      (change)="onChange($event)"
+    >
+      {{ resolvedLabel() }}
+    </mat-slide-toggle>
+  </f24-container>
+}

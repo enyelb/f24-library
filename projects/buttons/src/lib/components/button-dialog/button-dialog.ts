@@ -65,7 +65,7 @@ export class F24ButtonDialog {
       }, this.params());
     });
   }
-   /**
+  /**
    * open
    */
   public open(): void {
@@ -76,5 +76,17 @@ export class F24ButtonDialog {
     }
     click.emit();
     dialog.open();
+  }
+  /**
+   * open
+   */
+  public close(): void {
+    const dialog = this.dialog();
+    const click = this.click;
+    if (!dialog) {
+      return;
+    }
+    click.emit();
+    dialog.close();
   }
 }

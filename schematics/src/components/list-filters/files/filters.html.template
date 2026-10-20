@@ -1,0 +1,12 @@
+<section row>
+  <f24-filter-input 
+    [col]="{ s: 20, m: 20, l: 6, xl: 9, xxl: 10 }" 
+    [params]="{ id: 
+      '<%= name %>_name', 
+      name: 'name', 
+      dataSource: source.data, 
+      label: 'Buscar <%= name %>', 
+      placeholder: 'Buscar <%= name %>'
+    }" 
+  />
+</section>

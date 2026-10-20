@@ -1,0 +1,17 @@
+import { Component, inject, input } from '@angular/core';
+
+import { MatButtonModule } from '@angular/material/button';
+
+import { F24Icon } from '@f24/layout';
+
+/**
+ * <%= classify(name) %>Actions
+ */
+@Component({
+  selector: '<%= prefix %>-<%= dasherize(name) %>-actions',
+  imports: [MatButtonModule, F24Icon],
+  templateUrl: './actions.html',
+  styleUrl: './actions.<%= style %>',
+})
+export class <%= classify(name) %>Actions {
+}

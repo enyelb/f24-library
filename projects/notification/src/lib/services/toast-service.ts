@@ -1,4 +1,4 @@
-import { Component, Injectable } from '@angular/core';
+import { Component, inject, Injectable } from '@angular/core';
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -10,6 +10,10 @@ import { ToastrService } from 'ngx-toastr';
   providedIn: 'root'
 })
 export class ToastService {
+  /**
+   * 
+   */
+  private readonly toastr = inject(ToastrService, { optional: true });
 
   /**
    * pending
@@ -20,12 +24,6 @@ export class ToastService {
    * toasts
    */
   toasts: Toast[] = [];
-
-  /**
-   * constructor
-   */
-  constructor(public toastr: ToastrService) {
-  }
 
   /**
    * createBaseConfig
@@ -82,13 +80,13 @@ export class ToastService {
   private show(toast: Toast) {
     const config = toast.config;
     if (toast.type === 'success') {
-      this.toastr.success(toast.text, toast.title, config);
+      this.toastr?.success(toast.text, toast.title, config);
     } else if (toast.type === 'error') {
-      this.toastr.error(toast.text, toast.title, config);
+      this.toastr?.error(toast.text, toast.title, config);
     } else if (toast.type === 'warning') {
-      this.toastr.warning(toast.text, toast.title, config);
+      this.toastr?.warning(toast.text, toast.title, config);
     } else {
-      this.toastr.info(toast.text, toast.title, config);
+      this.toastr?.info(toast.text, toast.title, config);
     }
   }
 

@@ -1,0 +1,3 @@
+::ng-deep .f24-cell-dcredito p {
+  --background: var(--mat-sys-primary) !important;
+}

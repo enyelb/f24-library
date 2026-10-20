@@ -5,6 +5,7 @@
 export * from './lib/preview-module';
 
 export * from './lib/components/preview-text/preview-text';
+export * from './lib/components/preview-currency/preview-currency';
 
 export * from './lib/components/preview-form/preview-form';
 export * from './lib/components/preview-form/preview-form-source';

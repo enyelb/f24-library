@@ -4,11 +4,11 @@
 
 <div [style]="{'--mat-icon-button-state-layer-size': `${layerSize}px`, '--mat-icon-button-icon-size': `${iconSize}px`}">
   @if (isIcon) {
-    <button matIconButton (click)="open()">
-    <f24-icon [icon]="source().icon()" [size]="source().iconSize()"/>
+    <button matIconButton type="button" (click)="open()">
+      <f24-icon [icon]="source().icon()" [size]="source().iconSize()"/>
     </button>
   } @else {
-    <button matButton="elevated" (click)="open()">
+    <button matButton="elevated" type="button" (click)="open()">
       {{source().label()}}
       @if (source().icon(); as icon) {
         <f24-icon [icon]="icon" [size]="source().iconSize()"/>
