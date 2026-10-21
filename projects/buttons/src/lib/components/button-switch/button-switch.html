@@ -1,0 +1,34 @@
+<div class="f24-button-switch">
+  @for (option of resolvedOptions(); track option.value ?? option.label; let index = $index) {
+    @let isExpanded = expanded() === index;
+    <div
+      class="f24-button-switch-item"
+      [class.f24-button-switch-item-expanded]="isExpanded"
+      [class.f24-button-switch-item-collapsed]="!isExpanded"
+      (mouseenter)="onSelected(index)"
+      (focusin)="onSelected(index)"
+    >
+      <button
+        [matButton]="resolvedAppearance()"
+        type="button"
+        class="f24-button-switch-button"
+        [title]="option.tooltip ?? option.label"
+        [attr.aria-label]="option.label"
+        (click)="onClick(index)"
+      >
+        <span class="f24-button-switch-content">
+          @if (option.icon) {
+            <f24-icon [icon]="option.icon" [size]="resolvedIconSize()"/>
+          } @else {
+            <span class="f24-button-switch-slot f24-button-switch-initials-slot">
+              <span class="f24-button-switch-initials">{{ initials(option) }}</span>
+            </span>
+          }
+          <span class="f24-button-switch-slot f24-button-switch-label-slot">
+            <span class="f24-button-switch-label">{{ option.label }}</span>
+          </span>
+        </span>
+      </button>
+    </div>
+  }
+</div>

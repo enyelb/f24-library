@@ -14,3 +14,6 @@ export * from './lib/components/button-dropdown/button-dropdown-source';
 
 export * from './lib/components/button-icon/button-icon';
 export * from './lib/components/button-icon/button-icon-source';
+
+export * from './lib/components/button-switch/button-switch';
+export * from './lib/components/button-switch/button-switch-source';

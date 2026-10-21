@@ -1,0 +1,77 @@
+.f24-button-switch {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.f24-button-switch-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 0 0 auto;
+  min-width: 0;
+  transition: flex-grow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  .f24-button-switch-button {
+    transition: padding 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &:not(.f24-button-switch-item-collapsed) {
+    flex-grow: 1;
+
+    .f24-button-switch-button {
+      width: 100%;
+    }
+
+    .f24-button-switch-initials-slot {
+      grid-template-columns: 0fr;
+      opacity: 0;
+    }
+  }
+}
+
+.f24-button-switch .f24-button-switch-item-collapsed {
+
+  .f24-button-switch-button {
+    padding-inline: 12px;
+  }
+
+  .f24-button-switch-label-slot {
+    grid-template-columns: 0fr;
+    opacity: 0;
+  }
+}
+
+.f24-button-switch-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.f24-button-switch-slot {
+  display: grid;
+  grid-template-columns: 1fr;
+  opacity: 1;
+  transition: grid-template-columns 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 200ms ease;
+
+  > span {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+.f24-button-switch-initials {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.f24-button-switch-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

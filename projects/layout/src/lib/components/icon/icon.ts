@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, effect, inject, input, signal, View
 import { MatIconModule } from '@angular/material/icon';
 
 import { F24IconService, F24IconType } from '../../services/icon-service';
-import { BrowserModule } from '@angular/platform-browser';
 
 /**
  * F24Icon

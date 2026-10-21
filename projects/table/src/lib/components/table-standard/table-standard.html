@@ -125,7 +125,7 @@
     <!-- CELL NO RESULT -->
     @else {
       <tr class="f24-row-no-result">
-        <td class="f24-cell-no-result" [attr.colspan]="displayed().columns.length">
+        <td class="f24-cell-no-result" [attr.colspan]="displayed().columns.length + columnSelects().length">
           @if (source().total() === 0) {  
             <div class="f24-item-no-result">
               @if (source().loading()) {
