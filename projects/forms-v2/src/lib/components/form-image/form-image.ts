@@ -50,6 +50,8 @@ interface F24FormImagePreview {
  * - Permite ocultar el input principal y la zona de arrastre con `showInput`
  *   y `showDropZone`.
  * - Permite configurar el zoom de la imagen con `zoomClick`.
+ * - Permite configurar el icono, su tamaño y los textos de la zona de arrastre
+ *   con `icon`, `iconSize`, `title` y `subtitle`.
  * - No sube archivos a un servidor ni hace peticiones HTTP.
  * - Sigue el patrón `source + inputs + computed resolved` de `forms-v2`.
  */
@@ -123,6 +125,30 @@ export class F24FormImage {
    * Por defecto es `true`.
    */
   readonly zoomClick = input<F24FormImageSourceParams['zoomClick']>();
+  /**
+   * icon
+   * nombre del icono mostrado en la zona de arrastrar y soltar.
+   * Por defecto es `cloud_upload`.
+   */
+  readonly icon = input<F24FormImageSourceParams['icon']>();
+  /**
+   * iconSize
+   * tamaño en píxeles del icono de la zona de arrastrar y soltar.
+   * Por defecto es `40`.
+   */
+  readonly iconSize = input<F24FormImageSourceParams['iconSize']>();
+  /**
+   * title
+   * título mostrado en la zona de arrastrar y soltar.
+   * Por defecto es `Arrastra y suelta archivos aquí`.
+   */
+  readonly title = input<F24FormImageSourceParams['title']>();
+  /**
+   * subtitle
+   * subtítulo mostrado en la zona de arrastrar y soltar.
+   * Por defecto es `o haz clic para seleccionarlos`.
+   */
+  readonly subtitle = input<F24FormImageSourceParams['subtitle']>();
   /**
    * form
    * campo de Signal Forms tipado con `Field<File[]>`.
@@ -203,6 +229,34 @@ export class F24FormImage {
    */
   readonly resolvedZoomClick = computed(
     () => this.source()?.zoomClick() ?? this.zoomClick() ?? true,
+  );
+  /**
+   * resolvedIcon
+   * Combina el source, el input local y el icono por defecto `cloud_upload`.
+   * @returns nombre final del icono de la zona de arrastrar y soltar.
+   */
+  readonly resolvedIcon = computed(() => this.source()?.icon() ?? this.icon() ?? 'cloud_upload');
+  /**
+   * resolvedIconSize
+   * Combina el source, el input local y el tamaño por defecto `40`.
+   * @returns tamaño final del icono de la zona de arrastrar y soltar.
+   */
+  readonly resolvedIconSize = computed(() => this.source()?.iconSize() ?? this.iconSize() ?? 40);
+  /**
+   * resolvedTitle
+   * Combina el source, el input local y el título por defecto.
+   * @returns título final de la zona de arrastrar y soltar.
+   */
+  readonly resolvedTitle = computed(
+    () => this.source()?.title() ?? this.title() ?? 'Arrastra y suelta archivos aquí',
+  );
+  /**
+   * resolvedSubtitle
+   * Combina el source, el input local y el subtítulo por defecto.
+   * @returns subtítulo final de la zona de arrastrar y soltar.
+   */
+  readonly resolvedSubtitle = computed(
+    () => this.source()?.subtitle() ?? this.subtitle() ?? 'o haz clic para seleccionarlos',
   );
   /**
    * resolvedForm

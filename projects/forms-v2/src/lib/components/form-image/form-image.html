@@ -57,9 +57,13 @@
         (dragleave)="onDragLeave($event)"
         (drop)="onDrop($event)"
       >
-        <f24-icon class="f24-form-image-drop-icon" icon="cloud_upload" [size]="40" />
-        <span class="f24-form-image-drop-title">Arrastra y suelta archivos aquí</span>
-        <span class="f24-form-image-drop-subtitle">o haz clic para seleccionarlos</span>
+        <f24-icon
+          class="f24-form-image-drop-icon"
+          [icon]="resolvedIcon()"
+          [size]="resolvedIconSize()"
+        />
+        <span class="f24-form-image-drop-title">{{ resolvedTitle() }}</span>
+        <span class="f24-form-image-drop-subtitle">{{ resolvedSubtitle() }}</span>
       </button>
     }
 

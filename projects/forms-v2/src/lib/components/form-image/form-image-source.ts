@@ -67,6 +67,30 @@ export interface F24FormImageSourceParams {
    */
   zoomClick?: boolean;
   /**
+   * icon
+   * nombre del icono mostrado en la zona de arrastrar y soltar.
+   * Si no se define, el componente utiliza `cloud_upload`.
+   */
+  icon?: string;
+  /**
+   * iconSize
+   * tamaño en píxeles del icono de la zona de arrastrar y soltar.
+   * Si no se define, el componente utiliza `40`.
+   */
+  iconSize?: number;
+  /**
+   * title
+   * título mostrado en la zona de arrastrar y soltar.
+   * Si no se define, el componente utiliza `Arrastra y suelta archivos aquí`.
+   */
+  title?: string;
+  /**
+   * subtitle
+   * subtítulo mostrado en la zona de arrastrar y soltar.
+   * Si no se define, el componente utiliza `o haz clic para seleccionarlos`.
+   */
+  subtitle?: string;
+  /**
    * form
    * campo de Signal Forms donde se guardará la lista de archivos.
    */
@@ -147,6 +171,30 @@ export class F24FormImageSource {
   protected readonly _zoomClick = signal<F24FormImageSourceParams['zoomClick']>(undefined);
   readonly zoomClick = this._zoomClick.asReadonly();
   /**
+   * icon
+   * señal de solo lectura con el nombre del icono de la zona de arrastre.
+   */
+  protected readonly _icon = signal<F24FormImageSourceParams['icon']>(undefined);
+  readonly icon = this._icon.asReadonly();
+  /**
+   * iconSize
+   * señal de solo lectura con el tamaño del icono de la zona de arrastre.
+   */
+  protected readonly _iconSize = signal<F24FormImageSourceParams['iconSize']>(undefined);
+  readonly iconSize = this._iconSize.asReadonly();
+  /**
+   * title
+   * señal de solo lectura con el título de la zona de arrastre.
+   */
+  protected readonly _title = signal<F24FormImageSourceParams['title']>(undefined);
+  readonly title = this._title.asReadonly();
+  /**
+   * subtitle
+   * señal de solo lectura con el subtítulo de la zona de arrastre.
+   */
+  protected readonly _subtitle = signal<F24FormImageSourceParams['subtitle']>(undefined);
+  readonly subtitle = this._subtitle.asReadonly();
+  /**
    * form
    * señal de solo lectura con el `Field<File[]>` de Signal Forms enlazado al
    * componente.
@@ -184,6 +232,10 @@ export class F24FormImageSource {
         params?.showSelectedList ?? params2?.showSelectedList ?? this._showSelectedList(),
       );
       this._zoomClick.set(params?.zoomClick ?? params2?.zoomClick ?? this._zoomClick());
+      this._icon.set(params?.icon ?? params2?.icon ?? this._icon());
+      this._iconSize.set(params?.iconSize ?? params2?.iconSize ?? this._iconSize());
+      this._title.set(params?.title ?? params2?.title ?? this._title());
+      this._subtitle.set(params?.subtitle ?? params2?.subtitle ?? this._subtitle());
       this._form.set(params?.form ?? params2?.form ?? this._form());
     });
   }
