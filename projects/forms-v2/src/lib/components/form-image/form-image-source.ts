@@ -1,0 +1,200 @@
+import { signal, untracked } from '@angular/core';
+import { Field } from '@angular/forms/signals';
+
+/**
+ * F24FormImageSourceParams
+ * Parámetros de configuración del componente `f24-form-image`.
+ * Estos valores pueden pasarse directamente al source para centralizar la
+ * presentación, la validación de formatos y la visibilidad de secciones.
+ */
+export interface F24FormImageSourceParams {
+  /**
+   * label
+   * etiqueta mostrada en el `mat-form-field`.
+   */
+  label?: string;
+  /**
+   * appearance
+   * apariencia del campo Material: `fill` u `outline`.
+   */
+  appearance?: 'fill' | 'outline';
+  /**
+   * name
+   * nombre asignado al input de archivos.
+   */
+  name?: string;
+  /**
+   * placeholder
+   * texto mostrado mientras no existan archivos seleccionados.
+   */
+  placeholder?: string;
+  /**
+   * accept
+   * tipos MIME o extensiones permitidos.
+   * Si no se define, el componente utiliza `image/*`.
+   */
+  accept?: string;
+  /**
+   * showInput
+   * controla la visibilidad del `mat-form-field` principal.
+   * Si no se define, el componente lo muestra.
+   */
+  showInput?: boolean;
+  /**
+   * showDropZone
+   * controla la visibilidad de la zona de arrastrar y soltar.
+   * Si no se define, el componente la muestra.
+   */
+  showDropZone?: boolean;
+  /**
+   * showPreviews
+   * controla la visibilidad de la previsualización de cada archivo.
+   * Esta visibilidad es independiente de la lista de archivos seleccionados.
+   * Si no se define, el componente muestra la previsualización.
+   */
+  showPreviews?: boolean;
+  /**
+   * showSelectedList
+   * controla la visibilidad de la lista de archivos seleccionados.
+   * Si no se define, el componente muestra la lista.
+   */
+  showSelectedList?: boolean;
+  /**
+   * zoomClick
+   * habilita o deshabilita el zoom modal del `f24-image` cuando se hace clic
+   * sobre una miniatura.
+   * Si no se define, el componente lo mantiene activo.
+   */
+  zoomClick?: boolean;
+  /**
+   * form
+   * campo de Signal Forms donde se guardará la lista de archivos.
+   */
+  form?: Field<File[]>;
+}
+
+/**
+ * F24FormImageSource
+ * Agrupa las señales de configuración del componente `f24-form-image`.
+ * El source no realiza peticiones HTTP ni sube archivos; únicamente permite
+ * compartir o parametrizar la presentación, los formatos permitidos y la
+ * visibilidad de sus secciones mediante señales.
+ */
+export class F24FormImageSource {
+  /**
+   * label
+   * señal de solo lectura con la etiqueta del campo.
+   */
+  protected readonly _label = signal<F24FormImageSourceParams['label']>(undefined);
+  readonly label = this._label.asReadonly();
+  /**
+   * appearance
+   * señal de solo lectura con la apariencia del `mat-form-field`.
+   */
+  protected readonly _appearance = signal<F24FormImageSourceParams['appearance']>(undefined);
+  readonly appearance = this._appearance.asReadonly();
+  /**
+   * name
+   * señal de solo lectura con el nombre asignado al input de archivos.
+   */
+  protected readonly _name = signal<F24FormImageSourceParams['name']>(undefined);
+  readonly name = this._name.asReadonly();
+  /**
+   * placeholder
+   * señal de solo lectura con el texto mostrado cuando no hay archivos.
+   */
+  protected readonly _placeholder = signal<F24FormImageSourceParams['placeholder']>(undefined);
+  readonly placeholder = this._placeholder.asReadonly();
+  /**
+   * accept
+   * señal de solo lectura con los formatos permitidos para seleccionar o
+   * arrastrar imágenes y documentos.
+   */
+  protected readonly _accept = signal<F24FormImageSourceParams['accept']>(undefined);
+  readonly accept = this._accept.asReadonly();
+  /**
+   * showInput
+   * señal de solo lectura que indica si debe mostrarse el input principal.
+   */
+  protected readonly _showInput = signal<F24FormImageSourceParams['showInput']>(undefined);
+  readonly showInput = this._showInput.asReadonly();
+  /**
+   * showDropZone
+   * señal de solo lectura que indica si debe mostrarse la zona de arrastre.
+   */
+  protected readonly _showDropZone = signal<F24FormImageSourceParams['showDropZone']>(undefined);
+  readonly showDropZone = this._showDropZone.asReadonly();
+  /**
+   * showPreviews
+   * señal de solo lectura que indica si deben mostrarse las previsualizaciones
+   * de los archivos.
+   */
+  protected readonly _showPreviews = signal<F24FormImageSourceParams['showPreviews']>(undefined);
+  readonly showPreviews = this._showPreviews.asReadonly();
+  /**
+   * showSelectedList
+   * señal de solo lectura que indica si debe mostrarse la lista de
+   * archivos seleccionados.
+   */
+  protected readonly _showSelectedList =
+    signal<F24FormImageSourceParams['showSelectedList']>(undefined);
+  readonly showSelectedList = this._showSelectedList.asReadonly();
+  /**
+   * zoomClick
+   * señal de solo lectura que indica si la miniatura debe permitir zoom al
+   * hacer clic.
+   */
+  protected readonly _zoomClick = signal<F24FormImageSourceParams['zoomClick']>(undefined);
+  readonly zoomClick = this._zoomClick.asReadonly();
+  /**
+   * form
+   * señal de solo lectura con el `Field<File[]>` de Signal Forms enlazado al
+   * componente.
+   */
+  protected readonly _form = signal<F24FormImageSourceParams['form']>(undefined);
+  readonly form = this._form.asReadonly();
+
+  /**
+   * Crea una instancia del source y aplica su configuración inicial.
+   * @param params configuración inicial opcional.
+   */
+  constructor(params?: F24FormImageSourceParams) {
+    this.update(params);
+  }
+
+  /**
+   * Actualiza las señales del source.
+   * Se prioriza `params`; si alguna propiedad no llega, se intenta usar
+   * `params2` y, en último caso, se conserva el valor anterior.
+   * @param params valores nuevos para el source.
+   * @param params2 valores de respaldo para el source.
+   * @returns void
+   */
+  public update(params?: F24FormImageSourceParams, params2?: F24FormImageSourceParams): void {
+    untracked(() => {
+      this._label.set(params?.label ?? params2?.label ?? this._label());
+      this._appearance.set(params?.appearance ?? params2?.appearance ?? this._appearance());
+      this._name.set(params?.name ?? params2?.name ?? this._name());
+      this._placeholder.set(params?.placeholder ?? params2?.placeholder ?? this._placeholder());
+      this._accept.set(params?.accept ?? params2?.accept ?? this._accept());
+      this._showInput.set(params?.showInput ?? params2?.showInput ?? this._showInput());
+      this._showDropZone.set(params?.showDropZone ?? params2?.showDropZone ?? this._showDropZone());
+      this._showPreviews.set(params?.showPreviews ?? params2?.showPreviews ?? this._showPreviews());
+      this._showSelectedList.set(
+        params?.showSelectedList ?? params2?.showSelectedList ?? this._showSelectedList(),
+      );
+      this._zoomClick.set(params?.zoomClick ?? params2?.zoomClick ?? this._zoomClick());
+      this._form.set(params?.form ?? params2?.form ?? this._form());
+    });
+  }
+}
+
+/**
+ * createFormImageSource
+ * Factory para crear un `F24FormImageSource` con configuración opcional.
+ * @param params configuración inicial para el source.
+ * @returns instancia de `F24FormImageSource`.
+ */
+export const createFormImageSource = (params?: F24FormImageSourceParams) => {
+  return new F24FormImageSource(params);
+};

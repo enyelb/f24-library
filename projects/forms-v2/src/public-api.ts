@@ -12,6 +12,9 @@ export * from './lib/components/form-fields/form-fields-source';
 export * from './lib/components/form-input/form-input';
 export * from './lib/components/form-input/form-input-source';
 
+export * from './lib/components/form-image/form-image';
+export * from './lib/components/form-image/form-image-source';
+
 export * from './lib/components/form-select/form-select';
 export * from './lib/components/form-select/form-select-source';
 export * from './lib/components/form-select/select-source';

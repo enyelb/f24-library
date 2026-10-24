@@ -1,0 +1,131 @@
+@if (resolvedForm(); as form) {
+  <div class="f24-form-image-container">
+    @if (resolvedShowInput()) {
+      <mat-form-field [appearance]="resolvedAppearance()" class="f24-form-image-field">
+        <mat-label>{{ resolvedLabel() }}</mat-label>
+
+        <input
+          matInput
+          readonly
+          [disabled]="resolvedDisabled()"
+          [placeholder]="resolvedPlaceholder()"
+          [value]="fileSummary()"
+          [attr.aria-label]="resolvedLabel() || 'Seleccionar archivos'"
+          (click)="openFileSelector(fileInput)"
+          (keydown.enter)="openFileSelector(fileInput)"
+          (blur)="markAsTouched()"
+        />
+
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          [disabled]="resolvedDisabled()"
+          aria-label="Seleccionar archivos"
+          (click)="openFileSelector(fileInput)"
+        >
+          <f24-icon icon="upload_file" />
+        </button>
+      </mat-form-field>
+    }
+
+    <input
+      #fileInput
+      class="f24-form-image-native-input"
+      type="file"
+      multiple
+      hidden
+      tabindex="-1"
+      aria-hidden="true"
+      [name]="resolvedName()"
+      [accept]="resolvedAccept()"
+      [disabled]="resolvedDisabled()"
+      (change)="onFileSelected($event)"
+    />
+
+    @if (resolvedShowDropZone()) {
+      <button
+        matButton="outlined"
+        type="button"
+        class="f24-form-image-drop-zone"
+        [class.f24-form-image-drag-over]="isDragging()"
+        [disabled]="resolvedDisabled()"
+        (click)="openFileSelector(fileInput)"
+        (blur)="markAsTouched()"
+        (dragenter)="onDragEnter($event)"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+      >
+        <f24-icon class="f24-form-image-drop-icon" icon="cloud_upload" [size]="40" />
+        <span class="f24-form-image-drop-title">Arrastra y suelta archivos aquí</span>
+        <span class="f24-form-image-drop-subtitle">o haz clic para seleccionarlos</span>
+      </button>
+    }
+
+    @if (localError(); as error) {
+      <mat-error class="f24-form-image-error">{{ error }}</mat-error>
+    }
+    @if (form().touched() && form().invalid()) {
+      <mat-error class="f24-form-image-error">
+        <f24-form-errors [field]="form()" />
+      </mat-error>
+    }
+
+    @if (previews().length > 0) {
+      @if (resolvedShowSelectedList()) {
+        <div class="f24-form-image-list-header">
+          <span>{{ fileSummary() }}</span>
+          <button
+            matButton="text"
+            type="button"
+            [disabled]="resolvedDisabled()"
+            (click)="clearFiles()"
+          >
+            Limpiar todo
+          </button>
+        </div>
+      }
+
+      @if (resolvedShowPreviews()) {
+        <ul class="f24-form-image-previews">
+          @for (preview of previews(); track $index) {
+            <li class="f24-form-image-preview">
+              @if (preview.url) {
+                <f24-image
+                  class="f24-form-image-thumbnail"
+                  [src]="preview.url"
+                  [alt]="preview.file.name"
+                  [zoomClick]="resolvedZoomClick()"
+                />
+              } @else {
+                <f24-icon
+                  class="f24-form-image-preview-icon"
+                  [icon]="getPreviewIcon(preview.file)"
+                />
+              }
+              <span class="f24-form-image-file-data">
+                <span class="f24-form-image-file-name" [title]="preview.file.name">
+                  {{ preview.file.name }}
+                </span>
+                <span class="f24-form-image-file-size">{{
+                  formatFileSize(preview.file.size)
+                }}</span>
+              </span>
+
+              <button
+                mat-icon-button
+                type="button"
+                [disabled]="resolvedDisabled()"
+                [attr.aria-label]="'Eliminar ' + preview.file.name"
+                (click)="removeFile($index)"
+              >
+                <f24-icon icon="close" />
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    }
+  </div>
+}
