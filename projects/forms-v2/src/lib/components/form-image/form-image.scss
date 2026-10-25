@@ -115,6 +115,23 @@
   background: var(--mat-sys-surface-container-lowest);
 }
 
+.f24-form-image-preview.f24-form-image-marked {
+  border-color: var(--f24-form-image-error-color, var(--mat-sys-error));
+  background: color-mix(
+    in srgb,
+    var(--f24-form-image-error-color, var(--mat-sys-error)) 8%,
+    var(--mat-sys-surface-container-lowest)
+  );
+}
+
+.f24-form-image-cancel-delete {
+  color: var(--f24-form-image-error-color, var(--mat-sys-error));
+
+  ::ng-deep mat-icon {
+    color: inherit;
+  }
+}
+
 .f24-form-image-thumbnail {
   display: block;
   width: 56px;

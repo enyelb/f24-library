@@ -2,6 +2,67 @@ import { signal, untracked } from '@angular/core';
 import { Field } from '@angular/forms/signals';
 
 /**
+ * F24FormImageUploaded
+ * Representa una imagen o archivo que ya está subido en el servidor.
+ * Se usa en escenarios de edición para mostrar los elementos asociados y
+ * permitir marcarlos para eliminar.
+ */
+export interface F24FormImageUploaded {
+  /**
+   * id
+   * código del registro en base de datos. Opcional para mantener compatibilidad
+   * con subidas sin identificador; permite al procesar el submit saber qué
+   * recurso representa cada elemento.
+   */
+  id?: string | number;
+  /**
+   * url
+   * URL pública de la imagen o archivo ya subido.
+   */
+  url: string;
+  /**
+   * name
+   * nombre opcional para la lista; si no se define se deduce de la URL.
+   */
+  name?: string;
+  /**
+   * size
+   * tamaño en bytes; si no se define no se muestra en la previsualización.
+   */
+  size?: number;
+  /**
+   * type
+   * MIME type del recurso. Si no se define se asume que es una imagen.
+   */
+  type?: string;
+  /**
+   * delete
+   * marca de eliminación. El propio `f24-form-image` la escribe dentro del
+   * valor del campo cuando el usuario marca o cancela la eliminación de una
+   * subida. Al procesar el submit: los `File` se suben, los elementos con
+   * `delete: true` se eliminan y el resto se conserva.
+   */
+  delete?: boolean;
+}
+
+/**
+ * F24FormImageValue
+ * Valor admitido por el campo del formulario: archivos nuevos seleccionados
+ * por el usuario o imágenes/archivos ya subidos.
+ */
+export type F24FormImageValue = File | F24FormImageUploaded;
+
+/**
+ * F24ModelImage
+ * Extiende cualquier modelo de negocio agregándole la propiedad `images` con
+ * el tipo que recibe el componente `f24-form-image` en su campo del
+ * formulario: `File` nuevos y `F24FormImageUploaded` ya subidos.
+ */
+export type F24ModelImage<Model extends {}> = Model & {
+  images: F24FormImageValue[];
+};
+
+/**
  * F24FormImageSourceParams
  * Parámetros de configuración del componente `f24-form-image`.
  * Estos valores pueden pasarse directamente al source para centralizar la
@@ -93,8 +154,9 @@ export interface F24FormImageSourceParams {
   /**
    * form
    * campo de Signal Forms donde se guardará la lista de archivos.
+   * Acepta `File` nuevos y `F24FormImageUploaded` ya subidos.
    */
-  form?: Field<File[]>;
+  form?: Field<F24FormImageValue[]>;
 }
 
 /**
@@ -196,8 +258,8 @@ export class F24FormImageSource {
   readonly subtitle = this._subtitle.asReadonly();
   /**
    * form
-   * señal de solo lectura con el `Field<File[]>` de Signal Forms enlazado al
-   * componente.
+   * señal de solo lectura con el `Field<F24FormImageValue[]>` de Signal Forms
+   * enlazado al componente.
    */
   protected readonly _form = signal<F24FormImageSourceParams['form']>(undefined);
   readonly form = this._form.asReadonly();

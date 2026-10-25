@@ -16,24 +16,23 @@ import { MatInputModule } from '@angular/material/input';
 import { F24Icon, F24Image } from '@f24/layout';
 
 import { F24FormErrors } from '../form-errors';
-import { F24FormImageSource, F24FormImageSourceParams } from './form-image-source';
+import {
+  F24FormImageSource,
+  F24FormImageSourceParams,
+  F24FormImageUploaded,
+  F24FormImageValue,
+} from './form-image-source';
 
 /**
  * F24FormImagePreview
- * Representa un archivo dentro del listado de previsualizaciones.
+ * Representa un elemento dentro del listado de previsualizaciones. Puede ser
+ * un `File` recién seleccionado o una `F24FormImageUploaded` ya subida.
  * `url` contiene una miniatura solo para imágenes; en documentos u otros
  * tipos será `null` para que el template muestre un icono genérico.
  */
-interface F24FormImagePreview {
-  /**
-   * Archivo original seleccionado o soltado.
-   */
-  file: File;
-  /**
-   * Object URL de la imagen, o `null` cuando no aplica una miniatura.
-   */
-  url: string | null;
-}
+type F24FormImagePreview =
+  | { item: File; isUploaded: false; url: string | null }
+  | { item: F24FormImageUploaded; isUploaded: true; url: string | null };
 
 /**
  * F24FormImage
@@ -43,7 +42,11 @@ interface F24FormImagePreview {
  * Comportamiento:
  * - Permite selección múltiple mediante input nativo y arrastrar/soltar.
  * - Valida formatos usando `accept`.
- * - Mantiene el valor del campo como `File[]`.
+ * - Acepta un valor mixto en el campo: `File` nuevos y `F24FormImageUploaded`
+ *   ya subidos (modo edición).
+ * - Las imágenes subidas se marcan para eliminar dentro del mismo valor del
+ *   campo: al marcarlas reciben `delete: true` y la X lo revierte, de modo que
+ *   en el submit se procesan qué se eliminan y qué se suben.
  * - Muestra previsualizaciones de imágenes e iconos para documentos.
  * - Permite mostrar u ocultar las previsualizaciones mediante `showPreviews`
  *   y la lista de archivos seleccionados mediante `showSelectedList`.
@@ -151,8 +154,8 @@ export class F24FormImage {
   readonly subtitle = input<F24FormImageSourceParams['subtitle']>();
   /**
    * form
-   * campo de Signal Forms tipado con `Field<File[]>`.
-   * Aquí se almacenarán los archivos seleccionados por el usuario.
+   * campo de Signal Forms tipado con `Field<F24FormImageValue[]>`.
+   * Aquí se mezclan los archivos nuevos con las imágenes ya subidas.
    */
   readonly form = input<F24FormImageSourceParams['form']>();
   /**
@@ -261,7 +264,7 @@ export class F24FormImage {
   /**
    * resolvedForm
    * Combina el source y el input local.
-   * @returns `Field<File[]>` si existe; en caso contrario, `null`.
+   * @returns `Field<F24FormImageValue[]>` si existe; en caso contrario, `null`.
    */
   readonly resolvedForm = computed(() => this.source()?.form() ?? this.form() ?? null);
   /**
@@ -272,17 +275,17 @@ export class F24FormImage {
   readonly resolvedDisabled = computed(() => this.resolvedForm()?.().disabled() ?? false);
   /**
    * fieldState
-   * Obtiene el `FieldState<File[]>` del campo resuelto.
+   * Obtiene el `FieldState<F24FormImageValue[]>` del campo resuelto.
    * @returns estado del signal form o `undefined` si no existe campo.
    */
   protected readonly fieldState = computed(() => this.resolvedForm()?.());
   /**
-   * files
-   * Lista actual de archivos guardados en el campo.
-   * @returns arreglo de `File`; devuelve un array vacío si no hay campo o
-   * el valor todavía no está disponible.
+   * items
+   * Lista actual de elementos guardados en el campo.
+   * @returns arreglo de `File` y `F24FormImageUploaded`; devuelve un array
+   * vacío si no hay campo o el valor todavía no está disponible.
    */
-  protected readonly files = computed(() => this.fieldState()?.controlValue() ?? []);
+  protected readonly items = computed(() => this.fieldState()?.controlValue() ?? []);
   /**
    * fileSummary
    * Texto resumen mostrado en el input solo lectura de Material.
@@ -290,11 +293,13 @@ export class F24FormImage {
    * recuento si hay varios.
    */
   protected readonly fileSummary = computed(() => {
-    const files = this.files();
-    if (files.length === 0) {
+    const items = this.items();
+    if (items.length === 0) {
       return '';
     }
-    return files.length === 1 ? files[0].name : `${files.length} archivos seleccionados`;
+    return items.length === 1
+      ? this.getItemName(items[0])
+      : `${items.length} archivos seleccionados`;
   });
   /**
    * isDragging
@@ -310,11 +315,10 @@ export class F24FormImage {
   protected readonly localError = signal<string | null>(null);
   /**
    * previews
-   * Listado de previsualizaciones derivado de los archivos actuales.
-   * Cada imagen tendrá una object URL y los documentos tendrán `url: null`.
+   * Listado de previsualizaciones derivado de los elementos actuales.
+   * Cada imagen tendrá una miniatura y los documentos tendrán `url: null`.
    */
   protected readonly previews = signal<F24FormImagePreview[]>([]);
-
   /**
    * Referencia de destrucción para liberar object URLs al destruir el
    * componente.
@@ -338,12 +342,13 @@ export class F24FormImage {
    */
   constructor() {
     effect(() => {
-      const files = this.files();
-      this.revokeUnusedPreviewUrls(files);
-      const previews = files.map((file) => ({
-        file,
-        url: this.isImage(file) ? this.getPreviewUrl(file) : null,
-      }));
+      const items = this.items();
+      this.revokeUnusedPreviewUrls(items);
+      const previews = items.map<F24FormImagePreview>((item) =>
+        item instanceof File
+          ? { item, isUploaded: false, url: this.isImage(item) ? this.getPreviewUrl(item) : null }
+          : { item, isUploaded: true, url: this.isImage(item) ? item.url : null },
+      );
       untracked(() => this.previews.set(previews));
     });
 
@@ -438,7 +443,7 @@ export class F24FormImage {
   /**
    * Procesa los archivos soltados en la zona de drop.
    * Reinicia el estado visual, filtra los formatos permitidos y actualiza el
-   * `Field<File[]>`.
+   * `Field<F24FormImageValue[]>`.
    * @param event evento `drop`.
    * @returns void
    */
@@ -452,19 +457,21 @@ export class F24FormImage {
   }
 
   /**
-   * Elimina un archivo concreto del campo mediante su posición.
-   * @param index índice del archivo dentro de `files()`.
+   * Elimina un archivo nuevo concreto del campo mediante su posición.
+   * @param index índice del elemento dentro de `items()`.
    * @returns void
    */
   protected removeFile(index: number): void {
     if (this.resolvedDisabled()) {
       return;
     }
-    this.updateFiles(this.files().filter((_, fileIndex) => fileIndex !== index));
+    this.updateItems(this.items().filter((_, itemIndex) => itemIndex !== index));
   }
 
   /**
-   * Elimina todos los archivos del campo y limpia el error local de formatos.
+   * Elimina los archivos nuevos del campo, conserva las imágenes ya subidas
+   * y limpia el error local de formatos. Las subidas se eliminan marcándolas
+   * individualmente con su icono de eliminar.
    * @returns void
    */
   protected clearFiles(): void {
@@ -472,7 +479,37 @@ export class F24FormImage {
       return;
     }
     this.localError.set(null);
-    this.updateFiles([]);
+    this.updateItems(this.items().filter((item) => !(item instanceof File)));
+  }
+
+  /**
+   * Marca una imagen ya subida para eliminar escribiendo `delete: true` en el
+   * propio valor del campo. Al procesar el submit, los `File` se suben, los
+   * elementos con `delete: true` se eliminan y el resto se conserva.
+   * @param index índice del elemento subido dentro de `items()`.
+   * @returns void
+   */
+  protected markForDeletion(index: number): void {
+    this.writeDeletionMark(index, true);
+  }
+
+  /**
+   * Cancela la marca de eliminación de una imagen ya subida, escribiendo
+   * `delete: false` en el valor del campo.
+   * @param index índice del elemento subido dentro de `items()`.
+   * @returns void
+   */
+  protected cancelDeletion(index: number): void {
+    this.writeDeletionMark(index, false);
+  }
+
+  /**
+   * Indica si una previsualización está marcada para eliminar.
+   * @param preview previsualización actual.
+   * @returns true si el elemento subido lleva `delete: true`.
+   */
+  protected isMarkedForDeletion(preview: F24FormImagePreview): boolean {
+    return preview.isUploaded && preview.item.delete === true;
   }
 
   /**
@@ -500,12 +537,38 @@ export class F24FormImage {
   }
 
   /**
+   * Devuelve el nombre visible de un elemento del listado.
+   * @param item archivo nuevo o imagen ya subida.
+   * @returns nombre del archivo, el nombre de la subida o un nombre deducido
+   * de la URL cuando no viene informado.
+   */
+  protected getItemName(item: F24FormImageValue): string {
+    if (item instanceof File) {
+      return item.name;
+    }
+    if (item.name) {
+      return item.name;
+    }
+    const segment = item.url.split('?')[0].split('/').pop();
+    return segment && segment.includes('.') ? segment : 'Imagen subida';
+  }
+
+  /**
+   * Devuelve el tamaño en bytes de un elemento del listado.
+   * @param item archivo nuevo o imagen ya subida.
+   * @returns tamaño disponible o `null` si la subida no lo informa.
+   */
+  protected getItemSize(item: F24FormImageValue): number | null {
+    return item.size ?? null;
+  }
+
+  /**
    * Devuelve el icono Material usado cuando no se muestra una miniatura.
-   * @param file archivo de la fila actual.
+   * @param item archivo de la fila actual.
    * @returns `image` para imágenes y `description` para otros documentos.
    */
-  protected getPreviewIcon(file: File): string {
-    return this.isImage(file) ? 'image' : 'description';
+  protected getPreviewIcon(item: F24FormImageValue): string {
+    return this.isImage(item) ? 'image' : 'description';
   }
 
   /**
@@ -528,24 +591,46 @@ export class F24FormImage {
     );
 
     if (acceptedFiles.length > 0) {
-      this.updateFiles([...this.files(), ...acceptedFiles]);
+      this.updateItems([...this.items(), ...acceptedFiles]);
     }
   }
 
   /**
-   * Escribe la lista de archivos en el `Field<File[]>` asociado.
+   * Escribe la lista de elementos en el `Field<F24FormImageValue[]>` asociado.
    * También marca el campo como dirty y touched.
-   * @param files lista final que quedará en el formulario.
+   * @param items lista final que quedará en el formulario.
    * @returns void
    */
-  private updateFiles(files: File[]): void {
+  private updateItems(items: F24FormImageValue[]): void {
     const state = this.fieldState();
     if (!state) {
       return;
     }
-    state.controlValue.set(files);
+    state.controlValue.set(items);
     state.markAsDirty();
     state.markAsTouched();
+  }
+
+  /**
+   * Aplica o quita la marca de eliminación `delete` sobre una imagen ya
+   * subida dentro del propio valor del campo, sustituyendo el elemento por
+   * una copia inmutable.
+   * @param index índice del elemento dentro de `items()`.
+   * @param marked true para marcar, false para cancelar la marca.
+   * @returns void
+   */
+  private writeDeletionMark(index: number, marked: boolean): void {
+    if (this.resolvedDisabled()) {
+      return;
+    }
+    const items = this.items();
+    const item = items[index];
+    if (!item || item instanceof File) {
+      return;
+    }
+    const next = [...items];
+    next[index] = { ...item, delete: marked };
+    this.updateItems(next);
   }
 
   /**
@@ -579,12 +664,14 @@ export class F24FormImage {
   }
 
   /**
-   * Determina si el MIME type del archivo corresponde a una imagen.
-   * @param file archivo evaluado.
-   * @returns true si el archivo empieza por `image/`.
+   * Determina si el elemento corresponde a una imagen.
+   * @param item archivo nuevo o imagen ya subida.
+   * @returns true si el MIME type empieza por `image/`; en las subidas sin
+   * `type` se asume que es una imagen.
    */
-  protected isImage(file: File): boolean {
-    return file.type.toLowerCase().startsWith('image/');
+  protected isImage(item: F24FormImageValue): boolean {
+    const type = item instanceof File ? item.type : (item.type ?? 'image/');
+    return type.toLowerCase().startsWith('image/');
   }
 
   /**
@@ -607,14 +694,15 @@ export class F24FormImage {
   }
 
   /**
-   * Libera las object URLs cuyos archivos ya no existen en la lista actual.
-   * @param files archivos vigentes tras el último cambio del campo.
+   * Libera las object URLs cuyos archivos nuevos ya no existen en la lista
+   * actual. Las URLs de las imágenes subidas nunca se revocan.
+   * @param items elementos vigentes tras el último cambio del campo.
    * @returns void
    */
-  private revokeUnusedPreviewUrls(files: File[]): void {
-    const currentFiles = new Set(files);
+  private revokeUnusedPreviewUrls(items: F24FormImageValue[]): void {
+    const currentItems = new Set<F24FormImageValue>(items);
     for (const [file, url] of this.previewUrls) {
-      if (!currentFiles.has(file)) {
+      if (!currentItems.has(file)) {
         this.revokePreviewUrl(url);
         this.previewUrls.delete(file);
       }

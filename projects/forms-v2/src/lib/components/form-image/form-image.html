@@ -94,38 +94,66 @@
       @if (resolvedShowPreviews()) {
         <ul class="f24-form-image-previews">
           @for (preview of previews(); track $index) {
-            <li class="f24-form-image-preview">
+            <li
+              class="f24-form-image-preview"
+              [class.f24-form-image-marked]="isMarkedForDeletion(preview)"
+            >
               @if (preview.url) {
                 <f24-image
                   class="f24-form-image-thumbnail"
                   [src]="preview.url"
-                  [alt]="preview.file.name"
+                  [alt]="getItemName(preview.item)"
                   [zoomClick]="resolvedZoomClick()"
                 />
               } @else {
                 <f24-icon
                   class="f24-form-image-preview-icon"
-                  [icon]="getPreviewIcon(preview.file)"
+                  [icon]="getPreviewIcon(preview.item)"
                 />
               }
               <span class="f24-form-image-file-data">
-                <span class="f24-form-image-file-name" [title]="preview.file.name">
-                  {{ preview.file.name }}
+                <span class="f24-form-image-file-name" [title]="getItemName(preview.item)">
+                  {{ getItemName(preview.item) }}
                 </span>
-                <span class="f24-form-image-file-size">{{
-                  formatFileSize(preview.file.size)
-                }}</span>
+                @if (getItemSize(preview.item) !== null) {
+                  <span class="f24-form-image-file-size">{{
+                    formatFileSize(getItemSize(preview.item)!)
+                  }}</span>
+                }
               </span>
 
-              <button
-                mat-icon-button
-                type="button"
-                [disabled]="resolvedDisabled()"
-                [attr.aria-label]="'Eliminar ' + preview.file.name"
-                (click)="removeFile($index)"
-              >
-                <f24-icon icon="close" />
-              </button>
+              @if (preview.isUploaded && isMarkedForDeletion(preview)) {
+                <button
+                  mat-icon-button
+                  type="button"
+                  class="f24-form-image-cancel-delete"
+                  [disabled]="resolvedDisabled()"
+                  aria-label="Cancelar eliminación"
+                  (click)="cancelDeletion($index)"
+                >
+                  <f24-icon icon="close" />
+                </button>
+              } @else if (preview.isUploaded) {
+                <button
+                  mat-icon-button
+                  type="button"
+                  [disabled]="resolvedDisabled()"
+                  aria-label="Marcar para eliminar"
+                  (click)="markForDeletion($index)"
+                >
+                  <f24-icon icon="delete" />
+                </button>
+              } @else {
+                <button
+                  mat-icon-button
+                  type="button"
+                  [disabled]="resolvedDisabled()"
+                  [attr.aria-label]="'Eliminar ' + getItemName(preview.item)"
+                  (click)="removeFile($index)"
+                >
+                  <f24-icon icon="close" />
+                </button>
+              }
             </li>
           }
         </ul>
