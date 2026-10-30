@@ -13,13 +13,27 @@
       'f24-private-layout-sidenav': true,
       'f24-private-layout-sidenav-compact': resolvedCompact(),
     };
-    <mat-sidenav [mode]="mode()" [class]="classMatSidenav" [position]="resolvedPosition()" [opened]="isSidenavOpen()" (openedChange)="isSidenavOpen.set($event)" fixedInViewport="false">
-      <f24-sidenav 
-        [isMobile]="isMobile()" 
-        [routes]="resolvedRoutes()" 
-        (toggleSidenav)="onToggleSidenav()"
-        [logo]="!resolvedTop() ? resolvedLogo() : ''"
-        [name]="resolvedCompact() ? resolvedName() : resolvedCompactName()"
+    <mat-sidenav
+      fixedInViewport="false"
+      [class]="classMatSidenav" 
+      [mode]="mode()" 
+      [position]="resolvedPosition()" 
+      [opened]="isSidenavOpen()" 
+      (openedChange)="isSidenavOpen.set($event)" 
+      (mouseenter)="onCompact(false)"
+      (mouseleave)="onCompact(true)"
+    >
+      <ng-template #logo>
+        <f24-logo-swap 
+          [expandedSrc]="resolvedLogo()"
+          [collapsedSrc]="resolvedCompactLogo()"
+          [expanded]="!isCompact()"
+        />
+      </ng-template>
+      <f24-sidenav
+        [routes]="resolvedRoutes()"
+        [name]="isCompact() ? resolvedCompactName() : resolvedName()"
+        [templateLogo]="!resolvedTop() ? logo : undefined"
       />
     </mat-sidenav>
     @let classSidenavContent = {
@@ -34,7 +48,7 @@
           (toggleNavbar)="onToggleSidenav()" 
         />
       }  
-      <main class="f24-private-layout-content" [responsiveClass]="{ 
+      <main class="f24-private-layout-content" [responsiveClass]="{
         xxl: 'f24-private-layout-content-desktop',
         s: 'f24-private-layout-content-tablet',
         xs: 'f24-private-layout-content-mobile'

@@ -12,6 +12,7 @@ export * from './lib/components/currency/currency';
 export * from './lib/components/quantity/quantity';
 export * from './lib/components/description/description';
 export * from './lib/components/image/image';
+export * from './lib/components/logo-swap/logo-swap';
 export * from './lib/components/status/status';
 export * from './lib/components/icon/icon';
 export * from './lib/components/copy/copy';

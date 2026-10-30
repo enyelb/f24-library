@@ -8,6 +8,8 @@ export interface F24FormFieldsSourceParams<T> {
   title?: string;
   fields?: FieldTree<T[], string>
   model?: T,
+  hideAdd?: boolean;
+  hideDelete?: boolean;
 }
 /**
  * F24FormFieldsSource
@@ -29,6 +31,16 @@ export class F24FormFieldsSource<T> {
   protected readonly _model = signal<F24FormFieldsSourceParams<T>['model']>(undefined);
   readonly model = this._model.asReadonly();
   /**
+   * ocultar el boton para agregar un nuevo item
+   */
+  protected readonly _hideAdd = signal<F24FormFieldsSourceParams<T>['hideAdd']>(undefined);
+  readonly hideAdd = this._hideAdd.asReadonly();
+  /**
+   * ocultar el boton para eliminar un item
+   */
+  protected readonly _hideDelete = signal<F24FormFieldsSourceParams<T>['hideDelete']>(undefined);
+  readonly hideDelete = this._hideDelete.asReadonly();
+  /**
    * constructor
    */
   constructor(params?: F24FormFieldsSourceParams<T>) {
@@ -43,6 +55,8 @@ export class F24FormFieldsSource<T> {
       this._title.set(params?.title ?? params2?.title ?? this._title());
       this._fields.set(params?.fields ?? params2?.fields ?? this._fields());
       this._model.set(params?.model ?? params2?.model ?? this._model());
+      this._hideAdd.set(params?.hideAdd ?? params2?.hideAdd ?? this._hideAdd());
+      this._hideDelete.set(params?.hideDelete ?? params2?.hideDelete ?? this._hideDelete());
     });
   }
 }

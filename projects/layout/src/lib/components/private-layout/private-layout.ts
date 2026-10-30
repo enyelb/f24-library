@@ -1,4 +1,5 @@
 import { Component, signal, inject, computed, input, effect, untracked } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -14,8 +15,7 @@ import { F24Navbar } from '../navbar/navbar';
 import { F24Sidenav } from '../sidenav/sidenav';
 import { F24SidenavRouteSourceParams } from '../sidenav/sidenav-source';
 import { F24PrivateLayoutSource, F24PrivateLayoutSourceParams } from './private-layout-source';
-
-
+import { F24LogoSwap } from '../logo-swap/logo-swap';
 
 /**
  * F24PrivateLayout
@@ -23,10 +23,10 @@ import { F24PrivateLayoutSource, F24PrivateLayoutSourceParams } from './private-
 @Component({
   selector: 'f24-private-layout',
   imports: [
-    RouterOutlet, 
-    MatSidenavModule, 
-    F24Navbar, F24Sidenav, F24ResponsiveClassDirective
-  ],
+    NgTemplateOutlet, RouterOutlet,
+    MatSidenavModule,
+    F24Navbar, F24Sidenav, F24ResponsiveClassDirective, F24LogoSwap
+],
   templateUrl: './private-layout.html',
   styleUrl: './private-layout.scss',
   //encapsulation: ViewEncapsulation.None,
@@ -44,6 +44,7 @@ export class F24PrivateLayout {
   readonly name = input<F24PrivateLayoutSourceParams['name']>();
   readonly compactName = input<F24PrivateLayoutSourceParams['compactName']>();
   readonly logo = input<F24PrivateLayoutSourceParams['logo']>();
+  readonly compactLogo = input<F24PrivateLayoutSourceParams['compactLogo']>();
   readonly routes = input<F24PrivateLayoutSourceParams['routes']>();
   readonly icon = input<F24PrivateLayoutSourceParams['icon']>();
   readonly compact = input<F24PrivateLayoutSourceParams['compact']>();
@@ -56,6 +57,7 @@ export class F24PrivateLayout {
   readonly resolvedName = computed(() => this.source()?.name() ?? this.name() ?? '');
   readonly resolvedCompactName = computed(() => this.source()?.compactName() ?? this.compactName() ?? '');
   readonly resolvedLogo = computed(() => this.source()?.logo() ?? this.logo() ?? '');
+  readonly resolvedCompactLogo = computed(() => this.source()?.compactLogo() ?? this.compactLogo() ?? '');
   readonly resolvedRoutes = computed(() => this.source()?.routes() ?? this.routes() ?? []);
   readonly resolvedIcon = computed(() => this.source()?.icon() ?? this.icon() ?? 'menu');
   readonly resolvedCompact = computed(() => this.source()?.compact() ?? this.compact() ?? false);
@@ -67,6 +69,7 @@ export class F24PrivateLayout {
    * signals de estado del sidenav y del layout
    */
   protected readonly isSidenavOpen = signal(true);
+  protected readonly isCompact = signal(false);
   protected readonly oldIsSidenavOpen = signal(true);
   
   protected readonly isMobile = computed(() => this.layout.is(['xs', 's']));
@@ -101,6 +104,16 @@ export class F24PrivateLayout {
      * cambia la ruta
      */
     effect(() => {
+      const compact = this.resolvedCompact();
+      untracked(() => {
+        this.isCompact.set(compact);
+      })
+    })
+    /**
+     * para ocultar automaticamente el sidenav si el modo es over y 
+     * cambia la ruta
+     */
+    effect(() => {
       const route = this.routeCurrent();
       untracked(() => {
         const mode = this.mode();
@@ -110,12 +123,26 @@ export class F24PrivateLayout {
       })
     })
   }
-  
   /**
    * toggle the sidenav open state
    */
-  protected onToggleSidenav(): void {
-    this.isSidenavOpen.set(!this.isSidenavOpen());
+  protected onToggleSidenav(isSidenavOpen?: boolean): void {
+    this.isSidenavOpen.set(isSidenavOpen ?? !this.isSidenavOpen());
+  }
+  /**
+   * 
+   * @param routes 
+   * @returns 
+   */
+  /**
+   * toggle the sidenav open state
+   */
+  protected onCompact(isCompact?: boolean): void {
+    const compact = this.resolvedCompact();
+    if (!compact) {
+      return;
+    }
+    this.isCompact.set(isCompact ?? !this.isCompact());
   }
   /**
    * find the active route from a list of routes

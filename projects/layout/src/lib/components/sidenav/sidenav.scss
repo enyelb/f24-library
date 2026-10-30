@@ -4,6 +4,13 @@ f24-sidenav {
   height: 100%;
 }
 
+.f24-sidenav-logo {
+  padding: var(--f24-sidenav-padding, calc(var(--mat-list-list-item-one-line-container-height, 48px) * .2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .f24-sidenav-parent-nav-list {
   &.mdc-list {
     padding: var(--f24-sidenav-padding, calc(var(--mat-list-list-item-one-line-container-height, 48px) * .2));

@@ -41,6 +41,7 @@ export class F24FormInput {
   readonly placeholder = input<F24FormInputSourceParams['placeholder']>();
   readonly form = input<F24FormInputSourceParams['form']>();
   readonly type = input<F24FormInputSourceParams['type']>();
+  readonly step = input<F24FormInputSourceParams['step']>();
 
   readonly templateSuffix = input<TemplateRef<any>>();
   /**
@@ -53,5 +54,6 @@ export class F24FormInput {
   readonly resolvedPlaceholder = computed(() => this.source()?.placeholder() ?? this.placeholder() ?? '');
   readonly resolvedForm = computed(() => this.source()?.form() ?? this.form() ?? null);
   readonly resolvedType = computed(() => this.source()?.type() ?? this.type() ?? 'text');
+  readonly resolvedStep = computed(() => this.source()?.step() ?? this.step());
   
 }

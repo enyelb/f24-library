@@ -1,4 +1,4 @@
-import { Component, computed, input, viewChildren, ViewEncapsulation } from '@angular/core';
+import { Component, computed, input, TemplateRef, viewChildren, ViewEncapsulation } from '@angular/core';
 
 import { MatListModule } from '@angular/material/list';
 
@@ -6,6 +6,8 @@ import { F24Image } from '../image/image';
 import { F24SidenavItem } from '../sidenav-item/sidenav-item';
 
 import { F24SidenavSource, F24SidenavSourceParams } from './sidenav-source';
+import { F24LogoSwap } from '../logo-swap/logo-swap';
+import { NgTemplateOutlet } from '@angular/common';
 
 /**
  * Sidenav
@@ -13,7 +15,8 @@ import { F24SidenavSource, F24SidenavSourceParams } from './sidenav-source';
 @Component({
   selector: 'f24-sidenav',
   imports: [
-    MatListModule, F24SidenavItem, F24Image
+    NgTemplateOutlet, MatListModule, 
+    F24SidenavItem, F24Image, F24LogoSwap
   ],
   templateUrl: './sidenav.html',
   styleUrl: './sidenav.scss',
@@ -30,7 +33,6 @@ export class F24Sidenav {
   readonly logo = input<F24SidenavSourceParams['logo']>();
   readonly name = input<F24SidenavSourceParams['name']>();
   readonly routes = input<F24SidenavSourceParams['routes']>();
-  readonly isMobile = input<F24SidenavSourceParams['isMobile']>();
   readonly allowExpandedMultiple = input<F24SidenavSourceParams['allowExpandedMultiple']>(false);
   /**
    * items
@@ -42,8 +44,9 @@ export class F24Sidenav {
   readonly resolvedLogo = computed(() => this.source()?.logo() ?? this.logo());
   readonly resolvedName = computed(() => this.source()?.name() ?? this.name());
   readonly resolvedRoutes = computed(() => this.source()?.routes() ?? this.routes() ?? []);
-  readonly resolvedIsMobile = computed(() => this.source()?.isMobile() ?? this.isMobile());
   readonly resolvedAllowExpandedMultiple = computed(() => this.source()?.allowExpandedMultiple() ?? this.allowExpandedMultiple());
+  
+  readonly templateLogo = input<TemplateRef<any>>();
   /**
    * changeExpanded
    */

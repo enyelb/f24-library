@@ -12,6 +12,7 @@ export interface F24FormInputSourceParams {
   placeholder?: string;
   form?: Field<any>;
   type?: 'number' | 'text' | 'password';
+  step?: number | 'any';
 }
 /**
  * F24FormInputSource
@@ -60,6 +61,12 @@ export class F24FormInputSource {
   protected readonly _type = signal<'number' | 'text' | 'password'>('text');
   readonly type = this._type.asReadonly();
   /**
+   * step
+   * paso del input, permite valores decimales cuando type es number
+   */
+  protected readonly _step = signal<F24FormInputSourceParams['step']>(undefined);
+  readonly step = this._step.asReadonly();
+  /**
    * constructor
    */
   constructor(params?: F24FormInputSourceParams) {
@@ -78,6 +85,7 @@ export class F24FormInputSource {
       this._placeholder.set(params?.placeholder ?? params2?.placeholder ?? this._placeholder());
       this._form.set(params?.form ?? params2?.form ?? this._form());
       this._type.set(params?.type ?? params2?.type ?? this._type());
+      this._step.set(params?.step ?? params2?.step ?? this._step());
     });
   }
 }

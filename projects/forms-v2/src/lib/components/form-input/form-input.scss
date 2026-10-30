@@ -10,6 +10,15 @@
 
   .f24-form-input {
     width: 100%;
+
+    &.f24-form-input-valid {
+      --mat-form-field-outlined-outline-color: var(--f24-form-input-valid-color, #4caf50);
+      --mat-form-field-outlined-hover-outline-color: var(--f24-form-input-valid-color, #4caf50);
+      --mat-form-field-outlined-focus-outline-color: var(--f24-form-input-valid-color, #4caf50);
+      --mat-form-field-filled-active-indicator-color: var(--f24-form-input-valid-color, #4caf50);
+      --mat-form-field-filled-hover-active-indicator-color: var(--f24-form-input-valid-color, #4caf50);
+      --mat-form-field-filled-focus-active-indicator-color: var(--f24-form-input-valid-color, #4caf50);
+    }
   }
 }
 

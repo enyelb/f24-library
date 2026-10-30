@@ -9,6 +9,7 @@ import { F24Icon } from '../icon/icon';
 
 import { F24NavbarSource, F24NavbarSourceParams } from './navbar-source';
 import { F24Image } from '../image/image';
+import { F24LogoSwap } from '../logo-swap/logo-swap';
 
 /**
  * F24Navbar
@@ -17,7 +18,7 @@ import { F24Image } from '../image/image';
   selector: 'f24-navbar',
   imports: [
     MatToolbarModule, MatButtonModule, UpperCasePipe,
-    F24FunctionsModule, F24Icon, F24Image,
+    F24FunctionsModule, F24Icon, F24Image, F24LogoSwap
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',

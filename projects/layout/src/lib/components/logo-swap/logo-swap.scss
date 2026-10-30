@@ -1,0 +1,65 @@
+.f24-logo-swap {
+  display: inline-grid;
+  align-items: center;
+  justify-items: center;
+  vertical-align: middle;
+}
+
+.f24-logo-swap-img {
+  grid-area: 1 / 1;
+  object-fit: contain;
+  max-width: 100%;
+  height: var(--f24-logo-height, 40px);
+  transition:
+    opacity var(--f24-logo-swap-duration, 0.3s) ease,
+    display var(--f24-logo-swap-duration, 0.3s) allow-discrete;
+}
+
+/* Oculta por completo (fuera de layout y arbol de accesibilidad) tras animar la salida */
+.f24-logo-swap-img-expanded {
+  display: none;
+  opacity: 0;
+}
+
+/* Visible por defecto; @starting-style permite animar la entrada desde display:none */
+.f24-logo-swap-img-collapsed {
+  display: block;
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+.f24-logo-swap.f24-logo-swap-expanded {
+  .f24-logo-swap-img-expanded {
+    display: block;
+    opacity: 1;
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  .f24-logo-swap-img-collapsed {
+    display: none;
+    opacity: 0;
+  }
+}
+
+/* Estado expandido por hover del contenedor (.f24-logo-swap-host) */
+.f24-logo-swap-host:hover .f24-logo-swap {
+  .f24-logo-swap-img-expanded {
+    display: block;
+    opacity: 1;
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  .f24-logo-swap-img-collapsed {
+    display: none;
+    opacity: 0;
+  }
+}

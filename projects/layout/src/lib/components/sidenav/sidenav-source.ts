@@ -16,7 +16,6 @@ export interface F24SidenavSourceParams {
   logo?: string;
   name?: string;
   routes?: F24SidenavRouteSourceParams[];
-  isMobile?: boolean;
   allowExpandedMultiple?: boolean;
 }
 /**
@@ -74,7 +73,6 @@ export class F24SidenavSource {
       this._logo.set(params?.logo ?? params2?.logo);
       this._name.set(params?.name ?? params2?.name);
       this._routes.set(params?.routes ?? params2?.routes);
-      this._isMobile.set(params?.isMobile ?? params2?.isMobile);  
       this._allowExpandedMultiple.set(params?.allowExpandedMultiple ?? params2?.allowExpandedMultiple);
     });
   }

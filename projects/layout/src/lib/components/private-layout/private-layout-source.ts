@@ -11,6 +11,7 @@ export type F24PrivateLayoutSourceParams = F24SidenavSourceParams &  F24NavbarSo
   position?: 'start' | 'end'
   compact?: boolean;
   compactName?: string;
+  compactLogo?: string;
 }
 /**
  * F24PrivateLayoutSource
@@ -33,18 +34,18 @@ export class F24PrivateLayoutSource {
    */
   protected readonly _logo = signal<F24PrivateLayoutSourceParams['logo']>(undefined);
   readonly logo = this._logo.asReadonly();
+   /**
+   * name
+   * nombre en caso de no usar logo
+   */
+  protected readonly _compactLogo = signal<F24PrivateLayoutSourceParams['compactLogo']>(undefined);
+  readonly compactLogo = this._compactLogo.asReadonly();
   /**
    * label
    * este es el label del mat input
    */
   protected readonly _routes = signal<F24PrivateLayoutSourceParams['routes']>(undefined);
   readonly routes = this._routes.asReadonly();
-  /**
-   * isMobile
-   * indica si la vista es móvil
-   */
-  protected readonly _isMobile = signal<F24PrivateLayoutSourceParams['isMobile']>(undefined);
-  readonly isMobile = this._isMobile.asReadonly();
   /**
    * icon
    * icono del navbar

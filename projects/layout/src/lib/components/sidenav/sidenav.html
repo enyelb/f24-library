@@ -2,6 +2,9 @@
   @if (resolvedLogo(); as logo) {
     <f24-image [src]="logo" [zoomClick]="false"></f24-image>
   }
+  @if(templateLogo(); as template) {
+    <ng-container *ngTemplateOutlet="template"></ng-container>    
+  }
 </div>
 
 <div class="f24-sidenav-header">

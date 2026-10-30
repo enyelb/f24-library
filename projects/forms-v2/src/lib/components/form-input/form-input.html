@@ -1,6 +1,10 @@
 @if (resolvedForm(); as form) {
   <div class="f24-form-input-container">
-    <mat-form-field [appearance]="resolvedAppearance()" class="f24-form-input">
+    <mat-form-field
+      [appearance]="resolvedAppearance()"
+      class="f24-form-input"
+      [class.f24-form-input-valid]="form().valid()"
+    >
 
       <mat-label>{{ resolvedLabel() }}</mat-label>
 
@@ -8,6 +12,7 @@
         matInput
         [placeholder]="resolvedPlaceholder()"
         [type]="resolvedType()"
+        [step]="resolvedStep()"
         [formField]="form"
       >
 
@@ -15,16 +20,12 @@
       <mat-error>
         <f24-form-errors [field]="form()"/>
       </mat-error>
-      <!-- Icono de estado -->
-
-      <div class="f24-form-input-suffix" matSuffix>
-        @if (templateSuffix(); as template) {
-           <ng-container *ngTemplateOutlet="template"></ng-container>
-        }
-        @if (form().valid()) {
-          <f24-icon class="f24-form-input-suffix-icon"  [icon]="'check'"/>
-        }
-      </div>
+      <!-- Contenido adicional -->
+      @if (templateSuffix(); as template) {
+        <div class="f24-form-input-suffix" matSuffix>
+          <ng-container *ngTemplateOutlet="template"></ng-container>
+        </div>
+      }
 
      
       <!-- Icono principal -->

@@ -38,12 +38,16 @@ export class F24FormFields<T> {
   readonly title = input<F24FormFieldsSourceParams<T>['title']>();
   readonly fields = input<F24FormFieldsSourceParams<T>['fields']>();
   readonly model = input<F24FormFieldsSourceParams<T>['model']>();
+  readonly hideAdd = input<F24FormFieldsSourceParams<T>['hideAdd']>();
+  readonly hideDelete = input<F24FormFieldsSourceParams<T>['hideDelete']>();
   /**
    * signals resolved
    */
   readonly resolvedTitle = computed(() => this.source()?.title() ?? this.title() ?? '');
   readonly resolvedFields = computed(() => this.source()?.fields() ?? this.fields()); 
   readonly resolvedModel = computed(() => this.source()?.model() ?? this.model() ?? {} as T);
+  readonly resolvedHideAdd = computed(() => this.source()?.hideAdd() ?? this.hideAdd() ?? false);
+  readonly resolvedHideDelete = computed(() => this.source()?.hideDelete() ?? this.hideDelete() ?? false);
   /**
    * 
    */

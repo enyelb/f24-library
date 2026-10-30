@@ -8,25 +8,27 @@
   padding: calc(var(--margin-filter-wrapper) / 2);
   gap: var(--margin-filter-wrapper);
 
+  --mat-sys-corner-extra-small: 12px;
+
   mat-form-field {
     width: 100%;
   }
+.f24-filter-prefix-icon {
+    padding-left: 10px;
+  }
 
-  .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix,
-  .mat-mdc-text-field-wrapper.mdc-text-field--filled .mat-mdc-form-field-infix {
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
     padding-top: 6px;
     padding-bottom: 6px;
     min-height: 35px;
   }
 
 
-  .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-flex .mat-mdc-floating-label,
-  .mat-mdc-text-field-wrapper.mdc-text-field--filled .mat-mdc-form-field-flex .mat-mdc-floating-label {
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-flex .mat-mdc-floating-label {
     top: 16px;
   }
 
-  .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above,
-  .mat-mdc-text-field-wrapper.mdc-text-field--filled .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
     --mat-mdc-form-field-label-transform: translateY(-21.75px) scale(var(--mat-mdc-form-field-floating-label-scale, 0.75));
     transform: var(--mat-mdc-form-field-label-transform);
   }

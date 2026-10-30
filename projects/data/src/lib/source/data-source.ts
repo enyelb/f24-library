@@ -139,7 +139,6 @@ export class F24DataSource<T> {
    * constructor
    */
   constructor(params?: F24DataSourceParams<T>) {
-    this.update(params);
 
     this.reload.pipe(
       debounceTime(300),
@@ -184,35 +183,8 @@ export class F24DataSource<T> {
         this._loading.set(false);
       }
     });
-    /**
-     * efecto para recargar data
-     */
-    effect((onCleanup) => {
-      this.pageIndex();
-      const rafId = requestAnimationFrame(() => {
-        untracked(() => {
-          this.reload.next();
-        });
-      });
-      onCleanup(() => cancelAnimationFrame(rafId));
-    });
-    /**
-     * efecto para recargar data
-     */
-    effect((onCleanup) => {
-      this.filters();
-      this.sorts();
-      this.request();
-      this.connected();
-      this.pageSize();
-      const rafId = requestAnimationFrame(() => {
-        untracked(() => {
-          this._pageIndex.set(0);
-          this.reload.next();
-        });
-      });
-      onCleanup(() => cancelAnimationFrame(rafId));
-    });
+
+    this.update(params);
   }
   /**
    * update
@@ -220,6 +192,13 @@ export class F24DataSource<T> {
    */
   public update(params?: F24DataSourceParams<T>, params2?: F24DataSourceParams<T>) {
     untracked(() => {
+
+      const prevFilters  = { ...this._filters.value() };
+      const prevSorts    = { ...this._sorts.value() };
+      const prevRequest  = this._request.value();
+      const prevPageSize = this._pageSize.value();
+      const prevPageIdx  = this._pageIndex.value();
+
       this._trackBy.setExectUndefined(params?.trackBy ?? params2?.trackBy);
       this._data.setExectUndefined(params?.data ?? params2?.data);
       this._total.setExectUndefined(params?.data?.length ?? params2?.data?.length);
@@ -234,13 +213,41 @@ export class F24DataSource<T> {
       this._request.setExectUndefined(params?.request ?? params2?.request);
       this._loading.setExectUndefined(params?.loading ?? params2?.loading);
       this._noResultLabel.setExectUndefined(params?.noResultLabel ?? params2?.noResultLabel);
+
+      const resetTriggered =
+        !this.shallowEqual(prevFilters, this._filters.value()) ||
+        !this.shallowEqual(prevSorts,   this._sorts.value())   ||
+        prevRequest  !== this._request.value()                 ||
+        prevPageSize !== this._pageSize.value();
+
+      const pageIndexTriggered = prevPageIdx !== this._pageIndex.value();
+
+      if (resetTriggered) {
+        this._pageIndex.set(0);
+        this.reload.next();
+        console.log('test')
+      } else if (pageIndexTriggered) {
+        this.reload.next();
+      }
     });
+  }
+  private shallowEqual(a: Record<string, any>, b: Record<string, any>): boolean {
+    if (a === b) return true;
+    const ka = Object.keys(a);
+    const kb = Object.keys(b);
+    if (ka.length !== kb.length) return false;
+    for (const k of ka) {
+      if (a[k] !== b[k]) return false;
+    }
+    return true;
   }
   /**
    * connect
    */
   public connect() {
     this._connected.set(true);
+    this._pageIndex.set(0);
+    this.reload.next();
   }
   /**
    * select

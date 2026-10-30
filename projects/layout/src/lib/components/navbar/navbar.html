@@ -2,6 +2,7 @@
 
   <div class="f24-navbar-logo">
     @if (resolvedLogo(); as logo) {
+      <f24-logo-swap [expandedSrc]="logo" [collapsedSrc]="logo"/>
       <f24-image [src]="logo" [zoomClick]="false"></f24-image>
     }
   </div>

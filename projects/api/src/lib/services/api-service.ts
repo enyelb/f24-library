@@ -107,7 +107,7 @@ export abstract class F24APIService {
    */
   public pdf(options: F24RequestOptions) : Observable<F24PDFResponse> {
     return this.request((options) => {
-      return this._http.post<F24IPDFResponse>(options.url, options.options).pipe(
+      return this._http.post<F24IPDFResponse>(options.url, options.body, options.options).pipe(
         map(response => {
           const base64 = typeof response === 'string' ? response : response.pdf_base64 || response.base64;
 
@@ -263,16 +263,36 @@ export abstract class F24APIService {
     return newurl;
   }
   /**
+   * private apply filter function 
+   */
+  private safeProperties(properties: { [key: string]: any }): { [key: string]: any } {
+    const safeProperties: { [key: string]: any } = {};
+    for (const key in properties) {
+      if (properties[key] == null) {
+        continue;
+      } 
+      
+      safeProperties[key] = isDate(properties[key]) ? format(properties[key], 'yyyy-MM-dd') : encodeURIComponent(properties[key]);
+    }
+    return safeProperties;
+  }
+  /**
    * params
    */
   private params(params?: {}, prefix : string = '') : string {
     let paramss = '';
     if (params) {
       for (const [name, param] of Object.entries(params)) {
+        if (!param) {
+          continue
+        }
         if (paramss.length > 0) {
           paramss += '&';
         }
-        paramss += `${prefix}${name}=${param}`;
+        const newParam = isDate(param) ? format(param, 'yyyy-MM-dd') : (
+          typeof param === 'number' || typeof param === 'boolean' || typeof param === 'string' ? encodeURIComponent(param) : param
+        );
+        paramss += `${prefix}${name}=${newParam}`;
       }
     }
     return paramss;
