@@ -1,16 +1,11 @@
 f24-container, f24-container-two {
   border-radius: var(--f24-container-border-radius, var(--mat-sys-corner-small, 8px));
   border: 1px solid var(--f24-container-border-color, var(--border-primary, var(--mat-sys-outline)));
-  background-color: var(--mat-sys-surface);
+  background-color: var(--f24-container-background, --mat-sys-surface);
 
   overflow: hidden;
   display: flex;
   flex-direction: column;
-
-  /*f24-container {
-    border-radius: 0px;
-    border: none;
-  }*/
 }
 
 f24-container {

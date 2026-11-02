@@ -1,11 +1,16 @@
+<ng-template #navbarRight>
+  <ng-content select="[navbar-right]"></ng-content>
+</ng-template>
+
 <div class="f24-private-layout">
   @if (resolvedTop()) {
     <f24-navbar 
       [icon]="resolvedIcon()" 
       (toggleNavbar)="onToggleSidenav()" 
       [logo]="resolvedLogo()"
-      [title]="resolvedTitle()">
-      <ng-content select="[navbar-right]" right></ng-content>
+      [title]="resolvedTitle()"
+    >
+      <ng-container right *ngTemplateOutlet="navbarRight"></ng-container>
     </f24-navbar>
   }
   <mat-sidenav-container class="f24-private-layout-sidenav-container">
@@ -44,9 +49,12 @@
     <mat-sidenav-content [class]="classSidenavContent">
       @if (!resolvedTop()) {
         <f24-navbar 
-          [icon]="resolvedIcon()" 
-          (toggleNavbar)="onToggleSidenav()" 
-        />
+          [icon]="resolvedIcon()"
+          [title]="resolvedTitle()"
+          (toggleNavbar)="onToggleSidenav()"
+        >
+          <ng-container right *ngTemplateOutlet="navbarRight"></ng-container>
+        </f24-navbar>
       }  
       <main class="f24-private-layout-content" [responsiveClass]="{
         xxl: 'f24-private-layout-content-desktop',

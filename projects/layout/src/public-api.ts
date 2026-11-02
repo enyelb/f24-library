@@ -8,6 +8,8 @@ export * from './lib/components/lazy/lazy';
 export * from './lib/components/loader/loader';
 export * from './lib/components/responsive-view/responsive-view';
 export * from './lib/components/container/container';
+export * from './lib/components/header/header';
+export * from './lib/components/footer/footer';
 export * from './lib/components/currency/currency';
 export * from './lib/components/quantity/quantity';
 export * from './lib/components/description/description';

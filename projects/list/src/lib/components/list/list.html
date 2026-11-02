@@ -10,6 +10,10 @@
   <ng-content select="[header]"></ng-content>  
 </ng-template>
 
+<ng-template #optionsTemplate>
+  <ng-content select="[options]"></ng-content>
+</ng-template>
+
 @if (source().showHeader()) {
   <div [class]="{ 'f24-list-header-content': true, 'f24-list-header-content-xs': layout.xs(), 'f24-list-header-content-s': layout.s() }" >
     @if (layout.xs() || layout.s()) {
@@ -44,11 +48,9 @@
       <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
     }
     <div class="f24-list-options">
-      <ng-content select="[options]"></ng-content>
+      <ng-container *ngTemplateOutlet="optionsTemplate"></ng-container>
     </div>
   </div>
-  
-  
 }
 
 <!-- LIST CONTENT -->
